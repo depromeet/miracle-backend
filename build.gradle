@@ -7,6 +7,7 @@ buildscript {
     ext {
         springBootVersion = '2.2.8.RELEASE'
         querydslPluginVersion = '1.0.10'
+        kotlinVersion = '1.3.72'
     }
     repositories {
         mavenCentral()
@@ -15,6 +16,9 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
     }
 }
 
@@ -25,12 +29,25 @@ configure(javaProjects) {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: "com.ewerk.gradle.plugins.querydsl"
+    apply plugin: 'kotlin'
+    apply plugin: 'kotlin-spring'
 
     group = 'com.deproment'
     sourceCompatibility = '11'
 
     repositories {
         mavenCentral()
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
     }
 
     dependencies {
@@ -46,6 +63,12 @@ configure(javaProjects) {
 
         implementation 'org.springframework.boot:spring-boot-starter-security'
         testImplementation 'org.springframework.security:spring-security-test'
+
+        // kotlin
+        implementation("org.jetbrains.kotlin:kotlin-stdlib")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        // 자바 + 코틀린 사용시, lombok, querydsl 이슈 확인 필요.
     }
 
     configurations {
