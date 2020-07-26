@@ -63,7 +63,7 @@ class MemberServiceTest {
             .profileUrl("test")
             .build();
 
-        // when
+        // when & then
         assertThatThrownBy(() -> {
             memberService.signUpMember(request);
         }).isInstanceOf(IllegalArgumentException.class);
