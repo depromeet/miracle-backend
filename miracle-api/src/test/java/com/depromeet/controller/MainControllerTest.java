@@ -24,11 +24,4 @@ class MainControllerTest {
             .andExpect(content().string("pong"));
     }
 
-    @Test
-    void ping_kotlin() throws Exception {
-        this.mockMvc.perform(get("/ping/kotlin"))
-            .andExpect(status().isOk())
-            .andExpect(content().string("pong"));
-    }
-
 }
