@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROFILE_NAME=miracle
+PROFILE_NAME=miracle-api
 REPOSITORY=/home/ec2-user/app/$PROFILE_NAME
 
 echo "> Build 파일 복사"

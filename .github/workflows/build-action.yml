@@ -42,7 +42,7 @@ jobs:
     - name: Move code deploy config
       run: cp appspec.yml code-deploy/
     - name: Move build jar
-      run: cp build/libs/*.jar code-deploy/
+      run: cp miracle-api/build/libs/*.jar code-deploy/
     - name: Zip build jar
       run: zip -r -j code-deploy code-deploy/*
     - name: Configure AWS credentials
