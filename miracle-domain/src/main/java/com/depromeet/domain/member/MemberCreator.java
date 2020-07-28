@@ -6,12 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberCreator {
 
-    public static Member create(String email) {
-        return Member.builder()
-            .email(email)
-            .build();
-    }
-
     public static Member create(String email, String name, String profileUrl) {
         return Member.builder()
             .email(email)
