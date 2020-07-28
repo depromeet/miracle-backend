@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-PROFILE_NAME=miracle-api
-REPOSITORY=/home/ec2-user/app/$PROFILE_NAME
+REPOSITORY=/home/ec2-user/app/miracle
 
 echo "> Build 파일 복사"
 echo "> cp $REPOSITORY/zip/*.jar $REPOSITORY/"
@@ -23,6 +22,6 @@ echo "> nohup java -jar
         -Dspring.config.location=classpath:/application.properties
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &"
 
-nohup java -jar
-    -Dspring.config.location=classpath:/application.properties
+nohup java -jar \
+    -Dspring.config.location=classpath:/application.properties \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
