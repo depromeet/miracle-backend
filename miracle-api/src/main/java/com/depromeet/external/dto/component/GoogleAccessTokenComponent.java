@@ -24,4 +24,6 @@ public class GoogleAccessTokenComponent {
 
     private String grantType;
 
+    private String redirectUri;
+
 }

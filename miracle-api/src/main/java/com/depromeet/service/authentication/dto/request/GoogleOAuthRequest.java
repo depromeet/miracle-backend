@@ -10,12 +10,9 @@ public class GoogleOAuthRequest {
 
     private String code;
 
-    private String redirectUri;
-
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public GoogleOAuthRequest(String code, String redirectUri) {
+    public GoogleOAuthRequest(String code) {
         this.code = code;
-        this.redirectUri = redirectUri;
     }
 
 }

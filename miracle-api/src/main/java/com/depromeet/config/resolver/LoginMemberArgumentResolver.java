@@ -4,6 +4,7 @@ import com.depromeet.config.session.MemberSession;
 import com.depromeet.constants.SessionConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import static com.depromeet.constants.HeaderConstants.AUTHORIZATION_HEADER;
-import static com.depromeet.constants.HeaderConstants.BEARER_TOKEN;
 
 @RequiredArgsConstructor
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final static String BEARER_TOKEN = "Bearer ";
 
     private final SessionRepository sessionRepository;
 
@@ -30,7 +31,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String header = webRequest.getHeader(AUTHORIZATION_HEADER);
+        String header = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         Session session = extractSessionFromHeader(header);
         return session.getAttribute(SessionConstants.LOGIN_USER);
     }

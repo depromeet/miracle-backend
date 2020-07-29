@@ -38,14 +38,15 @@ class GoogleOAuthServiceTest {
 
     private static class StubGoogleExternalApiCaller implements GoogleExternalApiCaller {
         @Override
-        public GoogleAccessTokenResponse getGoogleAccessToken(String code, String redirectUri) {
+        public GoogleAccessTokenResponse getGoogleAccessToken(String code) {
             return GoogleAccessTokenResponse.testBuilder()
                 .accessToken("accessToken")
+                .tokenType("tokenType")
                 .build();
         }
 
         @Override
-        public GoogleUserProfileResponse getGoogleUserProfileInfo(String accessToken) {
+        public GoogleUserProfileResponse getGoogleUserProfileInfo(String accessToken, String tokenType) {
             return GoogleUserProfileResponse.testBuilder()
                 .email("will.seungho@gmail.com")
                 .name("강승호")
@@ -63,7 +64,6 @@ class GoogleOAuthServiceTest {
 
         GoogleOAuthRequest request = GoogleOAuthRequest.testBuilder()
             .code("code")
-            .redirectUri("redirectUri")
             .build();
 
         // when
@@ -80,7 +80,6 @@ class GoogleOAuthServiceTest {
         // given
         GoogleOAuthRequest request = GoogleOAuthRequest.testBuilder()
             .code("code")
-            .redirectUri("redirectUri")
             .build();
 
         // when

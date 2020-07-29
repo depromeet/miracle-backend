@@ -19,11 +19,11 @@ public class GoogleOAuthService {
 
     @Transactional
     public Long getGoogleAuthentication(GoogleOAuthRequest request) {
-        GoogleAccessTokenResponse tokenResponse = googleExternalApiCaller.getGoogleAccessToken(request.getCode(), request.getRedirectUri());
-        GoogleUserProfileResponse profileResponse = googleExternalApiCaller.getGoogleUserProfileInfo(tokenResponse.getAccessToken());
+        GoogleAccessTokenResponse tokenResponse = googleExternalApiCaller.getGoogleAccessToken(request.getCode());
+        GoogleUserProfileResponse profileResponse = googleExternalApiCaller.getGoogleUserProfileInfo(tokenResponse.getAccessToken(), tokenResponse.getTokenType());
 
         Member member = memberRepository.findMemberByEmail(profileResponse.getEmail());
-        // TODO 프론트쪽으로 콜백해서 추가 정보를 받을 경우 변경해야함.
+        // 회원가입 플로우 결정되면 변경해야함.
         if (member != null) {
             return member.getId();
         }

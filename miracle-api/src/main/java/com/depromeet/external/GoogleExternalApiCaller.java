@@ -5,8 +5,8 @@ import com.depromeet.external.dto.response.GoogleUserProfileResponse;
 
 public interface GoogleExternalApiCaller {
 
-    GoogleAccessTokenResponse getGoogleAccessToken(String code, String redirectUri);
+    GoogleAccessTokenResponse getGoogleAccessToken(String code);
 
-    GoogleUserProfileResponse getGoogleUserProfileInfo(String accessToken);
+    GoogleUserProfileResponse getGoogleUserProfileInfo(String accessToken, String tokenType);
 
 }

@@ -29,7 +29,7 @@ public class MemberController {
     public ApiResponse<MemberInfoResponse> signUpMember(@Valid @RequestBody SignUpMemberRequest request) {
         return ApiResponse.of(memberService.signUpMember(request)); // TODO MemberInfoResponse가 아닌 세션 ID or 토큰 반환해야함.
     }
-    // TODO Google OAuth 프론트로 콜백해서 추가정보를 받고 회원가입 하지 않으면 삭제할 예정.
+    // 회원가입 플로우에 따라 제거될 수 있음.
 
     /**
      * 회원정보를 변경하는 API
