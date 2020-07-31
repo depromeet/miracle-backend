@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-// TODO index, unique, DDL setting
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

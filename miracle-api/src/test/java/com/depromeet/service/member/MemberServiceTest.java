@@ -1,4 +1,4 @@
-package com.depromeet.service;
+package com.depromeet.service.member;
 
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;

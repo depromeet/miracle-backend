@@ -2,6 +2,7 @@ package com.depromeet.controller.member;
 
 import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
+import com.depromeet.config.session.MemberSession;
 import com.depromeet.service.member.MemberService;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -28,21 +29,22 @@ public class MemberController {
     public ApiResponse<MemberInfoResponse> signUpMember(@Valid @RequestBody SignUpMemberRequest request) {
         return ApiResponse.of(memberService.signUpMember(request)); // TODO MemberInfoResponse가 아닌 세션 ID or 토큰 반환해야함.
     }
+    // 회원가입 플로우에 따라 제거될 수 있음.
 
     /**
      * 회원정보를 변경하는 API
      */
     @PutMapping("/api/v1/member")
-    public ApiResponse<MemberInfoResponse> updateMemberInfo(@Valid @RequestBody UpdateMemberInfoRequest request, @LoginMember Long memberId) {
-        return ApiResponse.of(memberService.updateMemberInfo(request, memberId));
+    public ApiResponse<MemberInfoResponse> updateMemberInfo(@Valid @RequestBody UpdateMemberInfoRequest request, @LoginMember MemberSession memberSession) {
+        return ApiResponse.of(memberService.updateMemberInfo(request, memberSession.getMemberId()));
     }
 
     /**
      * 내정보를 불러오는 API
      */
     @GetMapping("/api/v1/member")
-    public ApiResponse<MemberInfoResponse> getMemberInfo(@LoginMember Long memberId) {
-        return ApiResponse.of(memberService.getMemberInfo(memberId));
+    public ApiResponse<MemberInfoResponse> getMemberInfo(@LoginMember MemberSession memberSession) {
+        return ApiResponse.of(memberService.getMemberInfo(memberSession.getMemberId()));
     }
 
 }
