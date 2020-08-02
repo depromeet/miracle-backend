@@ -62,9 +62,7 @@ class GoogleOAuthServiceTest {
     void 존재하는_회원이_있으면_로그인이_진행된다() {
         // given
         String email = "will.seungho@gmail.com";
-        String name = "호승강";
-        String profileUrl = "profileUrl";
-        memberRepository.save(MemberCreator.create(email, name, profileUrl));
+        memberRepository.save(MemberCreator.create(email));
 
         GoogleOAuthRequest request = GoogleOAuthRequest.testBuilder()
             .code("code")

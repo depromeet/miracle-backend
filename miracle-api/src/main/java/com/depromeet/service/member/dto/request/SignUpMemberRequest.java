@@ -19,15 +19,18 @@ public class SignUpMemberRequest {
 
     private String profileUrl;
 
+    private String phoneNumber;
+
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public SignUpMemberRequest(String email, String name, String profileUrl) {
+    public SignUpMemberRequest(String email, String name, String profileUrl, String phoneNumber) {
         this.email = email;
         this.name = name;
         this.profileUrl = profileUrl;
+        this.phoneNumber = phoneNumber;
     }
 
     public Member toEntity() {
-        return Member.newInstance(email, name, profileUrl);
+        return Member.newInstance(email, name, profileUrl, phoneNumber);
     }
 
 }

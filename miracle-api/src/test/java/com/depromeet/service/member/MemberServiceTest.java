@@ -35,7 +35,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUpMemberSample() {
-        member = MemberCreator.create("will.seungho@gmail.com", "강승호", "profileUrl");
+        member = MemberCreator.create("will.seungho@gmail.com", "강승호", "profileUrl", "010-1234-1234");
     }
 
     @Test
@@ -44,11 +44,13 @@ class MemberServiceTest {
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
         String profileUrl = "http://profileUrl.test.com";
+        String phoneNumber = "010-1234-1234";
 
         SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
             .email(email)
             .name(name)
             .profileUrl(profileUrl)
+            .phoneNumber(phoneNumber)
             .build();
 
         // when
@@ -57,7 +59,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), email, name, profileUrl);
+        assertMemberInfo(members.get(0), email, name, profileUrl, phoneNumber);
     }
 
     @Test
@@ -67,8 +69,6 @@ class MemberServiceTest {
 
         SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
             .email(member.getEmail())
-            .name("강승호")
-            .profileUrl("test")
             .build();
 
         // when & then
@@ -82,12 +82,14 @@ class MemberServiceTest {
         // given
         String name = "kangseungho";
         String profileUrl = "http://profileUrl.test.com";
+        String phoneNumber = "010-1234-1234";
 
         memberRepository.save(member);
 
         UpdateMemberInfoRequest request = UpdateMemberInfoRequest.testBuilder()
             .name(name)
             .profileUrl(profileUrl)
+            .phoneNumber(phoneNumber)
             .build();
 
         // when
@@ -96,7 +98,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), member.getEmail(), name, profileUrl);
+        assertMemberInfo(members.get(0), member.getEmail(), name, profileUrl, phoneNumber);
     }
 
     @Test
@@ -122,7 +124,7 @@ class MemberServiceTest {
         MemberInfoResponse response = memberService.getMemberInfo(member.getId());
 
         // then
-        assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileUrl());
+        assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileUrl(), member.getPhoneNumber());
     }
 
     @Test
@@ -133,16 +135,18 @@ class MemberServiceTest {
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
-    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, String profileUrl) {
+    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, String profileUrl, String phoneNumber) {
         assertThat(response.getEmail()).isEqualTo(email);
         assertThat(response.getName()).isEqualTo(name);
         assertThat(response.getProfileUrl()).isEqualTo(profileUrl);
+        assertThat(response.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
-    private void assertMemberInfo(Member member, String email, String name, String profileUrl) {
+    private void assertMemberInfo(Member member, String email, String name, String profileUrl, String phoneNumber) {
         assertThat(member.getEmail()).isEqualTo(email);
         assertThat(member.getName()).isEqualTo(name);
         assertThat(member.getProfileUrl()).isEqualTo(profileUrl);
+        assertThat(member.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
 }
