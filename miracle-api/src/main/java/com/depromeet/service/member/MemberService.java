@@ -17,22 +17,22 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberInfoResponse signUpMember(SignUpMemberRequest request) {
+    public Long signUpMember(SignUpMemberRequest request) {
         MemberServiceUtils.validateNonExistMember(memberRepository, request.getEmail());
         Member newMember = memberRepository.save(request.toEntity());
-        return MemberInfoResponse.of(newMember);
+        return newMember.getId();
     }
 
     @Transactional
     public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
-        Member member = memberRepository.findMemberById(memberId);
+        Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
         member.updateInfo(request.getName(), request.getProfileUrl());
         return MemberInfoResponse.of(member);
     }
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(Long memberId) {
-        Member member = memberRepository.findMemberById(memberId);
+        Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
         return MemberInfoResponse.of(member);
     }
 

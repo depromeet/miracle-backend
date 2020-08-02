@@ -3,7 +3,6 @@ package com.depromeet.service.member;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberRepository;
-import com.depromeet.service.member.MemberService;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
@@ -101,6 +100,20 @@ class MemberServiceTest {
     }
 
     @Test
+    void 멤버의_회원정보를_변경한다_존재하지_않는_멤버인경우() {
+        // given
+        UpdateMemberInfoRequest request = UpdateMemberInfoRequest.testBuilder()
+            .name("name")
+            .profileUrl("profileUrl")
+            .build();
+
+        // when & then
+        assertThatThrownBy(() -> {
+            memberService.updateMemberInfo(request, 999L);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     void 내정보를_불러온다() {
         // given
         memberRepository.save(member);
@@ -110,6 +123,14 @@ class MemberServiceTest {
 
         // then
         assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileUrl());
+    }
+
+    @Test
+    void 내정보를_불러온다_존재하지_않는_멤버인경우() {
+        // when & then
+        assertThatThrownBy(() -> {
+            memberService.getMemberInfo(999L);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, String profileUrl) {

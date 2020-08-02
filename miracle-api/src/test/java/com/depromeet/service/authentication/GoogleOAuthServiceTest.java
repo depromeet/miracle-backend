@@ -1,25 +1,28 @@
 package com.depromeet.service.authentication;
 
 
-import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberRepository;
 import com.depromeet.external.GoogleExternalApiCaller;
 import com.depromeet.external.dto.response.GoogleAccessTokenResponse;
 import com.depromeet.external.dto.response.GoogleUserProfileResponse;
 import com.depromeet.service.authentication.dto.request.GoogleOAuthRequest;
+import com.depromeet.service.authentication.dto.response.GoogleOAuthResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class GoogleOAuthServiceTest {
+
+    @Autowired
+    private HttpSession httpSession;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -33,7 +36,7 @@ class GoogleOAuthServiceTest {
 
     @BeforeEach
     void setUpService() {
-        oAuthService = new GoogleOAuthService(new StubGoogleExternalApiCaller(), memberRepository);
+        oAuthService = new GoogleOAuthService(httpSession, new StubGoogleExternalApiCaller(), memberRepository);
     }
 
     private static class StubGoogleExternalApiCaller implements GoogleExternalApiCaller {
@@ -50,6 +53,7 @@ class GoogleOAuthServiceTest {
             return GoogleUserProfileResponse.testBuilder()
                 .email("will.seungho@gmail.com")
                 .name("강승호")
+                .picture("picture")
                 .build();
         }
     }
@@ -67,34 +71,36 @@ class GoogleOAuthServiceTest {
             .build();
 
         // when
-        oAuthService.getGoogleAuthentication(request);
+        GoogleOAuthResponse response = oAuthService.getGoogleAuthentication(request);
 
         // then
-        List<Member> members = memberRepository.findAll();
-        assertThat(members).hasSize(1);
-        assertMember(members.get(0), email, name, profileUrl);
+        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.LOGIN, httpSession.getId(), null, null, null);
     }
 
     @Test
-    void 존재하는_회원이_없으면_회원가입이_진행된다() {
+    void 존재하는_회원이_없으면_회원가입을_위한_정보가_반환된다() {
         // given
+        String email = "will.seungho@gmail.com";
+        String name = "강승호";
+        String profileUrl = "picture";
+
         GoogleOAuthRequest request = GoogleOAuthRequest.testBuilder()
             .code("code")
             .build();
 
         // when
-        oAuthService.getGoogleAuthentication(request);
+        GoogleOAuthResponse response = oAuthService.getGoogleAuthentication(request);
 
         // then
-        List<Member> members = memberRepository.findAll();
-        assertThat(members).hasSize(1);
-        assertMember(members.get(0), "will.seungho@gmail.com", "강승호", null);
+        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.SIGN_UP, null, email, name, profileUrl);
     }
 
-    private void assertMember(Member member, String email, String name, String profileUrl) {
-        assertThat(member.getEmail()).isEqualTo(email);
-        assertThat(member.getName()).isEqualTo(name);
-        assertThat(member.getProfileUrl()).isEqualTo(profileUrl);
+    private void assertGoogleOAuthResponse(GoogleOAuthResponse response, GoogleOAuthResponse.OAuthType type, String sessionId, String email, String name, String picture) {
+        assertThat(response.getType()).isEqualTo(type);
+        assertThat(response.getSessionId()).isEqualTo(sessionId);
+        assertThat(response.getEmail()).isEqualTo(email);
+        assertThat(response.getName()).isEqualTo(name);
+        assertThat(response.getProfileUrl()).isEqualTo(picture);
     }
 
 }
