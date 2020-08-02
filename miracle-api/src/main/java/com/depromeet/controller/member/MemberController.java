@@ -3,6 +3,7 @@ package com.depromeet.controller.member;
 import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
+import com.depromeet.constants.SessionConstants;
 import com.depromeet.service.member.MemberService;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -21,15 +23,17 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private final HttpSession httpSession;
 
     /**
      * 회원가입 API
      */
     @PostMapping("/api/v1/member")
-    public ApiResponse<MemberInfoResponse> signUpMember(@Valid @RequestBody SignUpMemberRequest request) {
-        return ApiResponse.of(memberService.signUpMember(request)); // TODO MemberInfoResponse가 아닌 세션 ID or 토큰 반환해야함.
+    public ApiResponse<String> signUpMember(@Valid @RequestBody SignUpMemberRequest request) {
+        Long memberId = memberService.signUpMember(request);
+        httpSession.setAttribute(SessionConstants.LOGIN_USER, MemberSession.of(memberId));
+        return ApiResponse.of(httpSession.getId());
     }
-    // 회원가입 플로우에 따라 제거될 수 있음.
 
     /**
      * 회원정보를 변경하는 API

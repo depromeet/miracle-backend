@@ -12,10 +12,13 @@ public class UpdateMemberInfoRequest {
 
     private String profileUrl;
 
+    private String phoneNumber;
+
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public UpdateMemberInfoRequest(String name, String profileUrl) {
+    public UpdateMemberInfoRequest(String name, String profileUrl, String phoneNumber) {
         this.name = name;
         this.profileUrl = profileUrl;
+        this.phoneNumber = phoneNumber;
     }
 
 }

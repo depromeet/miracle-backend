@@ -32,8 +32,4 @@ public class GoogleUserProfileResponse {
         this.locale = locale;
     }
 
-    public Member toEntity() {
-        return Member.newInstance(email, name, picture);
-    }
-
 }
