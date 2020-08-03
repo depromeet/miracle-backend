@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ApiResponse<T> {
 
-    public static ApiResponse<String> OK = new ApiResponse<>("", "", "OK");
+    public static ApiResponse<String> SUCCESS = new ApiResponse<>("", "", "SUCCESS");
 
     private String code;
     private String message;
