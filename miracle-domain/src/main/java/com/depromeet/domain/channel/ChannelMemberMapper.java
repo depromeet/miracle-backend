@@ -29,4 +29,22 @@ public class ChannelMemberMapper {
 
     private ChannelRole role;
 
+    private ChannelMemberMapper(Channel channel, Long memberId, ChannelRole role) {
+        this.channel = channel;
+        this.memberId = memberId;
+        this.role = role;
+    }
+
+    public static ChannelMemberMapper of(Channel channel, Long memberId, ChannelRole role) {
+        return new ChannelMemberMapper(channel, memberId, role);
+    }
+
+    boolean isParticipant(Long memberId) {
+        return this.memberId.equals(memberId) && this.role.equals(ChannelRole.PARTICIPANT);
+    }
+
+    boolean isCreator(Long memberId) {
+        return this.memberId.equals(memberId) && this.role.equals(ChannelRole.CREATOR);
+    }
+
 }

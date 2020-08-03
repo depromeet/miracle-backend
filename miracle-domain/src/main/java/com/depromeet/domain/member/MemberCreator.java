@@ -9,6 +9,7 @@ public class MemberCreator {
     public static Member create(String email) {
         return Member.builder()
             .email(email)
+            .name("will")
             .build();
     }
 

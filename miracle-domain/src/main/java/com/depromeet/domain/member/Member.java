@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,6 +28,7 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Email email;
 
+    @Column(nullable = false)
     private String name;
 
     private String profileUrl;
