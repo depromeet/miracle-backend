@@ -33,7 +33,7 @@ public class GoogleOAuthService {
             httpSession.setAttribute(SessionConstants.LOGIN_USER, MemberSession.of(member.getId()));
             return GoogleOAuthResponse.login(httpSession.getId());
         }
-        return GoogleOAuthResponse.signUp(profileResponse.getEmail(), profileResponse.getName(), profileResponse.getPicture());
+        return GoogleOAuthResponse.signUp(profileResponse.getEmail(), profileResponse.getName());
     }
 
 }

@@ -53,7 +53,6 @@ class GoogleOAuthServiceTest {
             return GoogleUserProfileResponse.testBuilder()
                 .email("will.seungho@gmail.com")
                 .name("강승호")
-                .picture("picture")
                 .build();
         }
     }
@@ -72,7 +71,7 @@ class GoogleOAuthServiceTest {
         GoogleOAuthResponse response = oAuthService.getGoogleAuthentication(request);
 
         // then
-        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.LOGIN, httpSession.getId(), null, null, null);
+        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.LOGIN, httpSession.getId(), null, null);
     }
 
     @Test
@@ -80,7 +79,6 @@ class GoogleOAuthServiceTest {
         // given
         String email = "will.seungho@gmail.com";
         String name = "강승호";
-        String profileUrl = "picture";
 
         GoogleOAuthRequest request = GoogleOAuthRequest.testBuilder()
             .code("code")
@@ -90,15 +88,14 @@ class GoogleOAuthServiceTest {
         GoogleOAuthResponse response = oAuthService.getGoogleAuthentication(request);
 
         // then
-        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.SIGN_UP, null, email, name, profileUrl);
+        assertGoogleOAuthResponse(response, GoogleOAuthResponse.OAuthType.SIGN_UP, null, email, name);
     }
 
-    private void assertGoogleOAuthResponse(GoogleOAuthResponse response, GoogleOAuthResponse.OAuthType type, String sessionId, String email, String name, String picture) {
+    private void assertGoogleOAuthResponse(GoogleOAuthResponse response, GoogleOAuthResponse.OAuthType type, String sessionId, String email, String name) {
         assertThat(response.getType()).isEqualTo(type);
         assertThat(response.getSessionId()).isEqualTo(sessionId);
         assertThat(response.getEmail()).isEqualTo(email);
         assertThat(response.getName()).isEqualTo(name);
-        assertThat(response.getProfileUrl()).isEqualTo(picture);
     }
 
 }

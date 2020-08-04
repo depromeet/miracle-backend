@@ -1,6 +1,5 @@
 package com.depromeet.external.dto.response;
 
-import com.depromeet.domain.member.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;

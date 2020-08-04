@@ -10,15 +10,9 @@ public class UpdateMemberInfoRequest {
 
     private String name;
 
-    private String profileUrl;
-
-    private String phoneNumber;
-
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public UpdateMemberInfoRequest(String name, String profileUrl, String phoneNumber) {
+    public UpdateMemberInfoRequest(String name) {
         this.name = name;
-        this.profileUrl = profileUrl;
-        this.phoneNumber = phoneNumber;
     }
 
 }

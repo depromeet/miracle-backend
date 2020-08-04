@@ -16,14 +16,12 @@ public class GoogleOAuthResponse {
 
     private final String name;
 
-    private final String profileUrl;
-
-    public static GoogleOAuthResponse signUp(String email, String name, String profileUrl) {
-        return new GoogleOAuthResponse(OAuthType.SIGN_UP, null, email, name, profileUrl);
+    public static GoogleOAuthResponse signUp(String email, String name) {
+        return new GoogleOAuthResponse(OAuthType.SIGN_UP, null, email, name);
     }
 
     public static GoogleOAuthResponse login(String sessionId) {
-        return new GoogleOAuthResponse(OAuthType.LOGIN, sessionId, null, null, null);
+        return new GoogleOAuthResponse(OAuthType.LOGIN, sessionId, null, null);
     }
 
     public enum OAuthType {
