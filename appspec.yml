@@ -12,7 +12,7 @@ permissions:
       group: ec2-user
 
 hooks:
-    AftreInstall:
+    AfterInstall:
         - location: stop.sh
           timeout: 60
           runas: ec2-user
