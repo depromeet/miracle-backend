@@ -29,10 +29,6 @@ public class Member extends BaseTimeEntity {
 
     private String name;
 
-    private String profileUrl;
-
-    private String phoneNumber; // TODO Convert to Value Object & Regex
-
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
@@ -40,21 +36,17 @@ public class Member extends BaseTimeEntity {
     private MemberType type;
 
     @Builder
-    public Member(String email, String name, String profileUrl, String phoneNumber) {
+    public Member(String email, String name) {
         this.email = Email.of(email);
         this.name = name;
-        this.profileUrl = profileUrl;
-        this.phoneNumber = phoneNumber;
         this.provider = AuthProvider.GOOGLE;
         this.type = MemberType.FREE;
     }
 
-    public static Member newInstance(String email, String name, String profileUrl, String phoneNumber) {
+    public static Member newInstance(String email, String name) {
         return Member.builder()
             .email(email)
             .name(name)
-            .profileUrl(profileUrl)
-            .phoneNumber(phoneNumber)
             .build();
     }
 
@@ -62,15 +54,9 @@ public class Member extends BaseTimeEntity {
         return email.getEmail();
     }
 
-    public void updateInfo(String name, String profileUrl, String phoneNumber) {
+    public void updateInfo(String name) {
         if (StringUtils.hasText(name)) {
             this.name = name;
-        }
-        if (StringUtils.hasText(profileUrl)) {
-            this.profileUrl = profileUrl;
-        }
-        if (StringUtils.hasText(phoneNumber)) {
-            this.phoneNumber = phoneNumber;
         }
     }
 

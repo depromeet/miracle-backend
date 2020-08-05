@@ -15,12 +15,8 @@ public class MemberInfoResponse {
 
     private final String name;
 
-    private final String profileUrl;
-
-    private final String phoneNumber;
-
     public static MemberInfoResponse of(Member member) {
-        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileUrl(), member.getPhoneNumber());
+        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName());
     }
 
 }

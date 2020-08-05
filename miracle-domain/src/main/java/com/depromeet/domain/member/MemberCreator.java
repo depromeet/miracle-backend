@@ -12,12 +12,10 @@ public class MemberCreator {
             .build();
     }
 
-    public static Member create(String email, String name, String profileUrl, String phoneNumber) {
+    public static Member create(String email, String name) {
         return Member.builder()
             .email(email)
             .name(name)
-            .profileUrl(profileUrl)
-            .phoneNumber(phoneNumber)
             .build();
     }
 
