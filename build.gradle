@@ -94,6 +94,9 @@ configure(javaProjects) {
     }
 
     configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
         querydsl.extendsFrom compileClasspath
     }
 
@@ -105,4 +108,17 @@ configure(javaProjects) {
         }
     }
 
+    project.afterEvaluate {
+        project.tasks.compileQuerydsl.options.compilerArgs = [
+            "-proc:only",
+            "-processor", project.querydsl.processors() +
+                ',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
+        ]
+    }
+
+    clean {
+        doLast {
+            file(new File(projectDir, queryDslSrcDir)).deleteDir()
+        }
+    }
 }
