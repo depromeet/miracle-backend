@@ -19,7 +19,9 @@ public class Schedule extends BaseTimeEntity {
 
     private int year;
 
-    private int monthDay;
+    private int month;
+
+    private int day;
 
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
@@ -43,7 +45,8 @@ public class Schedule extends BaseTimeEntity {
         validateTime(startTime, endTime);
         this.memberId = memberId;
         this.year = startTime.getYear();
-        this.monthDay = startTime.getMonthValue();
+        this.month = startTime.getMonthValue();
+        this.day = startTime.getDayOfMonth();
         this.dayOfWeek = startTime.getDayOfWeek();
         this.startTime = startTime.toLocalTime();
         this.endTime = endTime.toLocalTime();
@@ -77,8 +80,12 @@ public class Schedule extends BaseTimeEntity {
         return year;
     }
 
-    public int getMonthDay() {
-        return monthDay;
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
     }
 
     public DayOfWeek getDayOfWeek() {

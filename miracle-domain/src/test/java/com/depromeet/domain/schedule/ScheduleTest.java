@@ -22,7 +22,8 @@ class ScheduleTest {
         Schedule schedule = Schedule.of(memberId, startTime, endTime, category, description, loopType);
         assertAll(
             () -> assertThat(schedule.getYear()).isEqualTo(startTime.getYear()),
-            () -> assertThat(schedule.getMonthDay()).isEqualTo(startTime.getMonthValue()),
+            () -> assertThat(schedule.getMonth()).isEqualTo(startTime.getMonthValue()),
+            () -> assertThat(schedule.getDay()).isEqualTo(startTime.getDayOfMonth()),
             () -> assertThat(schedule.getStartTime()).isEqualTo(startTime.toLocalTime()),
             () -> assertThat(schedule.getEndTime()).isEqualTo(endTime.toLocalTime()),
             () -> assertThat(schedule.getLoopType()).isEqualTo(LoopType.of(loopType))
