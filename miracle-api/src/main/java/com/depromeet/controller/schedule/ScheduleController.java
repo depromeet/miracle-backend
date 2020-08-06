@@ -4,9 +4,9 @@ import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
 import com.depromeet.service.schedule.ScheduleService;
-import com.depromeet.service.schedule.dto.CreateScheduleRequest;
-import com.depromeet.service.schedule.dto.CreateScheduleResponse;
-import com.depromeet.service.schedule.dto.GetScheduleResponse;
+import com.depromeet.service.schedule.CreateScheduleRequest;
+import com.depromeet.service.schedule.CreateScheduleResponse;
+import com.depromeet.service.schedule.GetScheduleResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

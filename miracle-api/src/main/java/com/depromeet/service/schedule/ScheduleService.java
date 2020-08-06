@@ -3,9 +3,6 @@ package com.depromeet.service.schedule;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
-import com.depromeet.service.schedule.dto.CreateScheduleRequest;
-import com.depromeet.service.schedule.dto.CreateScheduleResponse;
-import com.depromeet.service.schedule.dto.GetScheduleResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

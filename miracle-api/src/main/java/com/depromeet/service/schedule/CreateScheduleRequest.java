@@ -1,4 +1,4 @@
-package com.depromeet.service.schedule.dto;
+package com.depromeet.service.schedule;
 
 import com.depromeet.config.session.MemberSession;
 import com.depromeet.domain.schedule.Schedule;
