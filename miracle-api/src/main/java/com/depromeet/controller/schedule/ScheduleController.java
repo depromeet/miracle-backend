@@ -6,9 +6,12 @@ import com.depromeet.config.session.MemberSession;
 import com.depromeet.service.schedule.ScheduleService;
 import com.depromeet.service.schedule.dto.CreateScheduleRequest;
 import com.depromeet.service.schedule.dto.CreateScheduleResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.depromeet.service.schedule.dto.GetScheduleResponse;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class ScheduleController {
@@ -18,9 +21,14 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping("/api/v1/schedule")
+    @PostMapping(value = "/api/v1/schedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<CreateScheduleResponse> createSchedule(@LoginMember MemberSession member, @RequestBody CreateScheduleRequest request) {
         request.updateMemberInfo(member);
         return ApiResponse.of(scheduleService.createSchedule(request));
+    }
+
+    @GetMapping(value = "/api/v1/schedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<List<GetScheduleResponse>> getSchedule(@LoginMember MemberSession member, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+        return ApiResponse.of(scheduleService.getDailySchedule(member.getMemberId(), LocalDate.of(year, month, day)));
     }
 }

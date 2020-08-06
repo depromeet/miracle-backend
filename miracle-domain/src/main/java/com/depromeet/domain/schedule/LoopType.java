@@ -20,4 +20,8 @@ public enum LoopType {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(String.format("Parameter is invalid. %s", text)));
     }
+
+    public String getText() {
+        return text;
+    }
 }
