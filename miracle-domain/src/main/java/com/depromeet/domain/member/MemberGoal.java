@@ -1,5 +1,6 @@
 package com.depromeet.domain.member;
 
+import com.depromeet.domain.BaseTimeEntity;
 import com.depromeet.domain.common.Category;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MemberGoal {
+public class MemberGoal extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
