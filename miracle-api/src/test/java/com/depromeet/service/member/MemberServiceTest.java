@@ -1,6 +1,6 @@
 package com.depromeet.service.member;
 
-import com.depromeet.common.Category;
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberGoal;

@@ -1,6 +1,6 @@
 package com.depromeet.domain.member;
 
-import com.depromeet.common.Category;
+import com.depromeet.domain.common.Category;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
