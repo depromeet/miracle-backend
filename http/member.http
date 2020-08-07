@@ -1,0 +1,27 @@
+ ### 회원가입 API
+POST {{host}}/api/v1/member
+Content-Type: application/json
+
+{
+    "name": "강승호",
+    "email": "will.seungho@gmail.com"
+}
+> {%
+client.global.set("AUTHORIZATION", response.body["data"])
+ %}
+
+### 내정보를 불러오는 API
+GET {{host}}/api/v1/member
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+### 회원 수정 API
+PUT {{host}}/api/v1/member
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "name": "호승강"
+}
+
+###
