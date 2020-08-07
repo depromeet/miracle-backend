@@ -4,7 +4,12 @@ Content-Type: application/json
 
 {
     "name": "강승호",
-    "email": "will.seungho@gmail.com"
+    "email": "will.seungho@gmail.com",
+    "profileIcon": "RED",
+    "goals": [
+        "READING",
+        "EXERCISE"
+    ]
 }
 > {%
 client.global.set("AUTHORIZATION", response.body["data"])
@@ -21,7 +26,19 @@ Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
 {
-    "name": "호승강"
+    "name": "호승강",
+    "profileIcon": "BLUE"
+}
+
+### 회원의 목표 변경 API
+PUT {{host}}/api/v1/member/goal
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "goals": [
+        "MEDITATION"
+    ]
 }
 
 ###
