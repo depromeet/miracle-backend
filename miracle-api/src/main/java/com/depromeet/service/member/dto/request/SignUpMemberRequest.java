@@ -1,6 +1,6 @@
 package com.depromeet.service.member.dto.request;
 
-import com.depromeet.common.Category;
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.ProfileIcon;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.depromeet.service.member.dto.request;
 
-import com.depromeet.common.Category;
+import com.depromeet.domain.common.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
