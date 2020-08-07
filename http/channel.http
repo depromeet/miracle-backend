@@ -1,0 +1,78 @@
+### 새로운 채널 생성 API
+POST {{host}}/api/v1/channel
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "name": "운동",
+    "introduction": "아침에 운동",
+    "profileUrl": "http://profile.com",
+    "startDateTime": "2020-08-06T00:00:00",
+    "endDateTime": "2020-09-01T00:00:00"
+}
+> {%
+client.global.set("CHANNEL_UUID", response.body["data"]["uuid"])
+ %}
+
+
+### 채널의 정보를 변경하는 API
+PUT {{host}}/api/v1/channel
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "channelUuid": "{{CHANNEL_UUID}}",
+    "name": "명상",
+    "introduction": "아침에 명상하기",
+    "profileUrl": "http://profile1.com",
+    "startDateTime": "2020-09-01T00:00:00",
+    "endDateTime": "2020-09-30T00:00:00"
+}
+
+
+### 내가 속한 채널들의 정보를 검색하는 API
+GET {{host}}/api/v1/channel/my
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+
+### 특정 채널의 정보를 검색하는 API
+GET {{host}}/api/v1/channel?channelUuid={{CHANNEL_UUID}}
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+
+### 새로운 멤버 회원가입 API (특정 채널에 입장하는 API 호출을 위한 )
+POST {{host}}/api/v1/member
+Content-Type: application/json
+
+{
+    "name": "will",
+    "email": "ksh980212@gmail.com"
+}
+> {%
+client.global.set("AUTHORIZATION_1", response.body["data"])
+ %}
+
+
+### 특정 채널에 입장하는 API
+PUT {{host}}/api/v1/channel/enter
+Authorization: Bearer {{AUTHORIZATION_1}}
+Content-Type: application/json
+
+{
+    "channelUuid": "{{CHANNEL_UUID}}"
+}
+
+
+### 특정 채널에서 퇴장하는 API
+PUT {{host}}/api/v1/channel/exit
+Authorization: Bearer {{AUTHORIZATION_1}}
+Content-Type: application/json
+
+{
+    "channelUuid": "{{CHANNEL_UUID}}"
+}
+
+
+###
