@@ -20,8 +20,8 @@ public class ScheduleService {
     }
 
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
-        Schedule schedule = repository.save(request.toEntity());
+    public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
+        Schedule schedule = repository.save(request.toEntity(memberId));
         return CreateScheduleResponse.of(schedule);
     }
 

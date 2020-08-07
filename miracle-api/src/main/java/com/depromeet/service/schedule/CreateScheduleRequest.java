@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public class CreateScheduleRequest {
-    private long memberId;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -24,11 +23,7 @@ public class CreateScheduleRequest {
         this.loopType = loopType;
     }
 
-    public Schedule toEntity() {
+    public Schedule toEntity(long memberId) {
         return Schedule.of(memberId, startTime, endTime, category, description, loopType);
-    }
-
-    public void updateMemberInfo(MemberSession member) {
-        this.memberId = member.getMemberId();
     }
 }
