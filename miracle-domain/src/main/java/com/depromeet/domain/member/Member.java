@@ -1,5 +1,6 @@
 package com.depromeet.domain.member;
 
+import com.depromeet.common.Category;
 import com.depromeet.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +16,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,23 +35,33 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    private ProfileIcon profileIcon;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberGoal> memberGoals = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
     @Enumerated(EnumType.STRING)
     private MemberType type;
 
     @Builder
-    public Member(String email, String name) {
+    public Member(String email, String name, ProfileIcon profileIcon, List<Category> goals) {
         this.email = Email.of(email);
         this.name = name;
+        this.profileIcon = profileIcon;
         this.provider = AuthProvider.GOOGLE;
         this.type = MemberType.FREE;
+        addMemberGoals(goals);
     }
 
-    public static Member newInstance(String email, String name) {
+    public static Member newInstance(String email, String name, ProfileIcon profileIcon, List<Category> goals) {
         return Member.builder()
             .email(email)
             .name(name)
+            .profileIcon(profileIcon)
+            .goals(goals)
             .build();
     }
 
@@ -54,10 +69,48 @@ public class Member extends BaseTimeEntity {
         return email.getEmail();
     }
 
-    public void updateInfo(String name) {
+    public void updateInfo(String name, ProfileIcon profileIcon) {
         if (StringUtils.hasText(name)) {
             this.name = name;
         }
+        if (profileIcon != null) {
+            this.profileIcon = profileIcon;
+        }
+    }
+
+    public void updateMemberGoals(List<Category> goals) {
+        removeAllMemberGoals();
+        addMemberGoals(goals);
+    }
+
+    private void removeAllMemberGoals() {
+        this.memberGoals.clear();
+    }
+
+    private void addMemberGoals(List<Category> categories) {
+        if (categories == null) {
+            return;
+        }
+        for (Category category : categories) {
+            addMemberGoal(category);
+        }
+    }
+
+    private void addMemberGoal(Category category) {
+        validateNonExistGoal(category);
+        MemberGoal memberGoal = MemberGoal.of(this, category);
+        this.memberGoals.add(memberGoal);
+    }
+
+    private void validateNonExistGoal(Category category) {
+        if (hasGoal(category)) {
+            throw new IllegalArgumentException(String.format("멤버 (%s)는 목표 (%s)을 이미 설정하였습니다", id, category));
+        }
+    }
+
+    private boolean hasGoal(Category category) {
+        return this.memberGoals.stream()
+            .anyMatch(memberGoal -> memberGoal.getCategory().equals(category));
     }
 
 }
