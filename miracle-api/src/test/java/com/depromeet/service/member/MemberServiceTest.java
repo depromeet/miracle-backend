@@ -1,9 +1,14 @@
 package com.depromeet.service.member;
 
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
+import com.depromeet.domain.member.MemberGoal;
+import com.depromeet.domain.member.MemberGoalRepository;
 import com.depromeet.domain.member.MemberRepository;
+import com.depromeet.domain.member.ProfileIcon;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
+import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -12,10 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -26,6 +34,9 @@ class MemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private MemberGoalRepository memberGoalRepository;
+
     private Member member;
 
     @AfterEach
@@ -35,7 +46,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUpMemberSample() {
-        member = MemberCreator.create("will.seungho@gmail.com", "강승호");
+        member = MemberCreator.create("will.seungho@gmail.com", "강승호", ProfileIcon.RED, Collections.singletonList(Category.EXERCISE));
     }
 
     @Test
@@ -43,10 +54,12 @@ class MemberServiceTest {
         // given
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
+        ProfileIcon profileIcon = ProfileIcon.RED;
 
         SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
             .email(email)
             .name(name)
+            .profileIcon(profileIcon)
             .build();
 
         // when
@@ -55,7 +68,50 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), email, name);
+        assertMemberInfo(members.get(0), email, name, profileIcon);
+    }
+
+    @Test
+    void 새로운_멤버가_회원가입시_멤버의_목표정보도_저장된다() {
+        // given
+        String email = "will.seungho@gmail.com";
+        String name = "kangseungho";
+        List<Category> goals = Arrays.asList(Category.EXERCISE, Category.READING);
+
+        SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
+            .email(email)
+            .name(name)
+            .goals(goals)
+            .build();
+
+        // when
+        memberService.signUpMember(request);
+
+        // then
+        List<MemberGoal> memberGoals = memberGoalRepository.findAll();
+        assertThat(memberGoals).hasSize(2);
+        assertThat(memberGoals).extracting("category").containsExactly(Category.EXERCISE, Category.READING);
+    }
+
+    @Test
+    void 새로운_멤버가_회원가입시_멤버의_목표를_선택하지_않을수_있다() {
+        // given
+        String email = "will.seungho@gmail.com";
+        String name = "kangseungho";
+        List<Category> goals = Collections.emptyList();
+
+        SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
+            .email(email)
+            .name(name)
+            .goals(goals)
+            .build();
+
+        // when
+        memberService.signUpMember(request);
+
+        // then
+        List<MemberGoal> memberGoals = memberGoalRepository.findAll();
+        assertThat(memberGoals).isEmpty();
     }
 
     @Test
@@ -77,11 +133,13 @@ class MemberServiceTest {
     void 멤버의_회원정보를_변경한다() {
         // given
         String name = "kangseungho";
+        ProfileIcon profileIcon = ProfileIcon.BLUE;
 
         memberRepository.save(member);
 
         UpdateMemberInfoRequest request = UpdateMemberInfoRequest.testBuilder()
             .name(name)
+            .profileIcon(profileIcon)
             .build();
 
         // when
@@ -90,7 +148,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), member.getEmail(), name);
+        assertMemberInfo(members.get(0), member.getEmail(), name, profileIcon);
     }
 
     @Test
@@ -107,6 +165,39 @@ class MemberServiceTest {
     }
 
     @Test
+    void 멤버의_목표정보를_변경한다() {
+        // given
+        memberRepository.save(member);
+
+        List<Category> categories = Arrays.asList(Category.MEDITATION, Category.READING);
+
+        UpdateMemberGoalsRequest request = UpdateMemberGoalsRequest.testInstance(categories);
+
+        // when
+        memberService.updateMemberGoals(request, member.getId());
+
+        // then
+        List<MemberGoal> memberGoals = memberGoalRepository.findAll();
+        assertThat(memberGoals).hasSize(2);
+        assertThat(memberGoals).extracting("category").containsExactly(Category.MEDITATION, Category.READING);
+    }
+
+    @Test
+    void 멤버의_목표정보를_변경한다_어떤_목표도_없을_수있다() {
+        // given
+        memberRepository.save(member);
+
+        UpdateMemberGoalsRequest request = UpdateMemberGoalsRequest.testInstance(Collections.emptyList());
+
+        // when
+        memberService.updateMemberGoals(request, member.getId());
+
+        // then
+        List<MemberGoal> memberGoals = memberGoalRepository.findAll();
+        assertThat(memberGoals).isEmpty();
+    }
+
+    @Test
     void 내정보를_불러온다() {
         // given
         memberRepository.save(member);
@@ -115,7 +206,7 @@ class MemberServiceTest {
         MemberInfoResponse response = memberService.getMemberInfo(member.getId());
 
         // then
-        assertMemberInfoResponse(response, member.getEmail(), member.getName());
+        assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileIcon());
     }
 
     @Test
@@ -126,14 +217,20 @@ class MemberServiceTest {
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
-    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name) {
-        assertThat(response.getEmail()).isEqualTo(email);
-        assertThat(response.getName()).isEqualTo(name);
+    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {
+        assertAll(
+            () -> assertThat(response.getEmail()).isEqualTo(email),
+            () -> assertThat(response.getName()).isEqualTo(name),
+            () -> assertThat(response.getProfileIcon()).isEqualTo(profileIcon)
+        );
     }
 
-    private void assertMemberInfo(Member member, String email, String name) {
-        assertThat(member.getEmail()).isEqualTo(email);
-        assertThat(member.getName()).isEqualTo(name);
+    private void assertMemberInfo(Member member, String email, String name, ProfileIcon profileIcon) {
+        assertAll(
+            () -> assertThat(member.getEmail()).isEqualTo(email),
+            () -> assertThat(member.getName()).isEqualTo(name),
+            () -> assertThat(member.getProfileIcon()).isEqualTo(profileIcon)
+        );
     }
 
 }

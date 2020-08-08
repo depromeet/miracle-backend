@@ -1,9 +1,15 @@
 package com.depromeet.service.member.dto.response;
 
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
+import com.depromeet.domain.member.MemberGoal;
+import com.depromeet.domain.member.ProfileIcon;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,8 +21,15 @@ public class MemberInfoResponse {
 
     private final String name;
 
+    private final ProfileIcon profileIcon;
+
+    private final List<Category> goals;
+
     public static MemberInfoResponse of(Member member) {
-        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName());
+        List<Category> memberGoalResponses = member.getMemberGoals().stream()
+            .map(MemberGoal::getCategory)
+            .collect(Collectors.toList());
+        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(), memberGoalResponses);
     }
 
 }

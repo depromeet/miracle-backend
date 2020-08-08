@@ -3,6 +3,7 @@ package com.depromeet.service.member;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberRepository;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
+import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,14 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
-        member.updateInfo(request.getName());
+        member.updateInfo(request.getName(), request.getProfileIcon());
+        return MemberInfoResponse.of(member);
+    }
+
+    @Transactional
+    public MemberInfoResponse updateMemberGoals(UpdateMemberGoalsRequest request, Long memberId) {
+        Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
+        member.updateMemberGoals(request.getGoals());
         return MemberInfoResponse.of(member);
     }
 

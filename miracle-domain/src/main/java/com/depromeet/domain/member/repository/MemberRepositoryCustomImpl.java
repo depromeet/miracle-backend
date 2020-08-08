@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import static com.depromeet.domain.member.QMember.member;
+import static com.depromeet.domain.member.QMemberGoal.memberGoal;
 
 @RequiredArgsConstructor
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
@@ -21,7 +22,8 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
     @Override
     public Member findMemberById(Long id) {
-        return queryFactory.selectFrom(member)
+        return queryFactory.selectFrom(member).distinct()
+            .leftJoin(member.memberGoals, memberGoal).fetchJoin()
             .where(
                 member.id.eq(id)
             ).fetchOne();
