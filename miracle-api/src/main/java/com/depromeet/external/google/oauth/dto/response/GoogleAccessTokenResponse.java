@@ -1,4 +1,4 @@
-package com.depromeet.external.dto.response;
+package com.depromeet.external.google.oauth.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

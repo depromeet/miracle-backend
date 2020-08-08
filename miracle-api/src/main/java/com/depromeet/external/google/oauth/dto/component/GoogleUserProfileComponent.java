@@ -1,4 +1,4 @@
-package com.depromeet.external.dto.component;
+package com.depromeet.external.google.oauth.dto.component;
 
 import lombok.Getter;
 import lombok.Setter;
