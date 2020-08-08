@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +17,10 @@ public class CreateAlarmScheduleRequest {
 
     private String description;
 
+    @NotNull
     private AlarmType type;
 
+    @NotNull
     private List<CreateAlarmRequest> alarms;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")

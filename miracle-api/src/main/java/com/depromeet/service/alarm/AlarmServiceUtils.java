@@ -16,7 +16,7 @@ class AlarmServiceUtils {
         return alarmSchedule;
     }
 
-    static void validateOwner(AlarmSchedule alarmSchedule, Long memberId) {
+    static void validateHasOwner(AlarmSchedule alarmSchedule, Long memberId) {
         if (!alarmSchedule.isOwner(memberId)) {
             throw new IllegalArgumentException(String.format("AlarmSchedule (%s)은 멤버 (%s)의 알림 스케쥴이 아닙니다", alarmSchedule.getId(), memberId));
         }
