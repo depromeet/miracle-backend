@@ -19,6 +19,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+        classpath "io.franzbecker:gradle-lombok:4.0.0"
     }
 }
 
@@ -31,6 +32,7 @@ configure(javaProjects) {
     apply plugin: "com.ewerk.gradle.plugins.querydsl"
     apply plugin: 'kotlin'
     apply plugin: 'kotlin-spring'
+    apply plugin: "io.franzbecker.gradle-lombok"
 
     group = 'com.depromeet'
     sourceCompatibility = '11'
@@ -94,6 +96,9 @@ configure(javaProjects) {
     }
 
     configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
         querydsl.extendsFrom compileClasspath
     }
 
@@ -105,4 +110,15 @@ configure(javaProjects) {
         }
     }
 
+    project.afterEvaluate {
+        project.tasks.compileQuerydsl.options.compilerArgs = [
+            "-proc:only",
+            "-processor", project.querydsl.processors() +
+                ',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
+        ]
+    }
+
+    clean {
+        file(queryDslSrcDir).deleteDir()
+    }
 }

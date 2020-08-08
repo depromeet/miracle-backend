@@ -1,0 +1,17 @@
+###
+POST {{host}}/api/v1/schedule
+Content-Type: application/json
+
+{
+    "startTime": "2020-08-06T16:30:00",
+    "endTime": "2020-08-06T17:00:00",
+    "category": "운동",
+    "description": "운동하기",
+    "loopType": "NONE"
+}
+###
+
+GET {{host}}/api/v1/schedule
+Content-Type: application/json
+
+###
