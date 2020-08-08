@@ -13,20 +13,24 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class CreateAlarmScheduleRequest {
+public class UpdateAlarmScheduleRequest {
 
-    private String description;
+    @NotNull
+    private Long alarmScheduleId;
 
     @NotNull
     private AlarmType type;
+
+    private String description;
 
     @NotNull
     private List<AlarmRequest> alarms;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public CreateAlarmScheduleRequest(String description, AlarmType type, List<AlarmRequest> alarms) {
-        this.description = description;
+    public UpdateAlarmScheduleRequest(Long alarmScheduleId, AlarmType type, String description, List<AlarmRequest> alarms) {
+        this.alarmScheduleId = alarmScheduleId;
         this.type = type;
+        this.description = description;
         this.alarms = alarms;
     }
 
@@ -37,6 +41,12 @@ public class CreateAlarmScheduleRequest {
         AlarmSchedule alarmSchedule = AlarmSchedule.newInstance(memberId, type, description);
         alarmSchedule.addAlarms(alarmList);
         return alarmSchedule;
+    }
+
+    public List<Alarm> toAlarmsEntity() {
+        return alarms.stream()
+            .map(AlarmRequest::toEntity)
+            .collect(Collectors.toList());
     }
 
 }
