@@ -16,7 +16,8 @@ public class ChannelRepositoryCustomImpl implements ChannelRepositoryCustom {
 
     @Override
     public Channel findChannelByUuid(String uuid) {
-        return queryFactory.selectFrom(channel)
+        return queryFactory.selectFrom(channel).distinct()
+            .leftJoin(channel.channelMemberMappers, channelMemberMapper).fetchJoin()
             .where(
                 channel.uuid.uuid.eq(uuid)
             ).fetchOne();
@@ -24,8 +25,8 @@ public class ChannelRepositoryCustomImpl implements ChannelRepositoryCustom {
 
     @Override
     public List<Channel> findChannelsByMemberId(Long memberId) {
-        return queryFactory.selectFrom(channel)
-            .innerJoin(channel.channelMemberMappers, channelMemberMapper).fetchJoin()
+        return queryFactory.selectFrom(channel).distinct()
+            .leftJoin(channel.channelMemberMappers, channelMemberMapper).fetchJoin()
             .where(
                 channelMemberMapper.memberId.eq(memberId)
             ).fetch();

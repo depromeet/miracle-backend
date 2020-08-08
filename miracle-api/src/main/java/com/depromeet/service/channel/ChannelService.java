@@ -37,7 +37,7 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChannelInfoResponse> retrieveMyChannelsInfo(Long memberId) {
+    public List<ChannelInfoResponse> retrieveChannelsInfo(Long memberId) {
         return channelRepository.findChannelsByMemberId(memberId).stream()
             .map(ChannelInfoResponse::of)
             .collect(Collectors.toList());

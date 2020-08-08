@@ -46,8 +46,8 @@ public class ChannelController {
      * 내가 속한 채널들의 정보를 검색하는 API
      */
     @GetMapping("/api/v1/channel/my")
-    public ApiResponse<List<ChannelInfoResponse>> retrieveMyChannelsInfo(@LoginMember MemberSession memberSession) {
-        return ApiResponse.of(channelService.retrieveMyChannelsInfo(memberSession.getMemberId()));
+    public ApiResponse<List<ChannelInfoResponse>> retrieveChannelsInfo(@LoginMember MemberSession memberSession) {
+        return ApiResponse.of(channelService.retrieveChannelsInfo(memberSession.getMemberId()));
     }
 
     /**

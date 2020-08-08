@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class ChannelServiceTest {
@@ -163,7 +164,7 @@ class ChannelServiceTest {
         channelRepository.save(channel);
 
         // when
-        List<ChannelInfoResponse> response = channelService.retrieveMyChannelsInfo(memberId);
+        List<ChannelInfoResponse> response = channelService.retrieveChannelsInfo(memberId);
 
         // then
         assertThat(response).hasSize(1);
@@ -262,19 +263,23 @@ class ChannelServiceTest {
     }
 
     private void assertChannelInfoResponse(ChannelInfoResponse response, String name, String introduction, String profileUrl, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        assertThat(response.getName()).isEqualTo(name);
-        assertThat(response.getIntroduction()).isEqualTo(introduction);
-        assertThat(response.getProfileUrl()).isEqualTo(profileUrl);
-        assertThat(response.getStartDateTime()).isEqualTo(startDateTime);
-        assertThat(response.getEndDateTime()).isEqualTo(endDateTime);
+        assertAll(
+            () -> assertThat(response.getName()).isEqualTo(name),
+            () -> assertThat(response.getIntroduction()).isEqualTo(introduction),
+            () -> assertThat(response.getProfileUrl()).isEqualTo(profileUrl),
+            () -> assertThat(response.getStartDateTime()).isEqualTo(startDateTime),
+            () -> assertThat(response.getEndDateTime()).isEqualTo(endDateTime)
+        );
     }
 
     private void assertChannelInfo(Channel channel, String name, String introduction, String profileUrl, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        assertThat(channel.getName()).isEqualTo(name);
-        assertThat(channel.getIntroduction()).isEqualTo(introduction);
-        assertThat(channel.getProfileUrl()).isEqualTo(profileUrl);
-        assertThat(channel.getStartDateTime()).isEqualTo(startDateTime);
-        assertThat(channel.getEndDateTime()).isEqualTo(endDateTime);
+        assertAll(
+            () -> assertThat(channel.getName()).isEqualTo(name),
+            () -> assertThat(channel.getIntroduction()).isEqualTo(introduction),
+            () -> assertThat(channel.getProfileUrl()).isEqualTo(profileUrl),
+            () -> assertThat(channel.getStartDateTime()).isEqualTo(startDateTime),
+            () -> assertThat(channel.getEndDateTime()).isEqualTo(endDateTime)
+        );
     }
 
 }
