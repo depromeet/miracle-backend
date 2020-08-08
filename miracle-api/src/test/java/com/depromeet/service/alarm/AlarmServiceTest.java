@@ -9,9 +9,11 @@ import com.depromeet.domain.alarm.AlarmScheduleScheduleRepository;
 import com.depromeet.domain.alarm.AlarmType;
 import com.depromeet.domain.alarm.DayOfTheWeek;
 import com.depromeet.service.MemberSetup;
-import com.depromeet.service.alarm.dto.request.CreateAlarmRequest;
+import com.depromeet.service.alarm.dto.request.AlarmRequest;
 import com.depromeet.service.alarm.dto.request.CreateAlarmScheduleRequest;
+import com.depromeet.service.alarm.dto.request.DeleteAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.request.RetrieveAlarmScheduleRequest;
+import com.depromeet.service.alarm.dto.request.UpdateAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.response.AlarmScheduleInfoResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +75,7 @@ class AlarmServiceTest extends MemberSetup {
         DayOfTheWeek dayOfTheWeek = DayOfTheWeek.MON;
         LocalTime reminderTime = LocalTime.of(9, 0);
 
-        CreateAlarmRequest alarmRequest = CreateAlarmRequest.testBuilder()
+        AlarmRequest alarmRequest = AlarmRequest.testBuilder()
             .dayOfTheWeek(dayOfTheWeek)
             .reminderTime(reminderTime)
             .build();
@@ -156,6 +158,65 @@ class AlarmServiceTest extends MemberSetup {
         assertThatThrownBy(() -> {
             alarmService.retrieveAlarmSchedule(request, 999L);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 알림설정을_변경한다() {
+        // given
+        String description = "description";
+        AlarmType type = AlarmType.WAKE_UP;
+        DayOfTheWeek dayOfTheWeek = DayOfTheWeek.MON;
+        LocalTime reminderTime = LocalTime.of(8, 0);
+
+        AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "알림 스케쥴");
+        alarmSchedule.addAlarms(Collections.emptyList());
+        alarmScheduleScheduleRepository.save(alarmSchedule);
+
+        AlarmRequest alarmRequest = AlarmRequest.testBuilder()
+            .dayOfTheWeek(dayOfTheWeek)
+            .reminderTime(reminderTime)
+            .build();
+
+        UpdateAlarmScheduleRequest request = UpdateAlarmScheduleRequest.testBuilder()
+            .alarmScheduleId(alarmSchedule.getId())
+            .description(description)
+            .type(type)
+            .alarms(Collections.singletonList(alarmRequest))
+            .build();
+
+        // when
+        alarmService.updateAlarmSchedule(request, memberId);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleScheduleRepository.findAll();
+        assertThat(alarmSchedules).hasSize(1);
+        assertAlarmSchedule(alarmSchedules.get(0), description, type);
+
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).hasSize(1);
+        assertAlarm(alarms.get(0), dayOfTheWeek, reminderTime);
+    }
+
+    @Test
+    void 특정_알림_스케쥴을_삭제한다() {
+        // given
+        AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "description");
+        Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
+        Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.TUE, LocalTime.of(9, 0));
+        alarmSchedule.addAlarms(Arrays.asList(alarm1, alarm2));
+        alarmScheduleScheduleRepository.save(alarmSchedule);
+
+        DeleteAlarmScheduleRequest request = DeleteAlarmScheduleRequest.testInstance(alarmSchedule.getId());
+
+        // when
+        alarmService.deleteAlarmSchedule(request, memberId);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleScheduleRepository.findAll();
+        assertThat(alarmSchedules).isEmpty();
+
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).isEmpty();
     }
 
     private void assertAlarmSchedule(AlarmSchedule alarmSchedule, String description, AlarmType type) {

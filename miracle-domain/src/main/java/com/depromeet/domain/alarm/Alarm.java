@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,6 +52,20 @@ public class Alarm extends BaseTimeEntity {
 
     void setAlarmSchedule(AlarmSchedule alarmSchedule) {
         this.alarmSchedule = alarmSchedule;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Alarm alarm = (Alarm) o;
+        return getDayOfTheWeek() == alarm.getDayOfTheWeek() &&
+            Objects.equals(getReminderTime(), alarm.getReminderTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }

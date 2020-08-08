@@ -11,7 +11,7 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class CreateAlarmRequest {
+public class AlarmRequest {
 
     @NotNull
     private DayOfTheWeek dayOfTheWeek;
@@ -20,7 +20,7 @@ public class CreateAlarmRequest {
     private LocalTime reminderTime;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public CreateAlarmRequest(DayOfTheWeek dayOfTheWeek, LocalTime reminderTime) {
+    public AlarmRequest(DayOfTheWeek dayOfTheWeek, LocalTime reminderTime) {
         this.dayOfTheWeek = dayOfTheWeek;
         this.reminderTime = reminderTime;
     }

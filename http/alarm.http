@@ -35,4 +35,29 @@ Authorization: Bearer {{AUTHORIZATION}}
 GET {{host}}/api/v1/alarm/schedule?alarmScheduleId={{ALARM_SCHEDULE_ID}}
 Authorization: Bearer {{AUTHORIZATION}}
 
+### 특정 알림 스케쥴을 변경하는 API
+PUT {{host}}/api/v1/alarm/schedule
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "alarmScheduleId": "{{ALARM_SCHEDULE_ID}}",
+    "type": "WAKE_UP",
+    "description": "기상 알람 서비스",
+    "alarms": [
+        {
+            "dayOfTheWeek": "WED",
+            "reminderTime": "08:00"
+        },
+        {
+            "dayOfTheWeek": "FRI",
+            "reminderTime": "15:00"
+        }
+    ]
+}
+
+### 특정 알림 스케쥴을 삭제하는 API
+DELETE {{host}}/api/v1/alarm/schedule?alarmScheduleId={{ALARM_SCHEDULE_ID}}
+Authorization: Bearer {{AUTHORIZATION}}
+
 ###
