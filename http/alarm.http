@@ -1,0 +1,38 @@
+### 새로운 알림 스케쥴을 설정하는 API
+POST {{host}}/api/v1/alarm/schedule
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "type": "WAKE_UP",
+    "description": "기상 알림",
+    "alarms": [
+        {
+            "dayOfTheWeek": "SUN",
+            "reminderTime": "09:00"
+        },
+        {
+            "dayOfTheWeek": "TUE",
+            "reminderTime": "10:00"
+        },
+        {
+            "dayOfTheWeek": "WED",
+            "reminderTime": "08:00"
+        }
+    ]
+}
+> {%
+client.global.set("ALARM_SCHEDULE_ID", response.body["data"]["id"])
+ %}
+
+
+### 회원의 알림 스케쥴 리스트를 불러오는 API
+GET {{host}}/api/v1/alarm/schedule/my
+Authorization: Bearer {{AUTHORIZATION}}
+
+
+### 특정 알림 스케쥴의 정보를 불러오는 API
+GET {{host}}/api/v1/alarm/schedule?alarmScheduleId={{ALARM_SCHEDULE_ID}}
+Authorization: Bearer {{AUTHORIZATION}}
+
+###
