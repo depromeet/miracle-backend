@@ -40,7 +40,7 @@ public class AlarmController {
     }
 
     /**
-     * 특정 앎림 스케쥴의 정보를 불러오는 API
+     * 특정 알림 스케쥴의 정보를 불러오는 API
      */
     @GetMapping("/api/v1/alarm/schedule")
     public ApiResponse<AlarmScheduleInfoResponse> retrieveAlarmSchedule(@Valid RetrieveAlarmScheduleRequest request, @LoginMember MemberSession memberSession) {
