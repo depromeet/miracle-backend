@@ -1,0 +1,41 @@
+package com.depromeet.controller.alarm;
+
+import com.depromeet.ApiResponse;
+import com.depromeet.config.resolver.LoginMember;
+import com.depromeet.config.session.MemberSession;
+import com.depromeet.service.alarm.AlarmService;
+import com.depromeet.service.alarm.dto.request.CreateAlarmScheduleRequest;
+import com.depromeet.service.alarm.dto.request.RetrieveAlarmScheduleRequest;
+import com.depromeet.service.alarm.dto.response.AlarmScheduleInfoResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@RequiredArgsConstructor
+@RestController
+public class AlarmController {
+
+    private final AlarmService alarmService;
+
+    @PostMapping("/api/v1/alarm/schedule")
+    public ApiResponse<AlarmScheduleInfoResponse> createAlarmSchedule(@Valid @RequestBody CreateAlarmScheduleRequest request,
+                                                                      @LoginMember MemberSession memberSession) {
+        return ApiResponse.of(alarmService.createAlarmSchedule(request, memberSession.getMemberId()));
+    }
+
+    @GetMapping("/api/v1/alarm/schedule/my")
+    public ApiResponse<List<AlarmScheduleInfoResponse>> retrieveAlarmSchedules(@LoginMember MemberSession memberSession) {
+        return ApiResponse.of(alarmService.retrieveAlarmSchedules(memberSession.getMemberId()));
+    }
+
+    @GetMapping("/api/v1/alarm/schedule")
+    public ApiResponse<AlarmScheduleInfoResponse> retrieveAlarmSchedule(@Valid RetrieveAlarmScheduleRequest request, @LoginMember MemberSession memberSession) {
+        return ApiResponse.of(alarmService.retrieveAlarmSchedule(request, memberSession.getMemberId()));
+    }
+
+}
