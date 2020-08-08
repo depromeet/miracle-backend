@@ -3,9 +3,9 @@ package com.depromeet.service.authentication;
 
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberRepository;
-import com.depromeet.external.GoogleExternalApiCaller;
-import com.depromeet.external.dto.response.GoogleAccessTokenResponse;
-import com.depromeet.external.dto.response.GoogleUserProfileResponse;
+import com.depromeet.external.google.oauth.GoogleExternalApiCaller;
+import com.depromeet.external.google.oauth.dto.response.GoogleAccessTokenResponse;
+import com.depromeet.external.google.oauth.dto.response.GoogleUserProfileResponse;
 import com.depromeet.service.authentication.dto.request.GoogleOAuthRequest;
 import com.depromeet.service.authentication.dto.response.GoogleOAuthResponse;
 import org.junit.jupiter.api.AfterEach;

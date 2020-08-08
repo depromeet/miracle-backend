@@ -1,9 +1,9 @@
-package com.depromeet.external;
+package com.depromeet.external.google.oauth;
 
-import com.depromeet.external.dto.component.GoogleAccessTokenComponent;
-import com.depromeet.external.dto.component.GoogleUserProfileComponent;
-import com.depromeet.external.dto.response.GoogleAccessTokenResponse;
-import com.depromeet.external.dto.response.GoogleUserProfileResponse;
+import com.depromeet.external.google.oauth.dto.component.GoogleAccessTokenComponent;
+import com.depromeet.external.google.oauth.dto.component.GoogleUserProfileComponent;
+import com.depromeet.external.google.oauth.dto.response.GoogleAccessTokenResponse;
+import com.depromeet.external.google.oauth.dto.response.GoogleUserProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
