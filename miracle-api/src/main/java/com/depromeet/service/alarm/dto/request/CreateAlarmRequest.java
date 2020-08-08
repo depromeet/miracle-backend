@@ -6,14 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
 public class CreateAlarmRequest {
 
+    @NotNull
     private DayOfTheWeek dayOfTheWeek;
 
+    @NotNull
     private LocalTime reminderTime;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
