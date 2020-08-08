@@ -45,3 +45,19 @@
 * 끝나는 시간은 시작하는 시간보다 커야 한다
 
 ### 달성현황
+
+## 환경변수 설정
+### Google OAuth
+```
+# miracle-api/src/main/resources/application-oauth.yml
+
+google:
+    oauth:
+        client_id: ...
+        client_secret: ...
+        grant_type: authorization_code
+        url: https://oauth2.googleapis.com/token
+        redirect-uri: ...
+    profile:
+        url: https://www.googleapis.com/oauth2/v2/userinfo
+```
