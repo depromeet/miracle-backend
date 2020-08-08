@@ -24,11 +24,12 @@ public class AlarmScheduleRepositoryCustomImpl implements AlarmScheduleRepositor
     }
 
     @Override
-    public AlarmSchedule findAlarmScheduleById(Long id) {
+    public AlarmSchedule findAlarmScheduleByIdAndMemberId(Long id, Long memberId) {
         return queryFactory.selectFrom(alarmSchedule).distinct()
             .leftJoin(alarmSchedule.alarms, alarm).fetchJoin()
             .where(
-                alarmSchedule.id.eq(id)
+                alarmSchedule.id.eq(id),
+                alarmSchedule.memberId.eq(memberId)
             ).fetchOne();
     }
 

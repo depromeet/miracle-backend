@@ -76,16 +76,6 @@ public class AlarmSchedule extends BaseTimeEntity {
         this.alarms.clear();
     }
 
-    public void validateMemberHasOwner(Long memberId) {
-        if (!isOwner(memberId)) {
-            throw new IllegalArgumentException(String.format("AlarmSchedule (%s)은 멤버 (%s)의 알림 스케쥴이 아닙니다", id, memberId));
-        }
-    }
-
-    private boolean isOwner(Long memberId) {
-        return this.memberId.equals(memberId);
-    }
-
     public boolean hasSameAlarms(AlarmSchedule other) {
         if (this.alarms.size() != other.alarms.size()) {
             return false;

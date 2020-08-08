@@ -36,15 +36,13 @@ public class AlarmService {
 
     @Transactional(readOnly = true)
     public AlarmScheduleInfoResponse retrieveAlarmSchedule(RetrieveAlarmScheduleRequest request, Long memberId) {
-        AlarmSchedule alarmSchedule = AlarmServiceUtils.findAlarmScheduleById(alarmScheduleRepository, request.getAlarmScheduleId());
-        alarmSchedule.validateMemberHasOwner(memberId);
+        AlarmSchedule alarmSchedule = AlarmServiceUtils.findAlarmScheduleByIdAndMemberId(alarmScheduleRepository, request.getAlarmScheduleId(), memberId);
         return AlarmScheduleInfoResponse.of(alarmSchedule);
     }
 
     @Transactional
     public AlarmScheduleInfoResponse updateAlarmSchedule(UpdateAlarmScheduleRequest request, Long memberId) {
-        AlarmSchedule findAlarmSchedule = AlarmServiceUtils.findAlarmScheduleById(alarmScheduleRepository, request.getAlarmScheduleId());
-        findAlarmSchedule.validateMemberHasOwner(memberId);
+        AlarmSchedule findAlarmSchedule = AlarmServiceUtils.findAlarmScheduleByIdAndMemberId(alarmScheduleRepository, request.getAlarmScheduleId(), memberId);
         findAlarmSchedule.updateAlarmScheduleInfo(request.getType(), request.getDescription());
 
         AlarmSchedule targetAlarms = request.toEntity(memberId);
@@ -57,8 +55,7 @@ public class AlarmService {
 
     @Transactional
     public void deleteAlarmSchedule(DeleteAlarmScheduleRequest request, Long memberId) {
-        AlarmSchedule alarmSchedule = AlarmServiceUtils.findAlarmScheduleById(alarmScheduleRepository, request.getAlarmScheduleId());
-        alarmSchedule.validateMemberHasOwner(memberId);
+        AlarmSchedule alarmSchedule = AlarmServiceUtils.findAlarmScheduleByIdAndMemberId(alarmScheduleRepository, request.getAlarmScheduleId(), memberId);
         alarmScheduleRepository.delete(alarmSchedule);
     }
 

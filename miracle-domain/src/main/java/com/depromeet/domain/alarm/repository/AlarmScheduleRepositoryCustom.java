@@ -8,6 +8,6 @@ public interface AlarmScheduleRepositoryCustom {
 
     List<AlarmSchedule> findAlarmSchedulesByMemberId(Long memberId);
 
-    AlarmSchedule findAlarmScheduleById(Long id);
+    AlarmSchedule findAlarmScheduleByIdAndMemberId(Long id, Long memberId);
 
 }
