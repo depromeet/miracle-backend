@@ -1,6 +1,7 @@
 package com.depromeet.domain.schedule;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum LoopType {
     NONE("NONE"),
@@ -14,14 +15,22 @@ public enum LoopType {
         this.text = text;
     }
 
-    public static LoopType of(String text) {
-        return Arrays.stream(values())
-            .filter(dayOfWeek -> dayOfWeek.text.equals(text))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(String.format("Parameter is invalid. %s", text)));
-    }
-
     public String getText() {
         return text;
+    }
+
+    private final static Map<String, LoopType> cachingLoopType = new HashMap<>();
+
+    static {
+        for (LoopType loopType : values()) {
+            cachingLoopType.put(loopType.getText(), loopType);
+        }
+    }
+
+    public static LoopType of(String text) {
+        if (!cachingLoopType.containsKey(text)) {
+            throw new IllegalArgumentException(String.format("Parameter is invalid. %s", text));
+        }
+        return cachingLoopType.get(text);
     }
 }
