@@ -44,4 +44,8 @@ public class MemberGoal extends BaseTimeEntity {
         return new MemberGoal(member, category);
     }
 
+    boolean hasSameCategory(Category category) {
+        return this.category.equals(category);
+    }
+
 }

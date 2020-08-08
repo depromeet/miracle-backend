@@ -110,7 +110,7 @@ public class Member extends BaseTimeEntity {
 
     private boolean hasGoal(Category category) {
         return this.memberGoals.stream()
-            .anyMatch(memberGoal -> memberGoal.getCategory().equals(category));
+            .anyMatch(memberGoal -> memberGoal.hasSameCategory(category));
     }
 
 }

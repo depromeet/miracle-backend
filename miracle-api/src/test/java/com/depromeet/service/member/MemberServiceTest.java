@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -217,15 +218,19 @@ class MemberServiceTest {
     }
 
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {
-        assertThat(response.getEmail()).isEqualTo(email);
-        assertThat(response.getName()).isEqualTo(name);
-        assertThat(response.getProfileIcon()).isEqualTo(profileIcon);
+        assertAll(
+            () -> assertThat(response.getEmail()).isEqualTo(email),
+            () -> assertThat(response.getName()).isEqualTo(name),
+            () -> assertThat(response.getProfileIcon()).isEqualTo(profileIcon)
+        );
     }
 
     private void assertMemberInfo(Member member, String email, String name, ProfileIcon profileIcon) {
-        assertThat(member.getEmail()).isEqualTo(email);
-        assertThat(member.getName()).isEqualTo(name);
-        assertThat(member.getProfileIcon()).isEqualTo(profileIcon);
+        assertAll(
+            () -> assertThat(member.getEmail()).isEqualTo(email),
+            () -> assertThat(member.getName()).isEqualTo(name),
+            () -> assertThat(member.getProfileIcon()).isEqualTo(profileIcon)
+        );
     }
 
 }
