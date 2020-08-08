@@ -35,7 +35,7 @@ public class AlarmService {
     @Transactional
     public AlarmScheduleInfoResponse retrieveAlarmSchedule(RetrieveAlarmScheduleRequest request, Long memberId) {
         AlarmSchedule alarmSchedule = AlarmServiceUtils.findAlarmScheduleById(alarmScheduleRepository, request.getAlarmScheduleId());
-        AlarmServiceUtils.validateHasOwner(alarmSchedule, memberId);
+        alarmSchedule.validateMemberHasOwner(memberId);
         return AlarmScheduleInfoResponse.of(alarmSchedule);
     }
 
