@@ -1,7 +1,7 @@
 package com.depromeet.service.alarm;
 
 import com.depromeet.domain.alarm.AlarmSchedule;
-import com.depromeet.domain.alarm.AlarmScheduleScheduleRepository;
+import com.depromeet.domain.alarm.AlarmScheduleRepository;
 import com.depromeet.service.alarm.dto.request.CreateAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.request.DeleteAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.request.RetrieveAlarmScheduleRequest;
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class AlarmService {
 
-    private final AlarmScheduleScheduleRepository alarmScheduleRepository;
+    private final AlarmScheduleRepository alarmScheduleRepository;
+
+    @Transactional
+    public void createDefaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
+        alarmScheduleRepository.save(AlarmSchedule.defaultWakeUpAlarmSchedule(memberId, wakeUpTime));
+    }
 
     @Transactional
     public AlarmScheduleInfoResponse createAlarmSchedule(CreateAlarmScheduleRequest request, Long memberId) {

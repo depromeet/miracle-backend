@@ -5,8 +5,6 @@ package com.depromeet.domain.common;
  */
 public enum Category {
 
-    EXERCISE,
-    MEDITATION,
-    READING
+    EXERCISE, MEDITATION, READING, PROMISE, DIARY, PLAN
 
 }

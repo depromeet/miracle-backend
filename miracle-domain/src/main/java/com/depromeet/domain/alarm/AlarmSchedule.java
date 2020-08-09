@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,12 @@ public class AlarmSchedule extends BaseTimeEntity {
             .type(type)
             .description(description)
             .build();
+    }
+
+    public static AlarmSchedule defaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
+        AlarmSchedule alarmSchedule = new AlarmSchedule(memberId, AlarmType.WAKE_UP, "기상 알람");
+        alarmSchedule.addAlarms(Alarm.defaultWakeUpAlarm(wakeUpTime));
+        return alarmSchedule;
     }
 
     public void updateAlarmScheduleInfo(AlarmType type, String description) {

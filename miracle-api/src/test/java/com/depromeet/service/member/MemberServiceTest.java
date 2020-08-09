@@ -1,5 +1,10 @@
 package com.depromeet.service.member;
 
+import com.depromeet.domain.alarm.Alarm;
+import com.depromeet.domain.alarm.AlarmRepository;
+import com.depromeet.domain.alarm.AlarmSchedule;
+import com.depromeet.domain.alarm.AlarmScheduleRepository;
+import com.depromeet.domain.alarm.AlarmType;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
@@ -17,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,11 +43,19 @@ class MemberServiceTest {
     @Autowired
     private MemberGoalRepository memberGoalRepository;
 
+    @Autowired
+    private AlarmScheduleRepository alarmScheduleRepository;
+
+    @Autowired
+    private AlarmRepository alarmRepository;
+
     private Member member;
 
     @AfterEach
     void cleanUp() {
         memberRepository.deleteAll();
+        alarmRepository.deleteAllInBatch();
+        alarmScheduleRepository.deleteAllInBatch();
     }
 
     @BeforeEach
@@ -127,6 +141,30 @@ class MemberServiceTest {
         assertThatThrownBy(() -> {
             memberService.signUpMember(request);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 회원가입시_입력받은_기상시간으로_기본_알림시간이_생성된다() {
+        // given
+        LocalTime wakeUpTime = LocalTime.of(8, 0);
+
+        SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
+            .email("will.seungho@gmail.com")
+            .name("강승호")
+            .wakeUpTime(wakeUpTime)
+            .build();
+
+        // when
+        memberService.signUpMember(request);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
+        assertThat(alarmSchedules).hasSize(1);
+        assertThat(alarmSchedules.get(0).getType()).isEqualTo(AlarmType.WAKE_UP);
+
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).hasSize(7);
+        assertThat(alarms).extracting("reminderTime").contains(LocalTime.of(8, 0));
     }
 
     @Test

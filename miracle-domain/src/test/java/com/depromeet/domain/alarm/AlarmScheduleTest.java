@@ -1,5 +1,6 @@
 package com.depromeet.domain.alarm;
 
+import com.depromeet.domain.common.DayOfTheWeek;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;

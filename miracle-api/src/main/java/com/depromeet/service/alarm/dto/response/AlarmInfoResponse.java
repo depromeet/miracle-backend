@@ -1,7 +1,7 @@
 package com.depromeet.service.alarm.dto.response;
 
 import com.depromeet.domain.alarm.Alarm;
-import com.depromeet.domain.alarm.DayOfTheWeek;
+import com.depromeet.domain.common.DayOfTheWeek;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

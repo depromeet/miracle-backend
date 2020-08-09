@@ -5,9 +5,9 @@ import com.depromeet.domain.alarm.AlarmCreator;
 import com.depromeet.domain.alarm.AlarmRepository;
 import com.depromeet.domain.alarm.AlarmSchedule;
 import com.depromeet.domain.alarm.AlarmScheduleCreator;
-import com.depromeet.domain.alarm.AlarmScheduleScheduleRepository;
+import com.depromeet.domain.alarm.AlarmScheduleRepository;
 import com.depromeet.domain.alarm.AlarmType;
-import com.depromeet.domain.alarm.DayOfTheWeek;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.service.MemberSetup;
 import com.depromeet.service.alarm.dto.request.AlarmRequest;
 import com.depromeet.service.alarm.dto.request.CreateAlarmScheduleRequest;
@@ -36,7 +36,7 @@ class AlarmServiceTest extends MemberSetup {
     private AlarmService alarmService;
 
     @Autowired
-    private AlarmScheduleScheduleRepository alarmScheduleScheduleRepository;
+    private AlarmScheduleRepository alarmScheduleRepository;
 
     @Autowired
     private AlarmRepository alarmRepository;
@@ -45,8 +45,38 @@ class AlarmServiceTest extends MemberSetup {
     void cleanUp() {
         super.cleanup();
         alarmRepository.deleteAllInBatch();
-        alarmScheduleScheduleRepository.deleteAllInBatch();
+        alarmScheduleRepository.deleteAllInBatch();
     }
+
+    @Test
+    void 기본_기상_알림시간_설정시_알림_스케쥴이_생성된다() {
+        // given
+        LocalTime wakeUpTime = LocalTime.of(8, 0);
+
+        // when
+        alarmService.createDefaultWakeUpAlarmSchedule(memberId, wakeUpTime);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
+        assertThat(alarmSchedules).hasSize(1);
+        assertThat(alarmSchedules.get(0).getType()).isEqualTo(AlarmType.WAKE_UP);
+    }
+
+    @Test
+    void 기본_기상_알림시간_설정시_모든요일_같은_시간으로_설정된다() {
+        // given
+        LocalTime wakeUpTime = LocalTime.of(8, 0);
+
+        // when
+        alarmService.createDefaultWakeUpAlarmSchedule(memberId, wakeUpTime);
+
+        // then
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).hasSize(7);
+        assertThat(alarms).extracting("dayOfTheWeek").containsAll(DayOfTheWeek.everyDay);
+        assertThat(alarms).extracting("reminderTime").contains(wakeUpTime);
+    }
+
 
     @Test
     void 새로운_알림을_설정하면_알림_스케쥴이_생성된다() {
@@ -64,7 +94,7 @@ class AlarmServiceTest extends MemberSetup {
         alarmService.createAlarmSchedule(request, memberId);
 
         // then
-        List<AlarmSchedule> alarmSchedules = alarmScheduleScheduleRepository.findAll();
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
         assertThat(alarmSchedules).hasSize(1);
         assertAlarmSchedule(alarmSchedules.get(0), description, type);
     }
@@ -104,7 +134,7 @@ class AlarmServiceTest extends MemberSetup {
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.TUE, LocalTime.of(9, 0));
         alarmSchedule.addAlarms(Arrays.asList(alarm1, alarm2));
-        alarmScheduleScheduleRepository.save(alarmSchedule);
+        alarmScheduleRepository.save(alarmSchedule);
 
         // when
         List<AlarmScheduleInfoResponse> responses = alarmService.retrieveAlarmSchedules(memberId);
@@ -129,7 +159,7 @@ class AlarmServiceTest extends MemberSetup {
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.TUE, LocalTime.of(9, 0));
         alarmSchedule.addAlarms(Arrays.asList(alarm1, alarm2));
-        alarmScheduleScheduleRepository.save(alarmSchedule);
+        alarmScheduleRepository.save(alarmSchedule);
 
         RetrieveAlarmScheduleRequest request = RetrieveAlarmScheduleRequest.of(alarmSchedule.getId());
 
@@ -150,7 +180,7 @@ class AlarmServiceTest extends MemberSetup {
         // given
         AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "알림 스케쥴");
         alarmSchedule.addAlarms(Collections.emptyList());
-        alarmScheduleScheduleRepository.save(alarmSchedule);
+        alarmScheduleRepository.save(alarmSchedule);
 
         RetrieveAlarmScheduleRequest request = RetrieveAlarmScheduleRequest.of(alarmSchedule.getId());
 
@@ -170,7 +200,7 @@ class AlarmServiceTest extends MemberSetup {
 
         AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "알림 스케쥴");
         alarmSchedule.addAlarms(Collections.emptyList());
-        alarmScheduleScheduleRepository.save(alarmSchedule);
+        alarmScheduleRepository.save(alarmSchedule);
 
         AlarmRequest alarmRequest = AlarmRequest.testBuilder()
             .dayOfTheWeek(dayOfTheWeek)
@@ -188,7 +218,7 @@ class AlarmServiceTest extends MemberSetup {
         alarmService.updateAlarmSchedule(request, memberId);
 
         // then
-        List<AlarmSchedule> alarmSchedules = alarmScheduleScheduleRepository.findAll();
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
         assertThat(alarmSchedules).hasSize(1);
         assertAlarmSchedule(alarmSchedules.get(0), description, type);
 
@@ -204,7 +234,7 @@ class AlarmServiceTest extends MemberSetup {
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.TUE, LocalTime.of(9, 0));
         alarmSchedule.addAlarms(Arrays.asList(alarm1, alarm2));
-        alarmScheduleScheduleRepository.save(alarmSchedule);
+        alarmScheduleRepository.save(alarmSchedule);
 
         DeleteAlarmScheduleRequest request = DeleteAlarmScheduleRequest.testInstance(alarmSchedule.getId());
 
@@ -212,7 +242,7 @@ class AlarmServiceTest extends MemberSetup {
         alarmService.deleteAlarmSchedule(request, memberId);
 
         // then
-        List<AlarmSchedule> alarmSchedules = alarmScheduleScheduleRepository.findAll();
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
         assertThat(alarmSchedules).isEmpty();
 
         List<Alarm> alarms = alarmRepository.findAll();
