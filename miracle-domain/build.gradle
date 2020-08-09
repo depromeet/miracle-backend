@@ -1,8 +1,72 @@
+buildscript {
+    ext {
+        querydslPluginVersion = '1.0.10'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+        classpath "io.franzbecker:gradle-lombok:4.0.0"
+    }
+}
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+apply plugin: "io.franzbecker.gradle-lombok"
+
 bootJar { enabled = false }
 jar { enabled = true }
-
 
 dependencies {
     api group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.8.RELEASE'
     runtimeOnly 'com.h2database:h2'
+
+    implementation("com.querydsl:querydsl-jpa")
+    implementation("com.querydsl:querydsl-apt")
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+def queryDslSrcDir = 'src/main/java/generated'
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = queryDslSrcDir
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', queryDslSrcDir]
+        }
+    }
+}
+
+project.afterEvaluate {
+    project.tasks.compileQuerydsl.options.compilerArgs = [
+        "-proc:only",
+        "-processor", project.querydsl.processors() +
+            ',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
+    ]
+}
+
+clean {
+    file(queryDslSrcDir).deleteDir()
 }
