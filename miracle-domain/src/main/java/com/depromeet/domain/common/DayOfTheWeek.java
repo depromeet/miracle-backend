@@ -1,11 +1,15 @@
-package com.depromeet.domain.alarm;
+package com.depromeet.domain.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,9 +26,13 @@ public enum DayOfTheWeek {
     private final DayOfWeek dayOfWeek;
     private final boolean isWeekend;
 
+    public static final List<DayOfTheWeek> everyDay = new ArrayList<>();
     private static final Map<DayOfWeek, DayOfTheWeek> cachingDayOfTheWeek = new HashMap<>();
 
     static {
+        everyDay.addAll(Arrays.stream(values())
+            .collect(Collectors.toList()));
+
         for (DayOfTheWeek dayOfTheWeek : values()) {
             cachingDayOfTheWeek.put(dayOfTheWeek.getDayOfWeek(), dayOfTheWeek);
         }

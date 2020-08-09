@@ -1,6 +1,7 @@
 package com.depromeet.domain.alarm;
 
 import com.depromeet.domain.BaseTimeEntity;
+import com.depromeet.domain.common.DayOfTheWeek;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,6 +51,12 @@ public class Alarm extends BaseTimeEntity {
             .dayOfTheWeek(dayOfTheWeek)
             .reminderTime(reminderTime)
             .build();
+    }
+
+    static List<Alarm> defaultWakeUpAlarm(LocalTime wakeUpTime) {
+        return DayOfTheWeek.everyDay.stream()
+            .map(dayOfTheWeek -> Alarm.newInstance(dayOfTheWeek, wakeUpTime))
+            .collect(Collectors.toList());
     }
 
     void setAlarmSchedule(AlarmSchedule alarmSchedule) {
