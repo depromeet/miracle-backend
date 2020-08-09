@@ -8,8 +8,10 @@ Content-Type: application/json
     "profileIcon": "RED",
     "goals": [
         "READING",
-        "EXERCISE"
-    ]
+        "EXERCISE",
+        "PROMISE"
+    ],
+    "wakeUpTime": "08:00"
 }
 > {%
 client.global.set("AUTHORIZATION", response.body["data"])

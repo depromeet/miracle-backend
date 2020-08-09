@@ -1,5 +1,6 @@
 package com.depromeet.domain.alarm;
 
+import com.depromeet.domain.common.DayOfTheWeek;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -1,11 +1,11 @@
-### 새로운 알림 스케쥴을 설정하는 API
+### 새로운 알림 스케쥴을 추가하는 API
 POST {{host}}/api/v1/alarm/schedule
 Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
 {
     "type": "WAKE_UP",
-    "description": "기상 알림",
+    "description": "추가 설정한 기상 알람",
     "alarms": [
         {
             "dayOfTheWeek": "SUN",
