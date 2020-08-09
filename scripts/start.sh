@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 REPOSITORY=/home/ec2-user/app/miracle
+MIRACLE_RESOURCES=/home/ec2-user/miracle-resources
 
 echo "> Build 파일 복사"
 echo "> cp $REPOSITORY/zip/*.jar $REPOSITORY/"
@@ -19,9 +20,9 @@ chmod +x $JAR_NAME
 echo "> $JAR_NAME 실행"
 
 echo "> nohup java -jar
-        -Dspring.config.location=classpath:/application.properties
+        -Dspring.config.location=classpath:/application.properties,$MIRACLE_RESOURCES/application-oauth.yml
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &"
 
 nohup java -jar \
-    -Dspring.config.location=classpath:/application.properties \
+    -Dspring.config.location=classpath:/application.properties,$MIRACLE_RESOURCES/application-oauth.yml \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
