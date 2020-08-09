@@ -19,12 +19,26 @@ public class ScheduleService {
         this.repository = repository;
     }
 
+    /**
+     * 스케쥴을 데이터 베이스에 저장한다
+     *
+     * @param memberId 가입 멤버 ID
+     * @param request  등록하고자 하는 스케쥴 정보
+     * @return 스케쥴 ID
+     */
     @Transactional
     public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
         Schedule schedule = repository.save(request.toEntity(memberId));
         return CreateScheduleResponse.of(schedule);
     }
 
+    /**
+     * 특정 날짜의 전체 스케쥴을 조회한다.
+     *
+     * @param memberId 가입 멤버 ID
+     * @param date     조회 날짜
+     * @return 해당 날짜에 등록된 전체 스케쥴 정보
+     */
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> getDailySchedule(long memberId, LocalDate date) {
         List<Schedule> schedules = repository.getSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
