@@ -49,7 +49,7 @@ class AlarmServiceTest extends MemberSetup {
     }
 
     @Test
-    void 기본_기상_알림시간_설정시_알림_스케쥴이_생성된다() {
+    void 기본_기상_알림시간_설정시_한개의_기상_알림_스케쥴이_생성된다() {
         // given
         LocalTime wakeUpTime = LocalTime.of(8, 0);
 
@@ -63,7 +63,7 @@ class AlarmServiceTest extends MemberSetup {
     }
 
     @Test
-    void 기본_기상_알림시간_설정시_모든요일_같은_시간으로_설정된다() {
+    void 기본_기상_알림시간_설정시_모든요일이_같은_시간으로_설정된다() {
         // given
         LocalTime wakeUpTime = LocalTime.of(8, 0);
 
@@ -77,9 +77,8 @@ class AlarmServiceTest extends MemberSetup {
         assertThat(alarms).extracting("reminderTime").contains(wakeUpTime);
     }
 
-
     @Test
-    void 새로운_알림을_설정하면_알림_스케쥴이_생성된다() {
+    void 새로운_알림을_설정하면_한개의_새로운_알림_스케쥴이_생성된다() {
         // given
         String description = "기상 알림";
         AlarmType type = AlarmType.WAKE_UP;
@@ -100,7 +99,7 @@ class AlarmServiceTest extends MemberSetup {
     }
 
     @Test
-    void 새로운_알림을_설정하면_알림_스케쥴에_알림이_생성된다() {
+    void 새로운_알림을_설정하면_알림_스케쥴에_N개의_알림이_생성된다() {
         // given
         DayOfTheWeek dayOfTheWeek = DayOfTheWeek.MON;
         LocalTime reminderTime = LocalTime.of(9, 0);
@@ -191,7 +190,7 @@ class AlarmServiceTest extends MemberSetup {
     }
 
     @Test
-    void 알림설정을_변경한다() {
+    void 기존에_존재하는_알림_스케쥴을_변경한다() {
         // given
         String description = "description";
         AlarmType type = AlarmType.WAKE_UP;
@@ -228,7 +227,7 @@ class AlarmServiceTest extends MemberSetup {
     }
 
     @Test
-    void 특정_알림_스케쥴을_삭제한다() {
+    void 기존에_존재하는_특정_알림_스케쥴을_삭제한다() {
         // given
         AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "description");
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));

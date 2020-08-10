@@ -37,7 +37,7 @@ public class AlarmSchedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "alarmSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarms = new ArrayList<>();
 
-    @Builder()
+    @Builder
     public AlarmSchedule(Long memberId, AlarmType type, String description) {
         this.memberId = memberId;
         this.type = type;
@@ -52,9 +52,9 @@ public class AlarmSchedule extends BaseTimeEntity {
             .build();
     }
 
-    public static AlarmSchedule defaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
+    public static AlarmSchedule defaultWakeUpAlarmScheduleInstance(Long memberId, LocalTime wakeUpTime) {
         AlarmSchedule alarmSchedule = new AlarmSchedule(memberId, AlarmType.WAKE_UP, "기상 알람");
-        alarmSchedule.addAlarms(Alarm.defaultWakeUpAlarm(wakeUpTime));
+        alarmSchedule.addAlarms(Alarm.defaultWakeUpAlarmInstance(wakeUpTime));
         return alarmSchedule;
     }
 
