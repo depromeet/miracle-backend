@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -12,6 +13,7 @@ import java.util.List;
 public class UpdateMemberGoalsRequest {
 
     @NotNull
+    @Size(max = 3)
     private List<Category> goals;
 
     private UpdateMemberGoalsRequest(List<Category> goals) {

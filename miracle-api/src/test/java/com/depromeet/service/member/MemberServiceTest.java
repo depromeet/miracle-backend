@@ -1,5 +1,10 @@
 package com.depromeet.service.member;
 
+import com.depromeet.domain.alarm.Alarm;
+import com.depromeet.domain.alarm.AlarmRepository;
+import com.depromeet.domain.alarm.AlarmSchedule;
+import com.depromeet.domain.alarm.AlarmScheduleRepository;
+import com.depromeet.domain.alarm.AlarmType;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
@@ -17,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,11 +43,19 @@ class MemberServiceTest {
     @Autowired
     private MemberGoalRepository memberGoalRepository;
 
+    @Autowired
+    private AlarmScheduleRepository alarmScheduleRepository;
+
+    @Autowired
+    private AlarmRepository alarmRepository;
+
     private Member member;
 
     @AfterEach
     void cleanUp() {
         memberRepository.deleteAll();
+        alarmRepository.deleteAllInBatch();
+        alarmScheduleRepository.deleteAllInBatch();
     }
 
     @BeforeEach
@@ -50,7 +64,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 새로운_멤버가_회원가입한다() {
+    void 새로운_멤버가_회원가입_하면_해당_멤버_정보가_저장된다() {
         // given
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
@@ -94,7 +108,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 새로운_멤버가_회원가입시_멤버의_목표를_선택하지_않을수_있다() {
+    void 새로운_멤버가_회원가입시_아무런_목표도_선택하지_않을수_있다() {
         // given
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
@@ -115,7 +129,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입시_이미_존재하는_이메일인경우() {
+    void 회원가입시_이미_존재하는_이메일인경우_에러가_발생한다() {
         // given
         memberRepository.save(member);
 
@@ -127,6 +141,30 @@ class MemberServiceTest {
         assertThatThrownBy(() -> {
             memberService.signUpMember(request);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 회원가입시_입력받은_기상시간으로_기본_알림스케쥴이_생성된다() {
+        // given
+        LocalTime wakeUpTime = LocalTime.of(8, 0);
+
+        SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
+            .email("will.seungho@gmail.com")
+            .name("강승호")
+            .wakeUpTime(wakeUpTime)
+            .build();
+
+        // when
+        memberService.signUpMember(request);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
+        assertThat(alarmSchedules).hasSize(1);
+        assertThat(alarmSchedules.get(0).getType()).isEqualTo(AlarmType.WAKE_UP);
+
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).hasSize(7);
+        assertThat(alarms).extracting("reminderTime").contains(LocalTime.of(8, 0));
     }
 
     @Test
@@ -152,7 +190,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_회원정보를_변경한다_존재하지_않는_멤버인경우() {
+    void 멤버의_회원정보를_변경할때_존재하지_않는_멤버인경우_에러가_발생한다() {
         // given
         UpdateMemberInfoRequest request = UpdateMemberInfoRequest.testBuilder()
             .name("name")
@@ -165,7 +203,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_목표정보를_변경한다() {
+    void 멤버의_목표_정보를_변경한다() {
         // given
         memberRepository.save(member);
 
@@ -183,7 +221,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_목표정보를_변경한다_어떤_목표도_없을_수있다() {
+    void 멤버의_목표_정보를_변경할때_아무런_목표도_없을_수있다() {
         // given
         memberRepository.save(member);
 
@@ -210,7 +248,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 내정보를_불러온다_존재하지_않는_멤버인경우() {
+    void 내정보를_불러올때_존재하지_않는_멤버인경우_에러가_발생한다() {
         // when & then
         assertThatThrownBy(() -> {
             memberService.getMemberInfo(999L);
