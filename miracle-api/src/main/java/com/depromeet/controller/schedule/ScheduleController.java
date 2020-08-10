@@ -4,9 +4,7 @@ import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
 import com.depromeet.service.schedule.ScheduleService;
-import com.depromeet.service.schedule.dto.CreateScheduleRequest;
-import com.depromeet.service.schedule.dto.CreateScheduleResponse;
-import com.depromeet.service.schedule.dto.GetScheduleResponse;
+import com.depromeet.service.schedule.dto.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +43,18 @@ public class ScheduleController {
     @GetMapping(value = "/api/v1/schedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<List<GetScheduleResponse>> getSchedule(@LoginMember MemberSession session, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
         return ApiResponse.of(scheduleService.getDailySchedule(session.getMemberId(), LocalDate.of(year, month, day)));
+    }
+
+
+    /**
+     * 스케쥴을 수정한다.
+     *
+     * @param request 수정하고자 하는 스케쥴 정보
+     * @param session 가입 멤버 정보
+     * @return 스케쥴 ID
+     */
+    @PutMapping(value = "/api/v1/schedule/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<UpdateScheduleResponse> updateSchedule(@LoginMember MemberSession session, @PathVariable long id, @RequestBody UpdateScheduleRequest request) {
+        return ApiResponse.of(scheduleService.updateSchedule(session.getMemberId(), id, request));
     }
 }

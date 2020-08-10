@@ -10,10 +10,27 @@ Content-Type: application/json
     "description": "운동하기",
     "loopType": "NONE"
 }
+> {%
+client.global.set("SCHEDULE_ID", response.body["data"]["scheduleId"]);
+ %}
+
 ###
 
 GET {{host}}/api/v1/schedule?year=2020&month=8&day=9
 Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
+###
+
+PUT {{host}}/api/v1/schedule/{{SCHEDULE_ID}}
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+  "startTime": "2020-08-09T16:30:00",
+  "endTime": "2020-08-09T17:00:00",
+  "category": "명상",
+  "description": "명상하기",
+  "loopType": "DAY"
+}
 ###
