@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 ###
 
-GET {{host}}/api/v1/schedule
+GET {{host}}/api/v1/schedule?year=2020&month=8&day=9
 Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 

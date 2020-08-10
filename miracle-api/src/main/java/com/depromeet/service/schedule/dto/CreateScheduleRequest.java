@@ -1,4 +1,4 @@
-package com.depromeet.service.schedule;
+package com.depromeet.service.schedule.dto;
 
 import com.depromeet.domain.schedule.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
