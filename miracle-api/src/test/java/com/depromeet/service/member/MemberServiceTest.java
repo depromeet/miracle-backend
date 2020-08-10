@@ -64,7 +64,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 새로운_멤버가_회원가입한다() {
+    void 새로운_멤버가_회원가입_하면_해당_멤버_정보가_저장된다() {
         // given
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
@@ -108,7 +108,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 새로운_멤버가_회원가입시_멤버의_목표를_선택하지_않을수_있다() {
+    void 새로운_멤버가_회원가입시_아무런_목표도_선택하지_않을수_있다() {
         // given
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
@@ -129,7 +129,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입시_이미_존재하는_이메일인경우() {
+    void 회원가입시_이미_존재하는_이메일인경우_에러가_발생한다() {
         // given
         memberRepository.save(member);
 
@@ -144,7 +144,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입시_입력받은_기상시간으로_기본_알림시간이_생성된다() {
+    void 회원가입시_입력받은_기상시간으로_기본_알림스케쥴이_생성된다() {
         // given
         LocalTime wakeUpTime = LocalTime.of(8, 0);
 
@@ -190,7 +190,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_회원정보를_변경한다_존재하지_않는_멤버인경우() {
+    void 멤버의_회원정보를_변경할때_존재하지_않는_멤버인경우_에러가_발생한다() {
         // given
         UpdateMemberInfoRequest request = UpdateMemberInfoRequest.testBuilder()
             .name("name")
@@ -203,7 +203,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_목표정보를_변경한다() {
+    void 멤버의_목표_정보를_변경한다() {
         // given
         memberRepository.save(member);
 
@@ -221,7 +221,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 멤버의_목표정보를_변경한다_어떤_목표도_없을_수있다() {
+    void 멤버의_목표_정보를_변경할때_아무런_목표도_없을_수있다() {
         // given
         memberRepository.save(member);
 
@@ -248,7 +248,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 내정보를_불러온다_존재하지_않는_멤버인경우() {
+    void 내정보를_불러올때_존재하지_않는_멤버인경우_에러가_발생한다() {
         // when & then
         assertThatThrownBy(() -> {
             memberService.getMemberInfo(999L);

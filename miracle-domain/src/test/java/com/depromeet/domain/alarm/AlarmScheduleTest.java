@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AlarmScheduleTest {
 
     @Test
-    void hasSameAlarms_테스트_두_알람이_같은경우() {
+    void 두_알람이_같은경우_hasSameAlarms_returnTrue() {
         // given
         AlarmSchedule alarmSchedule1 = AlarmScheduleCreator.createAlarmSchedule(1L, AlarmType.WAKE_UP, "description1");
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
@@ -30,7 +30,7 @@ class AlarmScheduleTest {
     }
 
     @Test
-    void hasSameAlarms_테스트_둘다_빈경우() {
+    void 알람_두개다_빈경우_hasSameAlarms_returnTrue() {
         // given
         AlarmSchedule alarmSchedule1 = AlarmScheduleCreator.createAlarmSchedule(1L, AlarmType.WAKE_UP, "description1");
         alarmSchedule1.addAlarms(Collections.emptyList());
@@ -43,7 +43,7 @@ class AlarmScheduleTest {
     }
 
     @Test
-    void hasSameAlarms_테스트_알람의_수가_다른경우() {
+    void 알람의_수가_다른경우_hasSameAlarms_returnFalse() {
         // given
         AlarmSchedule alarmSchedule1 = AlarmScheduleCreator.createAlarmSchedule(1L, AlarmType.WAKE_UP, "description1");
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
@@ -59,7 +59,7 @@ class AlarmScheduleTest {
     }
 
     @Test
-    void hasSameAlarms_테스트_알람의_수는_같은데_시간이_다른경우() {
+    void 알람의_시간이_다른경우_hasSameAlarms_returnFalse() {
         // given
         AlarmSchedule alarmSchedule1 = AlarmScheduleCreator.createAlarmSchedule(1L, AlarmType.WAKE_UP, "description1");
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));

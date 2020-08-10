@@ -23,7 +23,7 @@ public class AlarmService {
 
     @Transactional
     public void createDefaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
-        alarmScheduleRepository.save(AlarmSchedule.defaultWakeUpAlarmSchedule(memberId, wakeUpTime));
+        alarmScheduleRepository.save(AlarmSchedule.defaultWakeUpAlarmScheduleInstance(memberId, wakeUpTime));
     }
 
     @Transactional

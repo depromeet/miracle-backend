@@ -53,7 +53,7 @@ public class Alarm extends BaseTimeEntity {
             .build();
     }
 
-    static List<Alarm> defaultWakeUpAlarm(LocalTime wakeUpTime) {
+    static List<Alarm> defaultWakeUpAlarmInstance(LocalTime wakeUpTime) {
         return DayOfTheWeek.everyDay.stream()
             .map(dayOfTheWeek -> Alarm.newInstance(dayOfTheWeek, wakeUpTime))
             .collect(Collectors.toList());

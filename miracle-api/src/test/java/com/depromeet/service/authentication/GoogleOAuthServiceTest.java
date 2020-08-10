@@ -58,7 +58,7 @@ class GoogleOAuthServiceTest {
     }
 
     @Test
-    void 존재하는_회원이_있으면_로그인이_진행된다() {
+    void 구글_OAUTH_요청시_이미_존재하는_회원이_있으면_로그인이_진행된다() {
         // given
         String email = "will.seungho@gmail.com";
         memberRepository.save(MemberCreator.create(email));
@@ -75,7 +75,7 @@ class GoogleOAuthServiceTest {
     }
 
     @Test
-    void 존재하는_회원이_없으면_회원가입을_위한_정보가_반환된다() {
+    void 구글_OAUTH_요청시_기존에_존재하는_회원이_없으면_회원가입을_위한_정보가_반환된다() {
         // given
         String email = "will.seungho@gmail.com";
         String name = "강승호";

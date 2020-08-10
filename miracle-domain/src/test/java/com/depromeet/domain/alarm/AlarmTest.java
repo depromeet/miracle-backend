@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class AlarmTest {
 
     @Test
-    void 동등성_테스트_같은_요일_같은_시간인_경우() {
+    void 동등성_테스트_같은_요일_같은_시간인_경우_return_true() {
         // given
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
@@ -21,7 +21,7 @@ class AlarmTest {
     }
 
     @Test
-    void 동등성_테스트_다른_요일_같은_시간인_경우() {
+    void 동등성_테스트_다른_요일_같은_시간인_경우_return_false() {
         // given
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.TUE, LocalTime.of(8, 0));
@@ -31,7 +31,7 @@ class AlarmTest {
     }
 
     @Test
-    void 동등성_테스트_같은_요일_다른_시간인경우() {
+    void 동등성_테스트_같은_요일_다른_시간인경우_return_false() {
         // given
         Alarm alarm1 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0));
         Alarm alarm2 = AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(9, 0));
