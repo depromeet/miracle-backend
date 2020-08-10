@@ -3,11 +3,14 @@ package com.depromeet.service.schedule;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
+import com.depromeet.service.schedule.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,5 +52,20 @@ public class ScheduleService {
             .stream()
             .map(GetScheduleResponse::of)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 데이터 베이스의 스케쥴을 수정한다.
+     *
+     * @param memberId 가입 멤버 ID
+     * @param request  수정하고자 하는 스케쥴 정보
+     * @return 스케쥴 ID
+     */
+    @Transactional
+    public UpdateScheduleResponse updateSchedule(Long memberId, long scheduleId, UpdateScheduleRequest request) {
+        Optional<Schedule> opt = repository.findById(scheduleId);
+        Schedule schedule = opt.orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), LoopType.of(request.getLoopType()));
+        return UpdateScheduleResponse.of(schedule);
     }
 }
