@@ -68,6 +68,23 @@ public class Schedule extends BaseTimeEntity {
         }
     }
 
+    public void update(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+        if (this.memberId != memberId) {
+            throw new IllegalScheduleAccessException(String.format("해당 스케쥴 (%d)은 수정할 수 없습니다", this.id));
+        }
+
+        validateTime(startTime, endTime);
+        this.year = startTime.getYear();
+        this.month = startTime.getMonthValue();
+        this.day = startTime.getDayOfMonth();
+        this.dayOfWeek = startTime.getDayOfWeek();
+        this.startTime = startTime.toLocalTime();
+        this.endTime = endTime.toLocalTime();
+        this.category = category;
+        this.description = description;
+        this.loopType = loopType;
+    }
+
     public Long getId() {
         return id;
     }

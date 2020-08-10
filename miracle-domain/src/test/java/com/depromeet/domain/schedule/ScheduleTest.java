@@ -71,4 +71,46 @@ class ScheduleTest {
             Arguments.of(1L, LocalDateTime.of(2030, 8, 6, 11, 0, 0), LocalDateTime.of(2020, 8, 6, 11, 30, 0), "수면", "취침시간", "WEEK")
         );
     }
+
+    @DisplayName("Schedule 객체를 변경할 수 있다")
+    @ParameterizedTest
+    @MethodSource("source_updateSchedule_ShouldSuccess")
+    void updateSchedule_ShouldSuccess(LocalDateTime startTime, LocalDateTime endTime, String category, String description, String loopType) {
+        Schedule schedule = Schedule.of(1L, LocalDateTime.of(2020, 8, 6, 8, 0, 0), LocalDateTime.of(2020, 8, 6, 8, 30, 0), "운동", "운동하기", "NONE");
+        schedule.update(schedule.getMemberId(), startTime, endTime, category, description, LoopType.of(loopType));
+        assertAll(
+            () -> assertThat(schedule.getYear()).isEqualTo(startTime.getYear()),
+            () -> assertThat(schedule.getMonth()).isEqualTo(startTime.getMonthValue()),
+            () -> assertThat(schedule.getDay()).isEqualTo(startTime.getDayOfMonth()),
+            () -> assertThat(schedule.getStartTime()).isEqualTo(startTime.toLocalTime()),
+            () -> assertThat(schedule.getEndTime()).isEqualTo(endTime.toLocalTime()),
+            () -> assertThat(schedule.getLoopType()).isEqualTo(LoopType.of(loopType))
+        );
+    }
+
+    static Stream<Arguments> source_updateSchedule_ShouldSuccess() {
+        return Stream.of(
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 6, 0, 0), LocalDateTime.of(2020, 8, 6, 6, 30, 0), "운동", "운동하기", "NONE"),
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 9, 0, 0), LocalDateTime.of(2020, 8, 6, 10, 0, 0), "요가-2", "스트레칭-2", "DAY"),
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 22, 0, 0), LocalDateTime.of(2020, 8, 6, 22, 30, 0), "수면", "취침시간", "MONTH")
+        );
+    }
+
+    @DisplayName("다른 멤버의 스케쥴을 수정 시에 예외 발생")
+    @ParameterizedTest
+    @MethodSource("source_updateSchedule_ShouldFail")
+    void updateSchedule_ShouldFail(LocalDateTime startTime, LocalDateTime endTime, String category, String description, String loopType) {
+        Schedule schedule = Schedule.of(1L, LocalDateTime.of(2020, 8, 6, 8, 0, 0), LocalDateTime.of(2020, 8, 6, 8, 30, 0), "운동", "운동하기", "NONE");
+        assertThatThrownBy(() -> {
+            schedule.update(schedule.getMemberId() + 1, startTime, endTime, category, description, LoopType.of(loopType));
+        }).isInstanceOf(IllegalScheduleAccessException.class);
+    }
+
+    static Stream<Arguments> source_updateSchedule_ShouldFail() {
+        return Stream.of(
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 6, 0, 0), LocalDateTime.of(2020, 8, 6, 6, 30, 0), "운동", "운동하기", "NONE"),
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 9, 0, 0), LocalDateTime.of(2020, 8, 6, 10, 0, 0), "요가-2", "스트레칭-2", "DAY"),
+            Arguments.of(LocalDateTime.of(2020, 8, 6, 22, 0, 0), LocalDateTime.of(2020, 8, 6, 22, 30, 0), "수면", "취침시간", "MONTH")
+        );
+    }
 }
