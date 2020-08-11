@@ -41,4 +41,4 @@ application-oauth.yml
 application-prod-db.yml
 
 ## Logging File ###
-logs/**
+*.log

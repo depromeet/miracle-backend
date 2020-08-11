@@ -3,7 +3,11 @@ server:
 
 spring:
     profiles:
-        include: domain, oauth, logging
+        active: local
+        include:
+            - domain
+            - oauth
+            - logging
 
 ---
 
