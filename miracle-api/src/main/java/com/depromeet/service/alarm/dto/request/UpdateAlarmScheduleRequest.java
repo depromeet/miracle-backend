@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class UpdateAlarmScheduleRequest {
 
-    @NotNull
+    @NotNull(message = "수정하려는 알람 스케쥴의 아이디를 입력해주세요.")
     private Long alarmScheduleId;
 
-    @NotNull
+    @NotNull(message = "알람의 종류를 입력해주세요.")
     private AlarmType type;
 
     private String description;
 
-    @NotNull
+    @NotNull(message = "알람 리스트를 입력해주세요.")
     private List<AlarmRequest> alarms;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")

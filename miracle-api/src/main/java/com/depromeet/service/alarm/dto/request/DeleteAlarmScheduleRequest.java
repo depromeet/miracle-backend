@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class DeleteAlarmScheduleRequest {
 
-    @NotNull
+    @NotNull(message = "삭제하려는 알람 스케쥴의 아이디를 입력해주세요.")
     private Long alarmScheduleId;
 
     private DeleteAlarmScheduleRequest(Long alarmScheduleId) {

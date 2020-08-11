@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class GoogleOAuthRequest {
 
-    @NotBlank
+    @NotBlank(message = "Code를 입력해주세요.")
     private String code;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")

@@ -2,7 +2,9 @@ package com.depromeet.config.resolver;
 
 import com.depromeet.config.session.MemberSession;
 import com.depromeet.constants.SessionConstants;
+import com.deprommet.exception.InvalidSessionException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.session.Session;
@@ -13,7 +15,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
@@ -40,17 +42,20 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         validateAvailableHeader(header);
         Session session = sessionRepository.getSession(header.split(BEARER_TOKEN)[1]);
         if (session == null) {
-            throw new IllegalArgumentException(String.format("잘못된 세션입니다 (%s)", header));
+            log.info(String.format("잘못된 세션입니다 (%s)", header));
+            throw new InvalidSessionException("세션이 만료되었습니다. 다시 로그인 해주세요.");
         }
         return session;
     }
 
     private void validateAvailableHeader(String header) {
         if (header == null) {
-            throw new IllegalArgumentException("세션이 없습니다");
+            log.info("세션이 없습니다");
+            throw new InvalidSessionException("세션이 만료되었습니다. 다시 로그인 해주세요.");
         }
         if (!header.startsWith(BEARER_TOKEN)) {
-            throw new IllegalArgumentException(String.format("잘못된 세션입니다 (%s)", header));
+            log.info(String.format("잘못된 세션입니다 (%s)", header));
+            throw new InvalidSessionException("세션이 만료되었습니다. 다시 로그인 해주세요.");
         }
     }
 

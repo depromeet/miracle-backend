@@ -16,6 +16,8 @@ import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
+import com.deprommet.exception.ConflictException;
+import com.deprommet.exception.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -140,7 +142,7 @@ class MemberServiceTest {
         // when & then
         assertThatThrownBy(() -> {
             memberService.signUpMember(request);
-        }).isInstanceOf(IllegalArgumentException.class);
+        }).isInstanceOf(ConflictException.class);
     }
 
     @Test
@@ -199,7 +201,7 @@ class MemberServiceTest {
         // when & then
         assertThatThrownBy(() -> {
             memberService.updateMemberInfo(request, 999L);
-        }).isInstanceOf(IllegalArgumentException.class);
+        }).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -252,7 +254,7 @@ class MemberServiceTest {
         // when & then
         assertThatThrownBy(() -> {
             memberService.getMemberInfo(999L);
-        }).isInstanceOf(IllegalArgumentException.class);
+        }).isInstanceOf(NotFoundException.class);
     }
 
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {

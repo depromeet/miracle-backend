@@ -13,10 +13,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class AlarmRequest {
 
-    @NotNull
+    @NotNull(message = "알람을 받을 요일을 선택해주세요.")
     private DayOfTheWeek dayOfTheWeek;
 
-    @NotNull
+    @NotNull(message = "알람을 받을 시간을 입력해주세요.")
     private LocalTime reminderTime;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
