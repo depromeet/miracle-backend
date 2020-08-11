@@ -24,5 +24,8 @@ echo "> nohup java -jar
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &"
 
 nohup java -jar \
-    -Dspring.config.location=classpath:/application.properties,$MIRACLE_RESOURCES/application-oauth.yml \
+    -Dspring.profiles.active=prod \
+    -Dspring.config.location=classpath:/application.yml,\
+    $MIRACLE_RESOURCES/application-oauth.yml, \
+    $MIRACLE_RESOURCES/application-prod-db.yml \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
