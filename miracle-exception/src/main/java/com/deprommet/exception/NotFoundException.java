@@ -1,9 +1,9 @@
 package com.deprommet.exception;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends CustomException {
 
-    public NotFoundException(String message) {
-        super(message);
+    public NotFoundException(String message, String clientMessage) {
+        super(message, clientMessage);
     }
 
 }

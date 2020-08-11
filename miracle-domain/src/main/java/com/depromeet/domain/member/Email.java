@@ -4,14 +4,12 @@ import com.deprommet.exception.ValidationException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
@@ -29,8 +27,7 @@ public class Email {
 
     private void verifyEmailFormat(String email) {
         if (!EMAIL_REGEX.matcher(email).matches()) {
-            log.info(String.format("(%s)은 이메일 포맷에 맞지 않습니다", email));
-            throw new ValidationException("잘못된 이메일 형식입니다");
+            throw new ValidationException(String.format("(%s)은 이메일 포맷에 맞지 않습니다", email), "잘못된 이메일 형식입니다");
         }
     }
 
