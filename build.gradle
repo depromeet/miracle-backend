@@ -1,6 +1,7 @@
 def javaProjects = [
     project(':miracle-api'),
-    project(':miracle-domain')
+    project(':miracle-domain'),
+    project(':miracle-exception')
 ]
 
 buildscript {

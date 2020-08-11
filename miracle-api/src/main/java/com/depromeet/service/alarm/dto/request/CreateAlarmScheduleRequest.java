@@ -17,10 +17,10 @@ public class CreateAlarmScheduleRequest {
 
     private String description;
 
-    @NotNull
+    @NotNull(message = "알람의 종류를 입력해주세요.")
     private AlarmType type;
 
-    @NotNull
+    @NotNull(message = "알람 리스트를 입력해주세요.")
     private List<AlarmRequest> alarms;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")

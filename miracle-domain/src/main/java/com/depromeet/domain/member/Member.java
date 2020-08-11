@@ -2,6 +2,7 @@ package com.depromeet.domain.member;
 
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.BaseTimeEntity;
+import com.deprommet.exception.ConflictException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -104,7 +105,7 @@ public class Member extends BaseTimeEntity {
 
     private void validateNonExistGoal(Category category) {
         if (hasGoal(category)) {
-            throw new IllegalArgumentException(String.format("멤버 (%s)는 목표 (%s)을 이미 설정하였습니다", id, category));
+            throw new ConflictException(String.format("멤버 (%s) 는 목표 (%s)을 이미 설정하였습니다", email, category), "이미 설정한 목표입니다");
         }
     }
 

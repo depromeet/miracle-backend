@@ -1,0 +1,14 @@
+spring:
+    profiles: local
+logging:
+    file:
+        path: logs/
+        max-size: 10MB
+
+---
+spring:
+    profiles: prod
+logging:
+    file:
+        path: logs/
+        max-size: 100MB

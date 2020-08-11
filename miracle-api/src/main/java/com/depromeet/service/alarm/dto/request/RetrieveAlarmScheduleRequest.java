@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RetrieveAlarmScheduleRequest {
 
-    @NotNull
+    @NotNull(message = "조회하려는 알람 스케쥴의 아이디를 입력해주세요.")
     private Long alarmScheduleId;
 
     private RetrieveAlarmScheduleRequest(Long alarmScheduleId) {

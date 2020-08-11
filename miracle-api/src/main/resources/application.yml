@@ -3,7 +3,7 @@ server:
 
 spring:
     profiles:
-        include: domain, oauth
+        include: domain, oauth, logging
 
 ---
 

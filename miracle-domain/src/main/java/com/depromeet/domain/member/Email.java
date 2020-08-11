@@ -1,5 +1,6 @@
 package com.depromeet.domain.member;
 
+import com.deprommet.exception.ValidationException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Email {
 
     private void verifyEmailFormat(String email) {
         if (!EMAIL_REGEX.matcher(email).matches()) {
-            throw new IllegalArgumentException(String.format("(%s)은  이메일 포맷에 맞지 않습니다", email));
+            throw new ValidationException(String.format("(%s)은 이메일 포맷에 맞지 않습니다", email), "잘못된 이메일 형식입니다");
         }
     }
 

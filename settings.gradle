@@ -1,4 +1,5 @@
 rootProject.name = 'miracle'
 include 'miracle-api'
 include 'miracle-domain'
+include 'miracle-exception'
 

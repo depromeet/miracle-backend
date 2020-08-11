@@ -19,6 +19,8 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
+    implementation project(':miracle-exception')
+    
     api group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.8.RELEASE'
     implementation("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly 'mysql:mysql-connector-java'
