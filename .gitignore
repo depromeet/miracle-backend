@@ -39,3 +39,6 @@ generated/
 ### OAuth credentials ###
 application-oauth.yml
 application-prod-db.yml
+
+## Logging File ###
+logs/**
