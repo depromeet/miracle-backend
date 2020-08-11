@@ -38,3 +38,6 @@ generated/
 
 ### OAuth credentials ###
 application-oauth.yml
+
+## logging file ###
+logs/**
