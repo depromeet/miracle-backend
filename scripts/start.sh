@@ -20,12 +20,10 @@ chmod +x $JAR_NAME
 echo "> $JAR_NAME 실행"
 
 echo "> nohup java -jar
-        -Dspring.config.location=classpath:/application.properties,$MIRACLE_RESOURCES/application-oauth.yml
+        -Dspring.config.location=classpath:/application.properties,$MIRACLE_RESOURCES/application-oauth.yml,$MIRACLE_RESOURCES/application-prod-db.yml
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &"
 
 nohup java -jar \
+    -Dspring.config.location=classpath:/application.yml,$MIRACLE_RESOURCES/application-oauth.yml,$MIRACLE_RESOURCES/application-prod-db.yml\
     -Dspring.profiles.active=prod \
-    -Dspring.config.location=classpath:/application.yml,\
-    $MIRACLE_RESOURCES/application-oauth.yml, \
-    $MIRACLE_RESOURCES/application-prod-db.yml \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
