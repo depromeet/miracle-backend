@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.CascadeType;
@@ -22,7 +21,6 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -107,8 +105,7 @@ public class Member extends BaseTimeEntity {
 
     private void validateNonExistGoal(Category category) {
         if (hasGoal(category)) {
-            log.info(String.format("멤버 (%s) 는 목표 (%s)을 이미 설정하였습니다", email, category));
-            throw new ConflictException("이미 설정한 목표입니다");
+            throw new ConflictException(String.format("멤버 (%s) 는 목표 (%s)을 이미 설정하였습니다", email, category), "이미 설정한 목표입니다");
         }
     }
 

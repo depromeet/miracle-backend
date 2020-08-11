@@ -1,9 +1,9 @@
 package com.deprommet.exception;
 
-public class ValidationException extends RuntimeException {
+public class ValidationException extends CustomException {
 
-    public ValidationException(String message) {
-        super(message);
+    public ValidationException(String message, String clientMessage) {
+        super(message, clientMessage);
     }
 
 }
