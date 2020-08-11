@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class UpdateMemberGoalsRequest {
 
-    @NotNull
-    @Size(max = 3)
+    @NotNull(message = "목표를 설정해주세요.")
+    @Size(max = 3, message = "목표를 3개 이하 선택해주세요.")
     private List<Category> goals;
 
     private UpdateMemberGoalsRequest(List<Category> goals) {

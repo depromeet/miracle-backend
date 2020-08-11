@@ -15,6 +15,7 @@ import com.depromeet.service.alarm.dto.request.DeleteAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.request.RetrieveAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.request.UpdateAlarmScheduleRequest;
 import com.depromeet.service.alarm.dto.response.AlarmScheduleInfoResponse;
+import com.deprommet.exception.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,7 +187,7 @@ class AlarmServiceTest extends MemberSetup {
         // when & then
         assertThatThrownBy(() -> {
             alarmService.retrieveAlarmSchedule(request, 999L);
-        }).isInstanceOf(IllegalArgumentException.class);
+        }).isInstanceOf(NotFoundException.class);
     }
 
     @Test

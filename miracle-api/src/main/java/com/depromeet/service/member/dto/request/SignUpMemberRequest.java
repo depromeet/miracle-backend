@@ -17,20 +17,20 @@ import java.util.List;
 @NoArgsConstructor
 public class SignUpMemberRequest {
 
-    @NotBlank
+    @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "닉네임을 입력해주세요")
     private String name;
 
-    @NotNull
+    @NotNull(message = "프로필 아이콘을 선택해주세요.")
     private ProfileIcon profileIcon;
 
-    @NotNull
-    @Size(max = 3)
+    @NotNull(message = "목표를 설정해주세요.")
+    @Size(max = 3, message = "목표를 3개 이하 선택해주세요.")
     private List<Category> goals;
 
-    @NotNull
+    @NotNull(message = "기상시간을 입력해주세요.")
     private LocalTime wakeUpTime;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
