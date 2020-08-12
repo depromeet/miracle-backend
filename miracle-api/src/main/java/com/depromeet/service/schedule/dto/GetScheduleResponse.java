@@ -1,9 +1,13 @@
 package com.depromeet.service.schedule.dto;
 
+import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalTime;
 
+@ApiModel
 public class GetScheduleResponse {
     private long id;
     private int year;
@@ -14,9 +18,10 @@ public class GetScheduleResponse {
     private LocalTime endTime;
     private String category;
     private String description;
-    private String loopType;
+    @ApiModelProperty
+    private LoopType loopType;
 
-    public GetScheduleResponse(long id, int year, int month, int day, int dayOfWeek, LocalTime startTime, LocalTime endTime, String category, String description, String loopType) {
+    public GetScheduleResponse(long id, int year, int month, int day, int dayOfWeek, LocalTime startTime, LocalTime endTime, String category, String description, LoopType loopType) {
         this.id = id;
         this.year = year;
         this.month = month;
@@ -30,7 +35,7 @@ public class GetScheduleResponse {
     }
 
     public static GetScheduleResponse of(Schedule schedule) {
-        return new GetScheduleResponse(schedule.getId(), schedule.getYear(), schedule.getMonth(), schedule.getDay(), schedule.getDayOfWeek().getValue(), schedule.getStartTime(), schedule.getEndTime(), schedule.getCategory(), schedule.getDescription(), schedule.getLoopType().getText());
+        return new GetScheduleResponse(schedule.getId(), schedule.getYear(), schedule.getMonth(), schedule.getDay(), schedule.getDayOfWeek().getValue(), schedule.getStartTime(), schedule.getEndTime(), schedule.getCategory(), schedule.getDescription(), schedule.getLoopType());
     }
 
     public long getId() {
@@ -69,7 +74,7 @@ public class GetScheduleResponse {
         return description;
     }
 
-    public String getLoopType() {
+    public LoopType getLoopType() {
         return loopType;
     }
 }

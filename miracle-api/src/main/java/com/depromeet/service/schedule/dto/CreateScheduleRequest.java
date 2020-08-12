@@ -1,13 +1,17 @@
 package com.depromeet.service.schedule.dto;
 
+import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@ApiModel
 public class CreateScheduleRequest {
 
     @NotBlank(message = "시작시간을 선택해주세요")
@@ -25,14 +29,15 @@ public class CreateScheduleRequest {
     @Length(max = 11, message = "11자 이하로 입력해주세요")
     private String description;
 
+    @ApiModelProperty
     @NotBlank(message = "반복설정을 선택해주세요")
-    private String loopType;
+    private LoopType loopType;
 
     public CreateScheduleRequest() {
         // needed by jackson
     }
 
-    public CreateScheduleRequest(LocalDateTime startTime, LocalDateTime endTime, String category, String description, String loopType) {
+    public CreateScheduleRequest(LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
@@ -60,7 +65,7 @@ public class CreateScheduleRequest {
         return description;
     }
 
-    public String getLoopType() {
+    public LoopType getLoopType() {
         return loopType;
     }
 

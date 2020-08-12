@@ -1,5 +1,6 @@
 package com.depromeet.service.schedule;
 
+import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.service.schedule.dto.GetScheduleResponse;
 import com.depromeet.service.schedule.dto.UpdateScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +54,7 @@ class ScheduleServiceTest {
     @DisplayName("존재하지 않는 스케쥴 수정 시에 예외 발생")
     @Test
     void updateNotExistSchedule_ShouldFail() {
-        UpdateScheduleRequest request = new UpdateScheduleRequest(LocalDateTime.now(), LocalDateTime.now(), "category", "desciption", "loopType");
+        UpdateScheduleRequest request = new UpdateScheduleRequest(LocalDateTime.now(), LocalDateTime.now(), "category", "desciption", LoopType.NONE);
         assertThatThrownBy(() -> {
             service.updateSchedule(InMemoryScheduleRepository.MEMBER_1, 0L, request);
         }).isInstanceOf(NoSuchElementException.class);

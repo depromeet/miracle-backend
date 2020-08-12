@@ -1,6 +1,7 @@
 package com.depromeet.controller.schedule;
 
 import com.depromeet.controller.InMemoryLoginMemberArgumentResolver;
+import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.service.schedule.ScheduleService;
 import com.depromeet.service.schedule.dto.*;
@@ -61,7 +62,7 @@ class ScheduleControllerTest {
     @DisplayName("스케쥴을 등록할 수 있다")
     @Test
     void createSchedule_ShouldSuccess() throws Exception {
-        CreateScheduleRequest request = new CreateScheduleRequest(startDateTime, endDateTime, "category", "description", "NONE");
+        CreateScheduleRequest request = new CreateScheduleRequest(startDateTime, endDateTime, "category", "description", LoopType.NONE);
         Schedule schedule = request.toEntity(memberId);
 
         Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
@@ -90,7 +91,7 @@ class ScheduleControllerTest {
     @Test
     void retrieveSchedule_ShouldSuccess() throws Exception {
         // given
-        given(service.retrieveDailySchedule(memberId, LocalDate.of(2020, 8, 12))).willReturn(Arrays.asList(new GetScheduleResponse(1L, 2020, 8, 12, 4, startTime, endTime, "category", "description", "NONE")));
+        given(service.retrieveDailySchedule(memberId, LocalDate.of(2020, 8, 12))).willReturn(Arrays.asList(new GetScheduleResponse(1L, 2020, 8, 12, 4, startTime, endTime, "category", "description", LoopType.NONE)));
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -114,13 +115,13 @@ class ScheduleControllerTest {
             .andExpect(jsonPath("$.data.[0].endTime").exists())
             .andExpect(jsonPath("$.data.[0].category").value("category"))
             .andExpect(jsonPath("$.data.[0].description").value("description"))
-            .andExpect(jsonPath("$.data.[0].loopType").value("NONE"));
+            .andExpect(jsonPath("$.data.[0].loopType").exists());
     }
 
     @DisplayName("스케쥴을 수정할 수 있다")
     @Test
     void updateSchedule_ShouldSuccess() throws Exception {
-        UpdateScheduleRequest request = new UpdateScheduleRequest(startDateTime, endDateTime, "category", "description", "NONE");
+        UpdateScheduleRequest request = new UpdateScheduleRequest(startDateTime, endDateTime, "category", "description", LoopType.NONE);
         Schedule schedule = request.toEntity(memberId);
 
         Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");

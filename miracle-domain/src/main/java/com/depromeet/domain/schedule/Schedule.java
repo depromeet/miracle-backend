@@ -55,8 +55,8 @@ public class Schedule extends BaseTimeEntity {
         this.loopType = loopType;
     }
 
-    public static Schedule of(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, String loopType) {
-        return new Schedule(memberId, startTime, endTime, category, description, LoopType.of(loopType));
+    public static Schedule of(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+        return new Schedule(memberId, startTime, endTime, category, description, loopType);
     }
 
     private void validateTime(LocalDateTime startTime, LocalDateTime endTime) {

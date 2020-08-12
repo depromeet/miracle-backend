@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +62,7 @@ public class ScheduleService {
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long memberId, long scheduleId, UpdateScheduleRequest request) {
         Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
-        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), LoopType.of(request.getLoopType()));
+        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), request.getLoopType());
         return UpdateScheduleResponse.of(schedule);
     }
 }

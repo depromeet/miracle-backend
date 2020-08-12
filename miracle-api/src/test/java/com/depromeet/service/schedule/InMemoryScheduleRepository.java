@@ -24,19 +24,19 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     private long currentId = 1L;
 
     public InMemoryScheduleRepository() {
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), "기상", "기상하기", LoopType.NONE.getText()));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), "기상", "기상하기", LoopType.DAY.getText()));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 1, 6, 0), LocalDateTime.of(2020, 8, 1, 6, 30), "기상", "기상하기", LoopType.WEEK.getText()));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 8, 6, 0), LocalDateTime.of(2020, 9, 8, 6, 30), "기상", "기상하기", LoopType.MONTH.getText()));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 9, 6, 0), LocalDateTime.of(2020, 9, 9, 6, 30), "취침", "취침하기", LoopType.NONE.getText()));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), "취침", "취침하기", LoopType.NONE.getText()));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), "취침", "취침하기", LoopType.DAY.getText()));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 17, 20, 0), LocalDateTime.of(2020, 7, 17, 21, 0), "취침", "취침하기", LoopType.WEEK.getText()));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 6, 10, 20, 0), LocalDateTime.of(2020, 6, 10, 21, 0), "취침", "취침하기", LoopType.MONTH.getText()));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 9, 10, 20, 0), LocalDateTime.of(2020, 9, 10, 21, 0), "기상", "기상하기", LoopType.WEEK.getText()));
+        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), "기상", "기상하기", LoopType.NONE));
+        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), "기상", "기상하기", LoopType.DAY));
+        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 1, 6, 0), LocalDateTime.of(2020, 8, 1, 6, 30), "기상", "기상하기", LoopType.WEEK));
+        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 8, 6, 0), LocalDateTime.of(2020, 9, 8, 6, 30), "기상", "기상하기", LoopType.MONTH));
+        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 9, 6, 0), LocalDateTime.of(2020, 9, 9, 6, 30), "취침", "취침하기", LoopType.NONE));
+        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), "취침", "취침하기", LoopType.NONE));
+        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), "취침", "취침하기", LoopType.DAY));
+        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 17, 20, 0), LocalDateTime.of(2020, 7, 17, 21, 0), "취침", "취침하기", LoopType.WEEK));
+        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 6, 10, 20, 0), LocalDateTime.of(2020, 6, 10, 21, 0), "취침", "취침하기", LoopType.MONTH));
+        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 9, 10, 20, 0), LocalDateTime.of(2020, 9, 10, 21, 0), "기상", "기상하기", LoopType.WEEK));
     }
 
-    private Schedule generateSchedule(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, String loopType) {
+    private Schedule generateSchedule(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
         Schedule schedule = Schedule.of(memberId, startTime, endTime, category, description, loopType);
         try {
         Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
