@@ -45,7 +45,6 @@ public class ScheduleController {
         return ApiResponse.of(scheduleService.getDailySchedule(session.getMemberId(), LocalDate.of(year, month, day)));
     }
 
-
     /**
      * 스케쥴을 수정한다.
      *

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
-
     private final ScheduleRepository repository;
 
     public ScheduleService(ScheduleRepository repository) {
