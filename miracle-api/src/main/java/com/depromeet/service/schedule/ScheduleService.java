@@ -4,6 +4,7 @@ import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
 import com.depromeet.service.schedule.dto.*;
+import com.deprommet.exception.IllegalAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,10 +60,35 @@ public class ScheduleService {
      * @param request  수정하고자 하는 스케쥴 정보
      * @return 스케쥴 ID
      */
+
+    /**
+     * 데이터 베이스의 스케쥴을 수정한다.
+     *
+     * @param memberId 가입 멤버 ID
+     * @param scheduleId 수정하고자 하는 스케쥴 ID
+     * @param request  수정하고자 하는 스케쥴 정보
+     * @return
+     */
     @Transactional
-    public UpdateScheduleResponse updateSchedule(Long memberId, long scheduleId, UpdateScheduleRequest request) {
+    public UpdateScheduleResponse updateSchedule(long memberId, long scheduleId, UpdateScheduleRequest request) {
         Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
         schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), request.getLoopType());
         return UpdateScheduleResponse.of(schedule);
+    }
+
+    /**
+     * 데이터 베이스의 스케쥴을 삭제한다.
+     *
+     * @param memberId 가입 멤버 ID
+     * @param scheduleId  삭제하고자 하는 스케쥴 ID
+     */
+    public void deleteSchedule(long memberId, long scheduleId) {
+        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+
+        if (schedule.getMemberId() != memberId) {
+            throw new IllegalAccessException(String.format("스케쥴 (%d)은 삭제할 수 없습니다", scheduleId), "스케쥴은 삭제할 수 없습니다");
+        }
+
+        repository.delete(schedule);
     }
 }

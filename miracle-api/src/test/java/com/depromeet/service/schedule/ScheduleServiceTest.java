@@ -1,6 +1,8 @@
 package com.depromeet.service.schedule;
 
 import com.depromeet.domain.schedule.LoopType;
+import com.depromeet.domain.schedule.ScheduleRepository;
+import com.depromeet.service.schedule.dto.DeleteScheduleRequest;
 import com.depromeet.service.schedule.dto.GetScheduleResponse;
 import com.depromeet.service.schedule.dto.UpdateScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +26,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ScheduleServiceTest {
 
     private ScheduleService service;
+    private ScheduleRepository repository = new InMemoryScheduleRepository();
 
     public ScheduleServiceTest() {
-        this.service = new ScheduleService(new InMemoryScheduleRepository());
+        this.service = new ScheduleService(repository);
     }
 
     @DisplayName("하루 동안의 스케쥴을 조회 할 수 있다")
@@ -58,5 +61,15 @@ class ScheduleServiceTest {
         assertThatThrownBy(() -> {
             service.updateSchedule(InMemoryScheduleRepository.MEMBER_1, 0L, request);
         }).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @DisplayName("스케쥴을 삭제할 수 있다")
+    @Test
+    void deleteSchedule_ShouldSuccess() {
+        int expected = repository.findAll().size() - 1;
+
+        service.deleteSchedule(InMemoryScheduleRepository.MEMBER_1, 1L);
+
+        assertThat(repository.findAll().size()).isEqualTo(expected);
     }
 }
