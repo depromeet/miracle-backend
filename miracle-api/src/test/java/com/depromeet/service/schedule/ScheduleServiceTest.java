@@ -30,9 +30,9 @@ class ScheduleServiceTest {
 
     @DisplayName("하루 동안의 스케쥴을 조회 할 수 있다")
     @ParameterizedTest
-    @MethodSource("source_getDailySchedule_ShouldSuccess")
-    void getDailySchedule_ShouldSuccess(long memberId, LocalDate date, List<Long> scheduleIds) {
-        List<GetScheduleResponse> response = service.getDailySchedule(memberId, date);
+    @MethodSource("source_retrieveDailySchedule_ShouldSuccess")
+    void retrieveDailySchedule_ShouldSuccess(long memberId, LocalDate date, List<Long> scheduleIds) {
+        List<GetScheduleResponse> response = service.retrieveDailySchedule(memberId, date);
 
         List<Long> result = response
             .stream()
@@ -43,7 +43,7 @@ class ScheduleServiceTest {
         assertThat(scheduleIds.equals(result)).isTrue();
     }
 
-    static Stream<Arguments> source_getDailySchedule_ShouldSuccess() {
+    static Stream<Arguments> source_retrieveDailySchedule_ShouldSuccess() {
         return Stream.of(
             Arguments.of(InMemoryScheduleRepository.MEMBER_1, LocalDate.of(2020, 8, 8), Arrays.asList(1L, 2L, 3L, 4L)),
             Arguments.of(InMemoryScheduleRepository.MEMBER_2, LocalDate.of(2020, 7, 10), Arrays.asList(6L, 7L, 8L, 9L))

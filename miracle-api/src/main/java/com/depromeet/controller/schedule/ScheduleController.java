@@ -41,8 +41,8 @@ public class ScheduleController {
      * @return 해당 날짜에 등록된 전체 스케쥴 정보
      */
     @GetMapping(value = "/api/v1/schedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<List<GetScheduleResponse>> getSchedule(@LoginMember MemberSession session, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
-        return ApiResponse.of(scheduleService.getDailySchedule(session.getMemberId(), LocalDate.of(year, month, day)));
+    public ApiResponse<List<GetScheduleResponse>> retrieveSchedule(@LoginMember MemberSession session, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+        return ApiResponse.of(scheduleService.retrieveDailySchedule(session.getMemberId(), LocalDate.of(year, month, day)));
     }
 
     /**

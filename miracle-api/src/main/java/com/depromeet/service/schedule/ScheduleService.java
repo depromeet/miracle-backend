@@ -42,11 +42,11 @@ public class ScheduleService {
      * @return 해당 날짜에 등록된 전체 스케쥴 정보
      */
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> getDailySchedule(long memberId, LocalDate date) {
-        List<Schedule> schedules = repository.getSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopType(memberId, LoopType.DAY));
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopTypeAndDayOfWeek(memberId, LoopType.WEEK, date.getDayOfWeek()));
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopTypeAndDay(memberId, LoopType.MONTH, date.getDayOfMonth()));
+    public List<GetScheduleResponse> retrieveDailySchedule(long memberId, LocalDate date) {
+        List<Schedule> schedules = repository.findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopType(memberId, LoopType.DAY));
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(memberId, LoopType.WEEK, date.getDayOfWeek()));
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDay(memberId, LoopType.MONTH, date.getDayOfMonth()));
         return schedules
             .stream()
             .map(GetScheduleResponse::of)
