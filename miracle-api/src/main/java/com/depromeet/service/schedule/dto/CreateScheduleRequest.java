@@ -8,17 +8,18 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @ApiModel
 public class CreateScheduleRequest {
 
-    @NotBlank(message = "시작시간을 선택해주세요")
+    @NotNull(message = "시작시간을 선택해주세요")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
 
-    @NotBlank(message = "종료시간을 선택해주세요")
+    @NotNull(message = "종료시간을 선택해주세요")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
 
@@ -30,7 +31,7 @@ public class CreateScheduleRequest {
     private String description;
 
     @ApiModelProperty
-    @NotBlank(message = "반복설정을 선택해주세요")
+    @NotNull(message = "반복설정을 선택해주세요")
     private LoopType loopType;
 
     public CreateScheduleRequest() {
