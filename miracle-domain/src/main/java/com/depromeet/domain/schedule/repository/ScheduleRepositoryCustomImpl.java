@@ -20,7 +20,7 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
     }
 
     @Override
-    public List<Schedule> getSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(long memberId, LoopType loopType, int year, int month, int day) {
+    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(long memberId, LoopType loopType, int year, int month, int day) {
         return queryFactory.selectFrom(schedule)
             .where(
                 schedule.memberId.eq(memberId),
@@ -32,7 +32,7 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
     }
 
     @Override
-    public List<Schedule> getSchedulesByMemberIdAndLoopType(long memberId, LoopType loopType) {
+    public List<Schedule> findSchedulesByMemberIdAndLoopType(long memberId, LoopType loopType) {
         return queryFactory.selectFrom(schedule)
             .where(
                 schedule.memberId.eq(memberId),
@@ -41,7 +41,7 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
     }
 
     @Override
-    public List<Schedule> getSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek) {
+    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek) {
         return queryFactory.selectFrom(schedule)
             .where(
                 schedule.memberId.eq(memberId),
@@ -51,7 +51,7 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
     }
 
     @Override
-    public List<Schedule> getSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day) {
+    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day) {
         return queryFactory.selectFrom(schedule)
             .where(
                 schedule.memberId.eq(memberId),

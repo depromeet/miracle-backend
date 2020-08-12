@@ -7,11 +7,11 @@ import java.time.DayOfWeek;
 import java.util.List;
 
 public interface ScheduleRepositoryCustom {
-    List<Schedule> getSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(long memberId, LoopType loopType, int year, int month, int day);
+    List<Schedule> findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(long memberId, LoopType loopType, int year, int month, int day);
 
-    List<Schedule> getSchedulesByMemberIdAndLoopType(long memberId, LoopType loopType);
+    List<Schedule> findSchedulesByMemberIdAndLoopType(long memberId, LoopType loopType);
 
-    List<Schedule> getSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek);
+    List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek);
 
-    List<Schedule> getSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day);
+    List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day);
 }

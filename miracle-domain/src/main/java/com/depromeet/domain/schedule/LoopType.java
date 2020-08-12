@@ -1,8 +1,11 @@
 package com.depromeet.domain.schedule;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@ApiModel
 public enum LoopType {
     NONE("NONE"),
     DAY("DAY"),

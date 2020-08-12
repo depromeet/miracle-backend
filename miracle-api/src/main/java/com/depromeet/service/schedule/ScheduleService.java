@@ -3,16 +3,17 @@ package com.depromeet.service.schedule;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
+import com.depromeet.service.schedule.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
-
     private final ScheduleRepository repository;
 
     public ScheduleService(ScheduleRepository repository) {
@@ -40,14 +41,28 @@ public class ScheduleService {
      * @return 해당 날짜에 등록된 전체 스케쥴 정보
      */
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> getDailySchedule(long memberId, LocalDate date) {
-        List<Schedule> schedules = repository.getSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopType(memberId, LoopType.DAY));
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopTypeAndDayOfWeek(memberId, LoopType.WEEK, date.getDayOfWeek()));
-        schedules.addAll(repository.getSchedulesByMemberIdAndLoopTypeAndDay(memberId, LoopType.MONTH, date.getDayOfMonth()));
+    public List<GetScheduleResponse> retrieveDailySchedule(long memberId, LocalDate date) {
+        List<Schedule> schedules = repository.findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopType(memberId, LoopType.DAY));
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(memberId, LoopType.WEEK, date.getDayOfWeek()));
+        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDay(memberId, LoopType.MONTH, date.getDayOfMonth()));
         return schedules
             .stream()
             .map(GetScheduleResponse::of)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 데이터 베이스의 스케쥴을 수정한다.
+     *
+     * @param memberId 가입 멤버 ID
+     * @param request  수정하고자 하는 스케쥴 정보
+     * @return 스케쥴 ID
+     */
+    @Transactional
+    public UpdateScheduleResponse updateSchedule(Long memberId, long scheduleId, UpdateScheduleRequest request) {
+        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), request.getLoopType());
+        return UpdateScheduleResponse.of(schedule);
     }
 }
