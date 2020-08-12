@@ -62,8 +62,7 @@ public class ScheduleService {
      */
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long memberId, long scheduleId, UpdateScheduleRequest request) {
-        Optional<Schedule> opt = repository.findById(scheduleId);
-        Schedule schedule = opt.orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
         schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), LoopType.of(request.getLoopType()));
         return UpdateScheduleResponse.of(schedule);
     }
