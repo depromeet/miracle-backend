@@ -48,12 +48,26 @@ public class ScheduleController {
     /**
      * 스케쥴을 수정한다.
      *
-     * @param request 수정하고자 하는 스케쥴 정보
      * @param session 가입 멤버 정보
+     * @param scheduleId 수정하고자 하는 스케쥴 ID
+     * @param request 수정하고자 하는 스케쥴 정보
      * @return 스케쥴 ID
      */
-    @PutMapping(value = "/api/v1/schedule/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<UpdateScheduleResponse> updateSchedule(@LoginMember MemberSession session, @PathVariable long id, @RequestBody UpdateScheduleRequest request) {
-        return ApiResponse.of(scheduleService.updateSchedule(session.getMemberId(), id, request));
+    @PutMapping(value = "/api/v1/schedule/{scheduleId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<UpdateScheduleResponse> updateSchedule(@LoginMember MemberSession session, @PathVariable long scheduleId, @RequestBody UpdateScheduleRequest request) {
+        return ApiResponse.of(scheduleService.updateSchedule(session.getMemberId(), scheduleId, request));
+    }
+
+    /**
+     * 스케쥴을 삭제한다.
+     *
+     * @param session 가입 멤버 정보
+     * @param scheduleId  삭제하고자 하는 스케쥴 ID
+     * @return
+     */
+    @DeleteMapping(value = "/api/v1/schedule/{scheduleId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<String> updateSchedule(@LoginMember MemberSession session, @PathVariable long scheduleId) {
+        scheduleService.deleteSchedule(session.getMemberId(), scheduleId);
+        return ApiResponse.SUCCESS;
     }
 }

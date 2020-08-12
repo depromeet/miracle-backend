@@ -20,7 +20,7 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
 
     public static final long MEMBER_1 = 1L;
     public static final long MEMBER_2 = 2L;
-    private final List<Schedule> schedules = new ArrayList<>();
+    private List<Schedule> schedules = new ArrayList<>();
     private long currentId = 1L;
 
     public InMemoryScheduleRepository() {
@@ -93,7 +93,7 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
 
     @Override
     public List<Schedule> findAll() {
-        return null;
+        return schedules;
     }
 
     @Override
@@ -158,7 +158,10 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
 
     @Override
     public Optional<Schedule> findById(Long aLong) {
-        return Optional.empty();
+        return schedules
+            .stream()
+            .filter(s -> s.getId().equals(aLong))
+            .findFirst();
     }
 
     @Override
@@ -178,7 +181,10 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
 
     @Override
     public void delete(Schedule entity) {
-
+        schedules = schedules
+            .stream()
+            .filter(s -> !s.getId().equals(entity.getId()))
+            .collect(Collectors.toList());
     }
 
     @Override

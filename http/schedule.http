@@ -16,7 +16,7 @@ client.global.set("SCHEDULE_ID", response.body["data"]["scheduleId"]);
 
 ###
 
-GET {{host}}/api/v1/schedule?year=2020&month=8&day=9
+GET {{host}}/api/v1/schedule?year=2020&month=8&day=6
 Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
@@ -33,4 +33,14 @@ Content-Type: application/json
   "description": "명상하기",
   "loopType": "DAY"
 }
+> {%
+client.global.set("SCHEDULE_ID", response.body["data"]["scheduleId"]);
+ %}
+
+###
+
+DELETE {{host}}/api/v1/schedule/{{SCHEDULE_ID}}
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
 ###
