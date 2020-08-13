@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleExternalApiCallerImpl implements GoogleExternalApiCaller {
+public class GoogleOAuthApiCallerImpl implements GoogleOAuthApiCaller {
 
     private final RestTemplate restTemplate;
     private final GoogleAccessTokenComponent googleAccessTokenComponent;

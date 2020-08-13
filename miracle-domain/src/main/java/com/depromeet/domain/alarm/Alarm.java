@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -35,8 +36,10 @@ public class Alarm extends BaseTimeEntity {
     private AlarmSchedule alarmSchedule;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DayOfTheWeek dayOfTheWeek;
 
+    @Column(nullable = false)
     private LocalTime reminderTime;
 
     @Builder

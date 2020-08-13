@@ -3,7 +3,7 @@ package com.depromeet.service.authentication;
 
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberRepository;
-import com.depromeet.external.google.oauth.GoogleExternalApiCaller;
+import com.depromeet.external.google.oauth.GoogleOAuthApiCaller;
 import com.depromeet.external.google.oauth.dto.response.GoogleAccessTokenResponse;
 import com.depromeet.external.google.oauth.dto.response.GoogleUserProfileResponse;
 import com.depromeet.service.authentication.dto.request.GoogleOAuthRequest;
@@ -36,10 +36,10 @@ class GoogleOAuthServiceTest {
 
     @BeforeEach
     void setUpService() {
-        oAuthService = new GoogleOAuthService(httpSession, new StubGoogleExternalApiCaller(), memberRepository);
+        oAuthService = new GoogleOAuthService(httpSession, new StubGoogleOAuthApiCaller(), memberRepository);
     }
 
-    private static class StubGoogleExternalApiCaller implements GoogleExternalApiCaller {
+    private static class StubGoogleOAuthApiCaller implements GoogleOAuthApiCaller {
         @Override
         public GoogleAccessTokenResponse getGoogleAccessToken(String code) {
             return GoogleAccessTokenResponse.testBuilder()

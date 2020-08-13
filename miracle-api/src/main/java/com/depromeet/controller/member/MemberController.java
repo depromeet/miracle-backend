@@ -37,7 +37,7 @@ public class MemberController {
     }
 
     /**
-     * 회원정보를 변경하는 API
+     * 회원의 멤버정보를 변경하는 API
      */
     @PutMapping("/api/v1/member")
     public ApiResponse<MemberInfoResponse> updateMemberInfo(@Valid @RequestBody UpdateMemberInfoRequest request, @LoginMember MemberSession memberSession) {

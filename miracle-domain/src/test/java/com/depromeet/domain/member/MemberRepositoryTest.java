@@ -23,19 +23,21 @@ class MemberRepositoryTest {
         // given
         String email = "will.seungho@gmail.com";
         String name = "will";
+        ProfileIcon profileIcon = ProfileIcon.BLUE;
 
-        memberRepository.save(MemberCreator.create(email, name));
+        memberRepository.save(MemberCreator.create(email, name, profileIcon));
 
         // when
         Member member = memberRepository.findMemberByEmail(email);
 
         // then
-        assertMemberInfo(member, email, name);
+        assertMemberInfo(member, email, name, profileIcon);
     }
 
-    private void assertMemberInfo(Member member, String email, String name) {
+    private void assertMemberInfo(Member member, String email, String name, ProfileIcon profileIcon) {
         assertThat(member.getEmail()).isEqualTo(email);
         assertThat(member.getName()).isEqualTo(name);
+        assertThat(member.getProfileIcon()).isEqualTo(profileIcon);
     }
 
 }
