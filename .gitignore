@@ -42,3 +42,4 @@ application-prod-db.yml
 
 ## Logging File ###
 *.log
+*.gz
