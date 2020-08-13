@@ -58,9 +58,29 @@ public class AlarmSchedule extends BaseTimeEntity {
         return alarmSchedule;
     }
 
-    public void updateAlarmScheduleInfo(AlarmType type, String description) {
+    public void updateAlarmScheduleInfo(AlarmType type, String description, List<Alarm> alarms) {
         this.type = type;
         this.description = description;
+        updateAlarms(alarms);
+    }
+
+    private void updateAlarms(List<Alarm> alarms) {
+        if (hasSameAlarms(alarms)) {
+            return;
+        }
+        removeAlarms();
+        addAlarms(alarms);
+    }
+
+    private boolean hasSameAlarms(List<Alarm> others) {
+        if (this.alarms.size() != others.size()) {
+            return false;
+        }
+        return this.alarms.containsAll(others);
+    }
+
+    private void removeAlarms() {
+        this.alarms.clear();
     }
 
     public void addAlarms(List<Alarm> alarmList) {
@@ -72,22 +92,6 @@ public class AlarmSchedule extends BaseTimeEntity {
     private void addAlarm(Alarm alarm) {
         alarm.setAlarmSchedule(this);
         this.alarms.add(alarm);
-    }
-
-    public void updateAlarms(List<Alarm> alarms) {
-        removeAlarms();
-        addAlarms(alarms);
-    }
-
-    private void removeAlarms() {
-        this.alarms.clear();
-    }
-
-    public boolean hasSameAlarms(AlarmSchedule other) {
-        if (this.alarms.size() != other.alarms.size()) {
-            return false;
-        }
-        return this.alarms.containsAll(other.alarms);
     }
 
 }
