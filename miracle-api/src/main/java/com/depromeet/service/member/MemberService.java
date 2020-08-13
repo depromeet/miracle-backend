@@ -22,9 +22,9 @@ public class MemberService {
     @Transactional
     public Long signUpMember(SignUpMemberRequest request) {
         MemberServiceUtils.validateNonExistMember(memberRepository, request.getEmail());
-        Member newMember = memberRepository.save(request.toEntity());
-        eventPublisher.publishEvent(NewMemberRegisteredEvent.of(newMember.getId(), request.getWakeUpTime()));
-        return newMember.getId();
+        Member member = memberRepository.save(request.toEntity());
+        eventPublisher.publishEvent(NewMemberRegisteredEvent.of(member.getId(), request.getWakeUpTime()));
+        return member.getId();
     }
 
     @Transactional
@@ -37,7 +37,7 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMemberGoals(UpdateMemberGoalsRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
-        member.updateMemberGoals(request.getGoals());
+        member.updateMemberGoals(request.toMemberGoals());
         return MemberInfoResponse.of(member);
     }
 
