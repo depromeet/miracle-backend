@@ -9,6 +9,7 @@ import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberGoal;
+import com.depromeet.domain.member.MemberGoalCreator;
 import com.depromeet.domain.member.MemberGoalRepository;
 import com.depromeet.domain.member.MemberRepository;
 import com.depromeet.domain.member.ProfileIcon;
@@ -62,7 +63,9 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUpMemberSample() {
-        member = MemberCreator.create("will.seungho@gmail.com", "강승호", ProfileIcon.RED, Collections.singletonList(Category.EXERCISE));
+        member = MemberCreator.create("will.seungho@gmail.com", "강승호", ProfileIcon.RED);
+        MemberGoal memberGoal = MemberGoalCreator.create(Category.READING);
+        member.addMemberGoals(Collections.singletonList(memberGoal));
     }
 
     @Test
@@ -76,6 +79,7 @@ class MemberServiceTest {
             .email(email)
             .name(name)
             .profileIcon(profileIcon)
+            .goals(Collections.emptyList())
             .build();
 
         // when
@@ -154,6 +158,7 @@ class MemberServiceTest {
             .email("will.seungho@gmail.com")
             .name("강승호")
             .wakeUpTime(wakeUpTime)
+            .goals(Collections.emptyList())
             .build();
 
         // when

@@ -2,6 +2,7 @@ package com.depromeet.service.member.dto.request;
 
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
+import com.depromeet.domain.member.MemberGoal;
 import com.depromeet.domain.member.ProfileIcon;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -43,7 +45,15 @@ public class SignUpMemberRequest {
     }
 
     public Member toEntity() {
-        return Member.newInstance(email, name, profileIcon, goals);
+        Member member = Member.newInstance(email, name, profileIcon);
+        member.addMemberGoals(toMemberGoals());
+        return member;
+    }
+
+    private List<MemberGoal> toMemberGoals() {
+        return this.goals.stream()
+            .map(MemberGoal::of)
+            .collect(Collectors.toList());
     }
 
 }

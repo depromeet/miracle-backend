@@ -1,6 +1,5 @@
 package com.depromeet.domain.member;
 
-import com.depromeet.domain.common.Category;
 import com.depromeet.domain.BaseTimeEntity;
 import com.deprommet.exception.ConflictException;
 import lombok.AccessLevel;
@@ -48,21 +47,19 @@ public class Member extends BaseTimeEntity {
     private MemberType type;
 
     @Builder
-    public Member(String email, String name, ProfileIcon profileIcon, List<Category> goals) {
+    public Member(String email, String name, ProfileIcon profileIcon) {
         this.email = Email.of(email);
         this.name = name;
         this.profileIcon = profileIcon;
         this.provider = AuthProvider.GOOGLE;
         this.type = MemberType.FREE;
-        addMemberGoals(goals);
     }
 
-    public static Member newInstance(String email, String name, ProfileIcon profileIcon, List<Category> goals) {
+    public static Member newInstance(String email, String name, ProfileIcon profileIcon) {
         return Member.builder()
             .email(email)
             .name(name)
             .profileIcon(profileIcon)
-            .goals(goals)
             .build();
     }
 
@@ -79,39 +76,46 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    public void updateMemberGoals(List<Category> goals) {
+    public void updateMemberGoals(List<MemberGoal> memberGoals) {
+        if (hasSameMemberGoals(memberGoals)) {
+            return;
+        }
         removeAllMemberGoals();
-        addMemberGoals(goals);
+        addMemberGoals(memberGoals);
+    }
+
+    private boolean hasSameMemberGoals(List<MemberGoal> others) {
+        if (this.memberGoals.size() != others.size()) {
+            return false;
+        }
+        return this.memberGoals.containsAll(others);
     }
 
     private void removeAllMemberGoals() {
         this.memberGoals.clear();
     }
 
-    private void addMemberGoals(List<Category> categories) {
-        if (categories == null) {
-            return;
-        }
-        for (Category category : categories) {
-            addMemberGoal(category);
+    public void addMemberGoals(List<MemberGoal> memberGoals) {
+        for (MemberGoal memberGoal : memberGoals) {
+            addMemberGoal(memberGoal);
         }
     }
 
-    private void addMemberGoal(Category category) {
-        validateNonExistGoal(category);
-        MemberGoal memberGoal = MemberGoal.of(this, category);
+    private void addMemberGoal(MemberGoal memberGoal) {
+        validateNonExistGoal(memberGoal);
+        memberGoal.setMember(this);
         this.memberGoals.add(memberGoal);
     }
 
-    private void validateNonExistGoal(Category category) {
-        if (hasGoal(category)) {
-            throw new ConflictException(String.format("멤버 (%s) 는 목표 (%s)을 이미 설정하였습니다", email, category), "이미 설정한 목표입니다");
+    private void validateNonExistGoal(MemberGoal memberGoal) {
+        if (hasGoal(memberGoal)) {
+            throw new ConflictException(String.format("멤버 (%s) 는 목표 (%s)을 이미 설정하였습니다", email, memberGoal.getCategory()), "이미 설정한 목표입니다");
         }
     }
 
-    private boolean hasGoal(Category category) {
+    private boolean hasGoal(MemberGoal other) {
         return this.memberGoals.stream()
-            .anyMatch(memberGoal -> memberGoal.hasSameCategory(category));
+            .anyMatch(memberGoal -> memberGoal.equals(other));
     }
 
 }
