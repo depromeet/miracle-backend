@@ -2,7 +2,6 @@ package com.depromeet.service.schedule;
 
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.ScheduleRepository;
-import com.depromeet.service.schedule.dto.DeleteScheduleRequest;
 import com.depromeet.service.schedule.dto.GetScheduleResponse;
 import com.depromeet.service.schedule.dto.UpdateScheduleRequest;
 import org.junit.jupiter.api.DisplayName;

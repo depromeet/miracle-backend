@@ -49,13 +49,7 @@ public class AlarmService {
     @Transactional
     public AlarmScheduleInfoResponse updateAlarmSchedule(UpdateAlarmScheduleRequest request, Long memberId) {
         AlarmSchedule findAlarmSchedule = AlarmServiceUtils.findAlarmScheduleByIdAndMemberId(alarmScheduleRepository, request.getAlarmScheduleId(), memberId);
-        findAlarmSchedule.updateAlarmScheduleInfo(request.getType(), request.getDescription());
-
-        AlarmSchedule targetAlarms = request.toEntity(memberId);
-        if (findAlarmSchedule.hasSameAlarms(targetAlarms)) {
-            return AlarmScheduleInfoResponse.of(findAlarmSchedule);
-        }
-        findAlarmSchedule.updateAlarms(request.toAlarmsEntity());
+        findAlarmSchedule.updateAlarmScheduleInfo(request.getType(), request.getDescription(), request.toAlarmsEntity());
         return AlarmScheduleInfoResponse.of(findAlarmSchedule);
     }
 
