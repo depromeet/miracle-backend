@@ -10,13 +10,7 @@ public class MemberCreator {
         return Member.builder()
             .email(email)
             .name("이름")
-            .build();
-    }
-
-    public static Member create(String email, String name) {
-        return Member.builder()
-            .email(email)
-            .name(name)
+            .profileIcon(ProfileIcon.BLUE)
             .build();
     }
 

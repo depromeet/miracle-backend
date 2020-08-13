@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -35,6 +36,7 @@ public class MemberGoal extends BaseTimeEntity {
     private Member member;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
 
     @Builder
@@ -49,7 +51,7 @@ public class MemberGoal extends BaseTimeEntity {
             .build();
     }
 
-    public void setMember(Member member) {
+    void setMember(Member member) {
         this.member = member;
     }
 

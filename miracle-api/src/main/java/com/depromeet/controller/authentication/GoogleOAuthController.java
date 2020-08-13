@@ -20,11 +20,17 @@ public class GoogleOAuthController {
     private final GoogleOAuthService googleOAuthService;
     private final HttpSession httpSession;
 
+    /**
+     * 구글 OAuth 를 요청하는 API
+     */
     @PostMapping("/api/v1/auth/google")
     public ApiResponse<GoogleOAuthResponse> googleAuthentication(@Valid @RequestBody GoogleOAuthRequest request) {
         return ApiResponse.of(googleOAuthService.getGoogleAuthentication(request));
     }
 
+    /**
+     * 로그아웃 API
+     */
     @PostMapping("/api/v1/logout")
     public ApiResponse<String> handleLogout() {
         httpSession.removeAttribute(SessionConstants.LOGIN_USER);

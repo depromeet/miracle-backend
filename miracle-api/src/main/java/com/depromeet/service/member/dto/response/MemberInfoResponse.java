@@ -26,10 +26,13 @@ public class MemberInfoResponse {
     private final List<Category> goals;
 
     public static MemberInfoResponse of(Member member) {
-        List<Category> memberGoalResponses = member.getMemberGoals().stream()
+        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(), convertMemberGoalsToCategories(member));
+    }
+
+    private static List<Category> convertMemberGoalsToCategories(Member member) {
+        return member.getMemberGoals().stream()
             .map(MemberGoal::getCategory)
             .collect(Collectors.toList());
-        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(), memberGoalResponses);
     }
 
 }
