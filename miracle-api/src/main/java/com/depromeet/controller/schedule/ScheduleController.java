@@ -76,4 +76,6 @@ public class ScheduleController {
     public ApiResponse<GetCategoryComment> getCategoryComment(@LoginMember MemberSession session, @PathVariable long scheduleId) {
         return ApiResponse.of(scheduleService.getCategoryComment(session.getMemberId(), scheduleId));
     }
+
+
 }
