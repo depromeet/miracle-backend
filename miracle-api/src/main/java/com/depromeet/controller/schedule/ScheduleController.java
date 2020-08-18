@@ -46,4 +46,6 @@ public class ScheduleController {
     public ApiResponse<List<GetScheduleResponse>> getSchedule(@LoginMember MemberSession member, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
         return ApiResponse.of(scheduleService.getDailySchedule(member.getMemberId(), LocalDate.of(year, month, day)));
     }
+
+
 }
