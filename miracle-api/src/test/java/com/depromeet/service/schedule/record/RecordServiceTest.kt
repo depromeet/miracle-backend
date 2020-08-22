@@ -2,6 +2,8 @@ package com.depromeet.service.schedule.record
 
 import com.depromeet.domain.schedule.record.RecordRepository
 import com.depromeet.service.MemberSetup
+import com.depromeet.service.record.CreateRecordRequest
+import com.depromeet.service.record.RecordService
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -34,8 +36,8 @@ class RecordServiceTest(): MemberSetup(){
     fun test(){
        val request = CreateRecordRequest(
            scheduleId = 1,
-           time = LocalDateTime.of(2020,8,11,23,0,0),
-           content = "테스트입니다."
+           startDateTime = LocalDateTime.of(2020, 8, 11, 23, 0, 0),
+           answer = "테스트입니다."
        )
 
         service.createRecord(memberId = memberId,request = request)

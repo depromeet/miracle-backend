@@ -1,12 +1,12 @@
-package com.depromeet.controller.schedule.record
+package com.depromeet.controller.record
 
 import com.depromeet.ApiResponse
 import com.depromeet.config.resolver.LoginMember
 import com.depromeet.config.session.MemberSession
 import com.depromeet.service.schedule.CreateScheduleRequest
 import com.depromeet.service.schedule.CreateScheduleResponse
-import com.depromeet.service.schedule.record.CreateRecordRequest
-import com.depromeet.service.schedule.record.RecordService
+import com.depromeet.service.record.CreateRecordRequest
+import com.depromeet.service.record.RecordService
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,7 +26,7 @@ class RecordController(private val recordService: RecordService) {
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun writeSchedule(
+    fun createSchedule(
         @LoginMember member: MemberSession,
         @RequestBody request: CreateRecordRequest
     ) {
