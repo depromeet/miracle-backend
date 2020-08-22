@@ -57,7 +57,7 @@ class MemberServiceTest {
     @AfterEach
     void cleanUp() {
         memberRepository.deleteAll();
-        alarmRepository.deleteAllInBatch(); //Todo lazy 의 느낌 나중에 다 지우겠다. 성능상 이점이 있음
+        alarmRepository.deleteAllInBatch();
         alarmScheduleRepository.deleteAllInBatch();
     }
 
