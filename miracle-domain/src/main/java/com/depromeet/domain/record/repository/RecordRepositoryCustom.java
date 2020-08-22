@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 public interface RecordRepositoryCustom {
 
-    Record findRecordById(Long id);
-
     Record findByMemberIdAndScheduleIdAndStartTime(Long memberId,
                                                    Long scheduleId,
                                                    LocalDateTime startDateTime);

@@ -14,14 +14,6 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Record findRecordById(Long id) {
-        return queryFactory.selectFrom(record)
-            .where(
-                record.id.eq(id)
-            ).fetchOne();
-    }
-
-    @Override
     public Record findByMemberIdAndScheduleIdAndStartTime(Long memberId, Long scheduleId, LocalDateTime startTimeAt) {
         return queryFactory.selectFrom(record)
             .where(record.memberId.eq(memberId))
