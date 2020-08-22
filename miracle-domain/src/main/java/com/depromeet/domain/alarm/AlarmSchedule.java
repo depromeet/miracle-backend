@@ -37,6 +37,7 @@ public class AlarmSchedule extends BaseTimeEntity {
 
     private String description;
 
+    //Todo 스케쥴 지워지면이 스케줄이 갖고있는 알람도 지워지게 하는
     @OneToMany(mappedBy = "alarmSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarms = new ArrayList<>();
 

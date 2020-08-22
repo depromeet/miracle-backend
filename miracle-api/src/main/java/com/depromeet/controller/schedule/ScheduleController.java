@@ -70,4 +70,6 @@ public class ScheduleController {
         scheduleService.deleteSchedule(session.getMemberId(), scheduleId);
         return ApiResponse.SUCCESS;
     }
+
+
 }
