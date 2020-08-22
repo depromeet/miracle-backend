@@ -21,13 +21,12 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
             ).fetchOne();
     }
 
-
-    public List<Record> findByMemberIdAndScheduleIdAndStartTime(Long memberId, Long scheduleId, LocalDateTime startTimeAt) {
+    @Override
+    public Record findByMemberIdAndScheduleIdAndStartTime(Long memberId, Long scheduleId, LocalDateTime startTimeAt) {
         return queryFactory.selectFrom(record)
             .where(record.memberId.eq(memberId))
             .where(record.scheduleId.eq(scheduleId))
             .where(record.startDateTime.eq(startTimeAt)).fetchOne();
     }
-
 
 }

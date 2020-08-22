@@ -1,7 +1,6 @@
 package com.depromeet.service.record
 
 import com.depromeet.domain.record.Record
-import com.depromeet.domain.schedule.record.Record
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 

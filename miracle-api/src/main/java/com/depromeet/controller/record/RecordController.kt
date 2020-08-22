@@ -3,16 +3,15 @@ package com.depromeet.controller.record
 import com.depromeet.ApiResponse
 import com.depromeet.config.resolver.LoginMember
 import com.depromeet.config.session.MemberSession
-import com.depromeet.service.schedule.CreateScheduleRequest
-import com.depromeet.service.schedule.CreateScheduleResponse
+import com.depromeet.domain.record.Record
 import com.depromeet.service.record.CreateRecordRequest
 import com.depromeet.service.record.RecordService
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 class RecordController(private val recordService: RecordService) {
     /**
      * 기록한다.
@@ -29,8 +28,8 @@ class RecordController(private val recordService: RecordService) {
     fun createSchedule(
         @LoginMember member: MemberSession,
         @RequestBody request: CreateRecordRequest
-    ) {
-        ApiResponse.of(
+    ): ApiResponse<Record> {
+        return ApiResponse.of(
             recordService.createRecord(
                 member.memberId,
                 request

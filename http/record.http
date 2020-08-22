@@ -1,0 +1,10 @@
+POST {{host}}/api/v1/record
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "scheduleId": 1,
+    "question": "OK"
+}
+
+###
