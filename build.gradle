@@ -21,6 +21,7 @@ buildscript {
     }
 }
 
+
 configure(javaProjects) {
 
     apply plugin: 'java-library'
@@ -29,7 +30,10 @@ configure(javaProjects) {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'kotlin'
     apply plugin: 'kotlin-spring'
+    apply plugin: "kotlin-jpa"
     apply plugin: 'org.sonarqube'
+
+    
 
     group = 'com.depromeet'
     sourceCompatibility = '11'

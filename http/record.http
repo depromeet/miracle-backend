@@ -4,7 +4,12 @@ Content-Type: application/json
 
 {
     "scheduleId": 1,
-    "question": "OK"
+    "question": "질문?",
+    "answer": "대답.",
+    "startDateTime":  "2020-08-23T16:30:00",
+    "endDateTime": "2020-08-23T17:00:00",
+    "category": "EXERCISE"
 }
+
 
 ###
