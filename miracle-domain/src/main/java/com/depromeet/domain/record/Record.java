@@ -50,8 +50,7 @@ public class Record extends BaseTimeEntity {
         this.answer = answer;
     }
 
-
-    public static Record newInstance(Long memberId, Long scheduleId,  LocalDateTime startDateTime, LocalDateTime endDateTime, String question, String answer) {
+    public static Record newInstance(Long memberId, Long scheduleId, LocalDateTime startDateTime, LocalDateTime endDateTime, String question, String answer) {
         return Record.builder()
             .memberId(memberId)
             .scheduleId(scheduleId)

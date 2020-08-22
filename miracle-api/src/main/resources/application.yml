@@ -23,6 +23,9 @@ spring:
             jdbc-url: jdbc:h2:mem:mimo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
             username: sa
             password: sa
+    jpa:
+        hibernate:
+            ddl-auto: update
 
 ---
 
