@@ -32,7 +32,6 @@ public class SignUpMemberRequest {
     @Size(max = 3, message = "목표를 3개 이하 선택해주세요.")
     private List<Category> goals;
 
-    @NotNull(message = "기상시간을 입력해주세요.")
     private LocalTime wakeUpTime;
 
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")

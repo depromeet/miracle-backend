@@ -23,6 +23,9 @@ public class AlarmService {
 
     @Transactional
     public void createDefaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
+        if (wakeUpTime == null) {
+            return;
+        }
         alarmScheduleRepository.save(AlarmSchedule.defaultWakeUpAlarmScheduleInstance(memberId, wakeUpTime));
     }
 

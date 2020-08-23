@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,14 +40,14 @@ public class Alarm extends BaseTimeEntity {
     @Column(nullable = false)
     private DayOfTheWeek dayOfTheWeek;
 
-    @Column(nullable = false)
-    private LocalTime reminderTime;
+    @Embedded
+    private ReminderTime reminderTime;
 
     @Builder
     public Alarm(AlarmSchedule alarmSchedule, DayOfTheWeek dayOfTheWeek, LocalTime reminderTime) {
         this.alarmSchedule = alarmSchedule;
         this.dayOfTheWeek = dayOfTheWeek;
-        this.reminderTime = reminderTime;
+        this.reminderTime = ReminderTime.of(reminderTime);
     }
 
     public static Alarm newInstance(DayOfTheWeek dayOfTheWeek, LocalTime reminderTime) {
@@ -54,6 +55,10 @@ public class Alarm extends BaseTimeEntity {
             .dayOfTheWeek(dayOfTheWeek)
             .reminderTime(reminderTime)
             .build();
+    }
+
+    public LocalTime getReminderTime() {
+        return reminderTime.getReminderTime();
     }
 
     static List<Alarm> defaultWakeUpAlarmInstance(LocalTime wakeUpTime) {
