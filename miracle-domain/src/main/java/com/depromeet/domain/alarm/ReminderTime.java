@@ -26,7 +26,7 @@ public class ReminderTime {
 
     private void validateWakeUpTime(LocalTime reminderTime) {
         if (reminderTime.getMinute() % UNIT_OF_TIME != 0) {
-            throw new ValidationException(String.format("기상시간이 10분단위가 아닙니다. (%s)", reminderTime), "기상 시간은 10분단위로 설정할 수 있습니다.");
+            throw new ValidationException(String.format("알람 시간이 10분단위가 아닙니다. (%s)", reminderTime), "알람 시간은 10분단위로 설정할 수 있습니다.");
         }
     }
 
