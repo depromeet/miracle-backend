@@ -97,11 +97,13 @@ class MemberServiceTest {
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
         List<Category> goals = Arrays.asList(Category.EXERCISE, Category.READING);
+        ProfileIcon profileIcon = ProfileIcon.BLUE;
 
         SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
             .email(email)
             .name(name)
             .goals(goals)
+            .profileIcon(profileIcon)
             .build();
 
         // when
@@ -119,11 +121,13 @@ class MemberServiceTest {
         String email = "will.seungho@gmail.com";
         String name = "kangseungho";
         List<Category> goals = Collections.emptyList();
+        ProfileIcon profileIcon = ProfileIcon.BLUE;
 
         SignUpMemberRequest request = SignUpMemberRequest.testBuilder()
             .email(email)
             .name(name)
             .goals(goals)
+            .profileIcon(profileIcon)
             .build();
 
         // when
@@ -159,6 +163,7 @@ class MemberServiceTest {
             .name("강승호")
             .wakeUpTime(wakeUpTime)
             .goals(Collections.emptyList())
+            .profileIcon(ProfileIcon.BLUE)
             .build();
 
         // when
