@@ -2,6 +2,7 @@ package com.depromeet.service.record
 
 import com.depromeet.domain.record.Record
 import com.depromeet.domain.record.RecordRepository
+import com.deprommet.exception.ConflictException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -22,7 +23,8 @@ class RecordService(private val repository: RecordRepository) {
         if (result == null)
             return RecordResponse.of(repository.save(record))
         else
-            throw Exception("이미 기록하였습니다.")
+            throw ConflictException(String.format("이미 (%s)로 기록하였습니다.", record.id),"이미 기록하였습니다.")
+
     }
 
     fun getRecordListForCalendar(memberId: Long, date: LocalDate): RecordListResponseForCalendar {
