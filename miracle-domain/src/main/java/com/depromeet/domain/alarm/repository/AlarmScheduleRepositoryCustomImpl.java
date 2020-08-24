@@ -1,6 +1,7 @@
 package com.depromeet.domain.alarm.repository;
 
 import com.depromeet.domain.alarm.AlarmSchedule;
+import com.depromeet.domain.alarm.AlarmType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,16 @@ public class AlarmScheduleRepositoryCustomImpl implements AlarmScheduleRepositor
                 alarmSchedule.id.eq(id),
                 alarmSchedule.memberId.eq(memberId)
             ).fetchOne();
+    }
+
+    @Override
+    public List<AlarmSchedule> findWakeUpAlarmSchedulesByMemberId(Long memberId) {
+        return queryFactory.selectFrom(alarmSchedule).distinct()
+            .leftJoin(alarmSchedule.alarms, alarm).fetchJoin()
+            .where(
+                alarmSchedule.memberId.eq(memberId),
+                alarmSchedule.type.eq(AlarmType.WAKE_UP)
+            ).fetch();
     }
 
 }

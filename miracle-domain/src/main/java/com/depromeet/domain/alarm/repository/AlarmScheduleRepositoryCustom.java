@@ -10,4 +10,6 @@ public interface AlarmScheduleRepositoryCustom {
 
     AlarmSchedule findAlarmScheduleByIdAndMemberId(Long id, Long memberId);
 
+    List<AlarmSchedule> findWakeUpAlarmSchedulesByMemberId(Long memberId);
+
 }

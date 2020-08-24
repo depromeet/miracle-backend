@@ -30,6 +30,13 @@ public class AlarmService {
     }
 
     @Transactional
+    public void updateDefaultWakeUpAlarmSchedule(Long memberId, LocalTime wakeUpTime) {
+        List<AlarmSchedule> findAlarmSchedules = alarmScheduleRepository.findWakeUpAlarmSchedulesByMemberId(memberId);
+        alarmScheduleRepository.deleteAll(findAlarmSchedules);
+        createDefaultWakeUpAlarmSchedule(memberId, wakeUpTime);
+    }
+
+    @Transactional
     public AlarmScheduleInfoResponse createAlarmSchedule(CreateAlarmScheduleRequest request, Long memberId) {
         AlarmSchedule alarmSchedule = alarmScheduleRepository.save(request.toEntity(memberId));
         return AlarmScheduleInfoResponse.of(alarmSchedule);

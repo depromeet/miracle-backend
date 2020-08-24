@@ -3,6 +3,7 @@ package com.depromeet.service.member;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberRepository;
 import com.depromeet.event.alarm.NewMemberRegisteredEvent;
+import com.depromeet.event.alarm.WakeUpTimeUpdatedEvent;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -30,7 +31,8 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
-        member.updateInfo(request.getName(), request.getProfileIcon());
+        member.updateInfo(request.getName(), request.getProfileIcon(), request.getWakeUpTime());
+        eventPublisher.publishEvent(WakeUpTimeUpdatedEvent.of(member.getId(), request.getWakeUpTime()));
         return MemberInfoResponse.of(member);
     }
 

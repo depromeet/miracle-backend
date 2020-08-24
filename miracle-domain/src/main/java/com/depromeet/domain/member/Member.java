@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,20 +50,24 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberType type;
 
+    private LocalTime wakeUpTime;
+
     @Builder
-    public Member(String email, String name, ProfileIcon profileIcon) {
+    public Member(String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
         this.email = Email.of(email);
         this.name = name;
         this.profileIcon = profileIcon;
+        this.wakeUpTime = wakeUpTime;
         this.provider = AuthProvider.GOOGLE;
         this.type = MemberType.FREE;
     }
 
-    public static Member newInstance(String email, String name, ProfileIcon profileIcon) {
+    public static Member newInstance(String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
         return Member.builder()
             .email(email)
             .name(name)
             .profileIcon(profileIcon)
+            .wakeUpTime(wakeUpTime)
             .build();
     }
 
@@ -70,12 +75,15 @@ public class Member extends BaseTimeEntity {
         return email.getEmail();
     }
 
-    public void updateInfo(String name, ProfileIcon profileIcon) {
+    public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
         if (StringUtils.hasText(name)) {
             this.name = name;
         }
         if (profileIcon != null) {
             this.profileIcon = profileIcon;
+        }
+        if (wakeUpTime != null) {
+            this.wakeUpTime = wakeUpTime;
         }
     }
 

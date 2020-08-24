@@ -11,7 +11,7 @@ Content-Type: application/json
         "EXERCISE",
         "PROMISE"
     ],
-    "wakeUpTime": "08:00"
+    "wakeUpTime": "06:00"
 }
 > {%
 client.global.set("AUTHORIZATION", response.body["data"])
@@ -29,7 +29,8 @@ Content-Type: application/json
 
 {
     "name": "호승강",
-    "profileIcon": "BLUE"
+    "profileIcon": "BLUE",
+    "wakeUpTime": "11:00"
 }
 
 ### 회원의 목표 변경 API

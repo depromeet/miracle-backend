@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor
 public class UpdateMemberInfoRequest {
@@ -13,10 +15,13 @@ public class UpdateMemberInfoRequest {
 
     private ProfileIcon profileIcon;
 
+    private LocalTime wakeUpTime;
+
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public UpdateMemberInfoRequest(String name, ProfileIcon profileIcon) {
+    public UpdateMemberInfoRequest(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
         this.name = name;
         this.profileIcon = profileIcon;
+        this.wakeUpTime = wakeUpTime;
     }
 
 }

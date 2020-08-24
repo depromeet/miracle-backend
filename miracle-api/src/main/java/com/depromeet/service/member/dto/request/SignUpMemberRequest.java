@@ -44,7 +44,7 @@ public class SignUpMemberRequest {
     }
 
     public Member toEntity() {
-        Member member = Member.newInstance(email, name, profileIcon);
+        Member member = Member.newInstance(email, name, profileIcon, wakeUpTime);
         member.addMemberGoals(toMemberGoals());
         return member;
     }
