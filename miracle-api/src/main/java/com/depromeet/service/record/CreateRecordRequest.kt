@@ -18,8 +18,7 @@ class CreateRecordRequest(
     private var question: String? = null,
     private var answer: String? = null
 ) {
-
     fun toEntity(memberId: Long): Record {
-        return Record.newInstance(memberId, scheduleId, category,startDateTime, endDateTime, question, answer)
+        return Record.newInstance(memberId, scheduleId, category, startDateTime, endDateTime, question, answer)
     }
 }

@@ -4,12 +4,78 @@ Content-Type: application/json
 
 {
     "scheduleId": 1,
-    "question": "질문?",
-    "answer": "대답.",
-    "startDateTime":  "2020-08-23T16:30:00",
-    "endDateTime": "2020-08-23T17:00:00",
+    "question": "123?",
+    "answer": "123.",
+    "startDateTime": "2020-08-01T18:00:00",
+    "endDateTime": "2020-08-01T18:30:00",
+    "category": "EXERCISE"
+}
+> {%
+client.global.set("MONTH", "2020-08-01")
+client.global.set("TODAY", "2020-08-22")
+ %}
+
+###
+
+POST {{host}}/api/v1/record
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "scheduleId": 1,
+    "question": "1234?",
+    "answer": "1234.",
+    "startDateTime": "2020-08-22T18:00:00",
+    "endDateTime": "2020-08-22T18:30:00",
     "category": "EXERCISE"
 }
 
+> {%
+client.global.set("MONTH", "2020-08-01")
+client.global.set("TODAY", "2020-08-22")
+ %}
 
 ###
+
+POST {{host}}/api/v1/record
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "scheduleId": 1,
+    "question": "질문456?",
+    "answer": "대답456.",
+    "startDateTime": "2020-08-22T17:00:00",
+    "endDateTime": "2020-08-22T17:30:00",
+    "category": "EXERCISE"
+}
+
+###
+
+POST {{host}}/api/v1/record
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "scheduleId": 1,
+    "question": "질문456?",
+    "answer": "대답456.",
+    "startDateTime": "2020-08-22T17:30:00",
+    "endDateTime": "2020-08-22T18:00:00",
+    "category": "EXERCISE"
+}
+
+####
+
+GET {{host}}/api/v1/record/month?month={{DATE}}
+Authorization: Bearer {{AUTHORIZATION}}
+
+###
+
+GET {{host}}/api/v1/record/today?today={{TODAY}}
+Authorization: Bearer {{AUTHORIZATION}}
+
+###
+
+
+

@@ -3,14 +3,11 @@ package com.depromeet.controller.record
 import com.depromeet.ApiResponse
 import com.depromeet.config.resolver.LoginMember
 import com.depromeet.config.session.MemberSession
-import com.depromeet.domain.record.Record
-import com.depromeet.service.record.CreateRecordRequest
-import com.depromeet.service.record.RecordResponse
-import com.depromeet.service.record.RecordService
+import com.depromeet.service.record.*
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 class RecordController(private val recordService: RecordService) {
@@ -20,7 +17,7 @@ class RecordController(private val recordService: RecordService) {
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createSchedule(
+    fun createRecord(
         @LoginMember member: MemberSession,
         @RequestBody request: CreateRecordRequest
     ): ApiResponse<RecordResponse> {
@@ -31,4 +28,29 @@ class RecordController(private val recordService: RecordService) {
             )
         )
     }
+
+    @GetMapping(
+        value = ["/api/v1/record/month"]
+    )
+    fun getRecordListForCalendar(
+        @LoginMember member: MemberSession,
+        @RequestParam(value = "month") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate
+    ): ApiResponse<RecordListResponseForCalendar> {
+        return ApiResponse.of(
+            recordService.getRecordListForCalendar(member.memberId, date)
+        )
+    }
+
+    @GetMapping(
+        value = ["/api/v1/record/today"]
+    )
+    fun getRecordListForLocalDate(
+        @LoginMember member: MemberSession,
+        @RequestParam(value = "today") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate
+    ): ApiResponse<RecordListResponse> {
+        return ApiResponse.of(
+            recordService.getRecordListForLocalDate(member.memberId, date)
+        )
+    }
+
 }

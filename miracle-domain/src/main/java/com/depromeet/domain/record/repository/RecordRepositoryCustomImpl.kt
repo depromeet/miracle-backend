@@ -16,10 +16,37 @@ class RecordRepositoryCustomImpl(
         endDateTime: LocalDateTime?
     ): Record? {
         return queryFactory.selectFrom(record)
-            .where(record.memberId.eq(memberId))
-            .where(record.scheduleId.eq(scheduleId))
-            .where(record.startDateTime.eq(startTimeAt))
-            .where(record.endDateTime.eq(endDateTime))
-            .fetchOne()
+            .where(
+                record.memberId.eq(memberId),
+                record.scheduleId.eq(scheduleId),
+                record.startDateTime.eq(startTimeAt),
+                record.endDateTime.eq(endDateTime)
+            ).fetchOne()
+    }
+
+    override fun findByMonth(
+        memberId: Long?,
+        startDateTime: LocalDateTime?,
+        endDateTime: LocalDateTime?
+    ): MutableList<Record> {
+
+        return queryFactory.selectFrom(record)
+            .where(
+                record.startDateTime.after(startDateTime),
+                record.startDateTime.before(endDateTime)
+            ).fetch()
+
+    }
+
+    override fun findByDayOfMonth(
+        memberId: Long?,
+        startDateTime: LocalDateTime?,
+        endDateTime: LocalDateTime?
+    ): MutableList<Record> {
+        return queryFactory.selectFrom(record)
+            .where(
+                record.startDateTime.after(startDateTime),
+                record.startDateTime.before(endDateTime)
+            ).fetch()
     }
 }
