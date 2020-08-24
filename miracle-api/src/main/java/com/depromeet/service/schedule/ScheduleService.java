@@ -83,4 +83,20 @@ public class ScheduleService {
 
         repository.delete(schedule);
     }
+
+    /**
+     * 스케쥴 인증을 위해 카테고리별 인증 코멘트를 조회한다.
+     * @param memberId
+     * @param scheduleId
+     * @return
+     */
+    public GetCategoryComment getCategoryComment(Long memberId, long scheduleId) {
+        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+
+        if (schedule.getMemberId() != memberId) {
+            throw new IllegalAccessException(String.format("스케쥴 (%d)에 접근할 수 없습니다.", scheduleId), "스케쥴에 접근할 수 없습니다.");
+        }
+
+        return new GetCategoryComment(schedule.getCategory().retrieveRecordComment());
+    }
 }

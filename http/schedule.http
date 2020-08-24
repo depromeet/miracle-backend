@@ -44,3 +44,9 @@ Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
 ###
+
+GET {{host}}/api/v1/schedule/{{SCHEDULE_ID}}/category/comment
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+###
