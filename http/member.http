@@ -15,7 +15,9 @@ Content-Type: application/json
 }
 > {%
 client.global.set("AUTHORIZATION", response.body["data"])
+client.global.set("DATE", "2020-08-01")
  %}
+
 
 ### 내정보를 불러오는 API
 GET {{host}}/api/v1/member

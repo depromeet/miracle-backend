@@ -13,7 +13,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,7 +52,7 @@ public class Record extends BaseTimeEntity {
         this.answer = answer;
     }
 
-    public static Record newInstance(Long memberId, Long scheduleId,Category category, LocalDateTime startDateTime, LocalDateTime endDateTime, String question, String answer) {
+    public static Record newInstance(Long memberId, Long scheduleId, Category category, LocalDateTime startDateTime, LocalDateTime endDateTime, String question, String answer) {
         return Record.builder()
             .memberId(memberId)
             .scheduleId(scheduleId)
@@ -62,4 +64,11 @@ public class Record extends BaseTimeEntity {
             .build();
     }
 
+    public static LocalDateTime makeStartDateTime(LocalDate date) {
+        return LocalDateTime.of(date.minusDays(1), LocalTime.of(0, 0, 0));
+    }
+
+    public static LocalDateTime makeEndDateTime(LocalDate date) {
+        return LocalDateTime.of(date.plusMonths(1).minusDays(1), LocalTime.of(23, 59, 59));
+    }
 }
