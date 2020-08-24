@@ -3,6 +3,7 @@ package com.depromeet.domain.schedule;
 import com.depromeet.domain.BaseTimeEntity;
 import com.deprommet.exception.IllegalAccessException;
 import com.deprommet.exception.ValidationException;
+import com.depromeet.domain.common.Category;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -32,7 +33,8 @@ public class Schedule extends BaseTimeEntity {
 
     private LocalTime endTime;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     private String description;
 
@@ -43,7 +45,7 @@ public class Schedule extends BaseTimeEntity {
         //needed by hibernate
     }
 
-    public Schedule(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+    public Schedule(long memberId, LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
         validateTime(startTime, endTime);
         this.memberId = memberId;
         this.year = startTime.getYear();
@@ -57,7 +59,7 @@ public class Schedule extends BaseTimeEntity {
         this.loopType = loopType;
     }
 
-    public static Schedule of(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+    public static Schedule of(long memberId, LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
         return new Schedule(memberId, startTime, endTime, category, description, loopType);
     }
 
@@ -70,7 +72,7 @@ public class Schedule extends BaseTimeEntity {
         }
     }
 
-    public void update(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+    public void update(long memberId, LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
         if (this.memberId != memberId) {
             throw new IllegalAccessException(String.format("타인의 스케쥴 (%d)은 수정할 수 없습니다", this.id), "타인의 스케쥴은 수정할 수 없습니다");
         }
@@ -119,7 +121,7 @@ public class Schedule extends BaseTimeEntity {
         return endTime;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
