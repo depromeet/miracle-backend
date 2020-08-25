@@ -1,1 +1,1 @@
-ALTER TABLE `MEMBER` ADD `wake_up_time` time DEFAULT NULL;
+ALTER TABLE `member` ADD `wake_up_time` time DEFAULT NULL;
