@@ -1,0 +1,1 @@
+ALTER TABLE `MEMBER` ADD `wake_up_time` time DEFAULT NULL;
