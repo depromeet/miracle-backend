@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -76,15 +75,9 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
-        if (StringUtils.hasText(name)) {
-            this.name = name;
-        }
-        if (profileIcon != null) {
-            this.profileIcon = profileIcon;
-        }
-        if (wakeUpTime != null) {
-            this.wakeUpTime = wakeUpTime;
-        }
+        this.name = name;
+        this.profileIcon = profileIcon;
+        this.wakeUpTime = wakeUpTime;
     }
 
     public void updateMemberGoals(List<MemberGoal> memberGoals) {

@@ -246,7 +246,7 @@ class MemberServiceTest {
         // then
         List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
         assertThat(alarmSchedules).hasSize(1);
-        assertThat(alarmSchedules.get(0)).isNotEqualTo(alarmSchedule.getId());
+        assertThat(alarmSchedules.get(0).getId()).isNotEqualTo(alarmSchedule.getId());
         assertThat(alarmSchedules.get(0).getType()).isEqualTo(AlarmType.WAKE_UP);
 
         List<Alarm> alarms = alarmRepository.findAll();
