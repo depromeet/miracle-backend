@@ -1,6 +1,8 @@
 package com.depromeet.domain.schedule;
 
 import com.depromeet.domain.BaseTimeEntity;
+import com.deprommet.exception.IllegalAccessException;
+import com.deprommet.exception.ValidationException;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -61,16 +63,16 @@ public class Schedule extends BaseTimeEntity {
 
     private void validateTime(LocalDateTime startTime, LocalDateTime endTime) {
         if (!startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equals(endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {
-            throw new InvalidScheduleTimeException("startTime and endTime must same day");
+            throw new ValidationException("날짜 형식은 'yyyy-MM-dd'이여야 합니다.", "날짜 형식은 'yyyy-MM-dd'이여야 합니다.");
         }
         if (startTime.isAfter(endTime)) {
-            throw new InvalidScheduleTimeException("startTime must before endTime");
+            throw new ValidationException("시작 시간은 종료 시간보다 반드시 먼저여야 합니다.", "시작 시간은 종료 시간보다 반드시 먼저여야 합니다.");
         }
     }
 
     public void update(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
         if (this.memberId != memberId) {
-            throw new IllegalScheduleAccessException(String.format("해당 스케쥴 (%d)은 수정할 수 없습니다", this.id));
+            throw new IllegalAccessException(String.format("타인의 스케쥴 (%d)은 수정할 수 없습니다", this.id), "타인의 스케쥴은 수정할 수 없습니다");
         }
 
         validateTime(startTime, endTime);

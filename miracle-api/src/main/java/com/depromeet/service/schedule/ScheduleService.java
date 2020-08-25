@@ -57,14 +57,6 @@ public class ScheduleService {
      * 데이터 베이스의 스케쥴을 수정한다.
      *
      * @param memberId 가입 멤버 ID
-     * @param request  수정하고자 하는 스케쥴 정보
-     * @return 스케쥴 ID
-     */
-
-    /**
-     * 데이터 베이스의 스케쥴을 수정한다.
-     *
-     * @param memberId 가입 멤버 ID
      * @param scheduleId 수정하고자 하는 스케쥴 ID
      * @param request  수정하고자 하는 스케쥴 정보
      * @return

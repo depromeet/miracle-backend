@@ -1,5 +1,7 @@
 package com.depromeet.domain.schedule;
 
+import com.deprommet.exception.IllegalAccessException;
+import com.deprommet.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -44,7 +46,7 @@ class ScheduleTest {
     void startTimeAfterEndTime_ShouldFail(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
         assertThatThrownBy(() -> {
             Schedule.of(memberId, startTime, endTime, category, description, loopType);
-        }).isInstanceOf(InvalidScheduleTimeException.class);
+        }).isInstanceOf(ValidationException.class);
     }
 
     static Stream<Arguments> source_startTimeAfterEndTime_ShouldFail() {
@@ -61,7 +63,7 @@ class ScheduleTest {
     void startTimeAndEndTimeNotSame_ShouldFail(long memberId, LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
         assertThatThrownBy(() -> {
             Schedule.of(memberId, startTime, endTime, category, description, loopType);
-        }).isInstanceOf(InvalidScheduleTimeException.class);
+        }).isInstanceOf(ValidationException.class);
     }
 
     static Stream<Arguments> source_startTimeAndEndTimeNotSame_ShouldFail() {
@@ -103,7 +105,7 @@ class ScheduleTest {
         Schedule schedule = Schedule.of(1L, LocalDateTime.of(2020, 8, 6, 8, 0, 0), LocalDateTime.of(2020, 8, 6, 8, 30, 0), "운동", "운동하기", LoopType.NONE);
         assertThatThrownBy(() -> {
             schedule.update(schedule.getMemberId() + 1, startTime, endTime, category, description, loopType);
-        }).isInstanceOf(IllegalScheduleAccessException.class);
+        }).isInstanceOf(IllegalAccessException.class);
     }
 
     static Stream<Arguments> source_updateSchedule_ShouldFail() {

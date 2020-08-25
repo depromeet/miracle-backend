@@ -66,7 +66,7 @@ public class ScheduleController {
      * @return
      */
     @DeleteMapping(value = "/api/v1/schedule/{scheduleId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<String> updateSchedule(@LoginMember MemberSession session, @PathVariable long scheduleId) {
+    public ApiResponse<String> deleteSchedule(@LoginMember MemberSession session, @PathVariable long scheduleId) {
         scheduleService.deleteSchedule(session.getMemberId(), scheduleId);
         return ApiResponse.SUCCESS;
     }
