@@ -3,6 +3,7 @@ package com.depromeet.controller.schedule;
 import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
+import com.depromeet.service.schedule.dto.GetCategoryComment;
 import com.depromeet.service.schedule.ScheduleService;
 import com.depromeet.service.schedule.dto.*;
 import org.springframework.http.MediaType;
@@ -69,5 +70,10 @@ public class ScheduleController {
     public ApiResponse<String> deleteSchedule(@LoginMember MemberSession session, @PathVariable long scheduleId) {
         scheduleService.deleteSchedule(session.getMemberId(), scheduleId);
         return ApiResponse.SUCCESS;
+    }
+
+    @GetMapping(value = "/api/v1/schedule/{scheduleId}/category/comment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<GetCategoryComment> getCategoryComment(@LoginMember MemberSession session, @PathVariable long scheduleId) {
+        return ApiResponse.of(scheduleService.getCategoryComment(session.getMemberId(), scheduleId));
     }
 }

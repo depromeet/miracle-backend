@@ -1,5 +1,6 @@
 package com.depromeet.service.schedule.dto;
 
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +23,7 @@ public class UpdateScheduleRequest {
     private LocalDateTime endTime;
 
     @NotBlank(message = "카테고리를 선택해주세요")
-    private String category;
+    private Category category;
 
     @NotBlank(message = "설명을 입력해주세요")
     @Length(max = 11, message = "11자 이하로 입력해주세요")
@@ -36,7 +37,7 @@ public class UpdateScheduleRequest {
         // needed by jackson
     }
 
-    public UpdateScheduleRequest(LocalDateTime startTime, LocalDateTime endTime, String category, String description, LoopType loopType) {
+    public UpdateScheduleRequest(LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
@@ -56,7 +57,7 @@ public class UpdateScheduleRequest {
         return endTime;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 

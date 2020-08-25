@@ -1,5 +1,6 @@
 package com.depromeet.service.schedule.dto;
 
+import com.depromeet.domain.common.Category;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import io.swagger.annotations.ApiModel;
@@ -16,12 +17,12 @@ public class GetScheduleResponse {
     private int dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
-    private String category;
+    private Category category;
     private String description;
     @ApiModelProperty
     private LoopType loopType;
 
-    public GetScheduleResponse(long id, int year, int month, int day, int dayOfWeek, LocalTime startTime, LocalTime endTime, String category, String description, LoopType loopType) {
+    public GetScheduleResponse(long id, int year, int month, int day, int dayOfWeek, LocalTime startTime, LocalTime endTime, Category category, String description, LoopType loopType) {
         this.id = id;
         this.year = year;
         this.month = month;
@@ -66,7 +67,7 @@ public class GetScheduleResponse {
         return endTime;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 

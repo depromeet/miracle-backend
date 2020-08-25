@@ -56,9 +56,9 @@ public class ScheduleService {
     /**
      * 데이터 베이스의 스케쥴을 수정한다.
      *
-     * @param memberId 가입 멤버 ID
+     * @param memberId   가입 멤버 ID
      * @param scheduleId 수정하고자 하는 스케쥴 ID
-     * @param request  수정하고자 하는 스케쥴 정보
+     * @param request    수정하고자 하는 스케쥴 정보
      * @return
      */
     @Transactional
@@ -71,9 +71,10 @@ public class ScheduleService {
     /**
      * 데이터 베이스의 스케쥴을 삭제한다.
      *
-     * @param memberId 가입 멤버 ID
-     * @param scheduleId  삭제하고자 하는 스케쥴 ID
+     * @param memberId   가입 멤버 ID
+     * @param scheduleId 삭제하고자 하는 스케쥴 ID
      */
+    @Transactional
     public void deleteSchedule(long memberId, long scheduleId) {
         Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
 
@@ -82,5 +83,23 @@ public class ScheduleService {
         }
 
         repository.delete(schedule);
+    }
+
+    /**
+     * 스케쥴 인증을 위해 카테고리별 인증 코멘트를 조회한다.
+     *
+     * @param memberId   가입 멤버 ID
+     * @param scheduleId 인증 코멘트가 필요한 스케쥴 ID
+     * @return 인증 화면에 노출될 코멘트
+     */
+    @Transactional(readOnly = true)
+    public GetCategoryComment getCategoryComment(Long memberId, long scheduleId) {
+        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
+
+        if (schedule.getMemberId() != memberId) {
+            throw new IllegalAccessException(String.format("스케쥴 (%d)에 접근할 수 없습니다.", scheduleId), "스케쥴에 접근할 수 없습니다.");
+        }
+
+        return new GetCategoryComment(schedule.getCategory().retrieveRecordComment());
     }
 }
