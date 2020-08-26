@@ -14,7 +14,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(
+    indexes = @Index(name = "idx_alarm_schedule_1", columnList = "memberId")
+)
 public class AlarmSchedule extends BaseTimeEntity {
 
     @Id
