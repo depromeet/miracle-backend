@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,29 +16,39 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(
+    indexes = @Index(name = "idx_record_1", columnList = "memberId,scheduleId")
+)
 public class Record extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long memberId;
 
+    @Column(nullable = false)
     private Long scheduleId;
 
     @Embedded
     private DateTimeInterval dateTimeInterval;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @Column(nullable = false, length = 100)
     private String question;
 
+    @Column(nullable = false, length = 100)
     private String answer;
 
     @Builder
