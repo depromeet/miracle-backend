@@ -17,6 +17,7 @@ Content-Type: application/json
 client.global.set("AUTHORIZATION", response.body["data"])
  %}
 
+
 ### 내정보를 불러오는 API
 GET {{host}}/api/v1/member
 Authorization: Bearer {{AUTHORIZATION}}
