@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class InitBinderConfig {
+    
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.initDirectFieldAccess();
