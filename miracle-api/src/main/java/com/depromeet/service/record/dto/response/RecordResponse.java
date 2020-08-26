@@ -15,8 +15,6 @@ public class RecordResponse {
 
     private final Long id;
 
-    private final Long memberId;
-
     private final Long scheduleId;
 
     private final LocalDateTime startDateTime;
@@ -30,7 +28,7 @@ public class RecordResponse {
     private final String answer;
 
     public static RecordResponse of(Record record) {
-        return new RecordResponse(record.getId(), record.getMemberId(), record.getScheduleId(), record.getStartDateTime(),
+        return new RecordResponse(record.getId(), record.getScheduleId(), record.getStartDateTime(),
             record.getEndDateTime(), record.getCategory(), record.getQuestion(), record.getAnswer());
     }
 
