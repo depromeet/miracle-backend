@@ -11,6 +11,5 @@ CREATE OR REPLACE TABLE `record`
     `created_date_time` datetime(6) DEFAULT NULL,
     `last_modified_date_time` datetime(6) DEFAULT NULL,
 
-    PRIMARY KEY(`id`),
-    KEY `idx_record_1` (`member_id`, `schedule_id`)
+    PRIMARY KEY(`id`)
 );
