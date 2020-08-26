@@ -14,4 +14,6 @@ public interface ScheduleRepositoryCustom {
     List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek);
 
     List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day);
+
+    Schedule findScheduleByIdAndMemberId(Long scheduleId, Long memberId);
 }

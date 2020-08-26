@@ -59,4 +59,13 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
                 schedule.day.eq(day)
             ).fetch();
     }
+
+    @Override
+    public Schedule findScheduleByIdAndMemberId(Long scheduleId, Long memberId) {
+        return queryFactory.selectFrom(schedule)
+            .where(
+                schedule.memberId.eq(memberId),
+                schedule.id.eq(scheduleId)
+            ).fetchOne();
+    }
 }

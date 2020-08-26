@@ -93,6 +93,16 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     }
 
     @Override
+    public Schedule findScheduleByIdAndMemberId(Long scheduleId, Long memberId) {
+        return schedules
+            .stream()
+            .filter(s -> s.getMemberId() == memberId)
+            .filter(s -> s.getId() == scheduleId)
+            .findFirst()
+            .orElse(null);
+    }
+
+    @Override
     public List<Schedule> findAll() {
         return schedules;
     }

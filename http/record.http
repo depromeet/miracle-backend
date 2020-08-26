@@ -67,12 +67,11 @@ Content-Type: application/json
 
 ####
 
-GET {{host}}/api/v1/record/month?month={{DATE}}
+GET {{host}}/api/v1/record/month?year=2020&month=8
 Authorization: Bearer {{AUTHORIZATION}}
 
 ###
-
-GET {{host}}/api/v1/record/today?today={{TODAY}}
+GET {{host}}/api/v1/record/day?date=[2020-08-01]
 Authorization: Bearer {{AUTHORIZATION}}
 
 ###
