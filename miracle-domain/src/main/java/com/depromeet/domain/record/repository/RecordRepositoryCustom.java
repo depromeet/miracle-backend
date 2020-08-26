@@ -9,7 +9,6 @@ public interface RecordRepositoryCustom {
 
     Record findByMemberIdAndScheduleIdAndStartTime(Long memberId, Long scheduleId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    List<Record> findByMonth(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<Record> findRecordBetween(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    List<Record> findByDayOfMonth(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

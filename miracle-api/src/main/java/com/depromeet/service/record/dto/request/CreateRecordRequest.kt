@@ -1,4 +1,4 @@
-package com.depromeet.service.record
+package com.depromeet.service.record.dto.request;
 
 import com.depromeet.domain.common.Category
 import com.depromeet.domain.record.Record
