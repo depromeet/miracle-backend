@@ -28,6 +28,7 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
     @Override
     public List<Record> findRecordBetween(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return queryFactory.selectFrom(record)
+            .orderBy(record.dateTimeInterval.startDateTime.asc(), record.dateTimeInterval.endDateTime.asc())
             .where(
                 record.memberId.eq(memberId),
                 record.dateTimeInterval.startDateTime.before(endDateTime),
