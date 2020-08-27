@@ -47,6 +47,11 @@ Content-Type: application/json
 GET {{host}}/api/v1/record/month?year=2020&month=8
 Authorization: Bearer {{AUTHORIZATION}}
 
+#### 특정 달의 상세 레코드 정보를 조회하는 API
+
+GET {{host}}/api/v1/record/month/detail?year=2020&month=8
+Authorization: Bearer {{AUTHORIZATION}}
+
 ### 특정 날의 레코드 정보를 조회하는 API
 GET {{host}}/api/v1/record/day?date=2020-08-04
 Authorization: Bearer {{AUTHORIZATION}}
