@@ -5,7 +5,6 @@ import com.depromeet.domain.record.RecordRepository;
 import com.depromeet.service.MemberSetup;
 import com.depromeet.service.record.dto.request.DayRecordsRequest;
 import com.depromeet.service.record.dto.request.MonthRecordsRequest;
-import com.depromeet.service.record.dto.response.RecordForCalendarResponse;
 import com.depromeet.service.record.dto.response.RecordResponse;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.AfterEach;
@@ -48,11 +47,11 @@ class RecordRetrieveServiceTest extends MemberSetup {
             .build();
 
         // when
-        RecordForCalendarResponse response = recordRetrieveService.retrieveMonthRecords(request, memberId);
+        List<RecordResponse> responses = recordRetrieveService.retrieveMonthDetailRecords(request, memberId);
 
         // then
-        assertThat(response.getDateList()).hasSize(1);
-      //  assertRecordResponse(response.getDateList().get(0), startDateTime, endDateTime);
+        assertThat(responses).hasSize(1);
+        assertRecordResponse(responses.get(0), startDateTime, endDateTime);
     }
 
     @Description("7월 31일 23:50 ~ 8월 1일 00:00 의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되지 않아야 한다.")
@@ -69,10 +68,10 @@ class RecordRetrieveServiceTest extends MemberSetup {
             .build();
 
         // when
-      //  List<RecordResponse> response = recordRetrieveService.retrieveMonthRecords(request, memberId);
+        List<RecordResponse> response = recordRetrieveService.retrieveMonthDetailRecords(request, memberId);
 
-        // then
-   //     assertThat(response).isEmpty();
+        //then
+        assertThat(response).isEmpty();
     }
 
     @Description("8월 31일 23:50 ~ 9월 1일 00:10 의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되어야 한다.")
@@ -88,12 +87,12 @@ class RecordRetrieveServiceTest extends MemberSetup {
             .month(8)
             .build();
 
-        // when
-     //   List<RecordResponse> response = recordRetrieveService.retrieveMonthRecords(request, memberId);
+        //when
+        List<RecordResponse> response = recordRetrieveService.retrieveMonthDetailRecords(request, memberId);
 
-        // then
-//        assertThat(response).hasSize(1);
-//        assertRecordResponse(response.get(0), startDateTime, endDateTime);
+        //then
+        assertThat(response).hasSize(1);
+        assertRecordResponse(response.get(0), startDateTime, endDateTime);
     }
 
     @Description("9월1일 00:00 ~ 9월 1일 00:10 의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되지 않아야한다.")
@@ -110,10 +109,10 @@ class RecordRetrieveServiceTest extends MemberSetup {
             .build();
 
         // when
-       // List<RecordResponse> response = recordRetrieveService.retrieveMonthRecords(request, memberId);
+        List<RecordResponse> response = recordRetrieveService.retrieveMonthDetailRecords(request, memberId);
 
         // then
-      //  assertThat(response).isEmpty();
+        assertThat(response).isEmpty();
     }
 
     @Description("8월 14일 00:00 ~ 15일 00:00의 레코드 기록이 있을때, 8월 15일의 레코드 정보를 불러오면 포함되지 않아야한다.")

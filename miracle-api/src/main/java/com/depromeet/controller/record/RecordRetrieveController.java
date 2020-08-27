@@ -26,8 +26,14 @@ public class RecordRetrieveController {
         return ApiResponse.of(recordRetrieveService.retrieveMonthRecords(request, memberSession.getMemberId()));
     }
 
+    @GetMapping("/api/v1/record/month/detail")
+    public ApiResponse<List<RecordResponse>> retrieveMonthDetailRecords(@Valid MonthRecordsRequest request, @LoginMember MemberSession memberSession) {
+        return ApiResponse.of(recordRetrieveService.retrieveMonthDetailRecords(request, memberSession.getMemberId()));
+    }
+
     @GetMapping("/api/v1/record/day")
     public ApiResponse<List<RecordResponse>> retrieveDayRecords(@Valid DayRecordsRequest request, @LoginMember MemberSession memberSession) {
         return ApiResponse.of(recordRetrieveService.retrieveDayRecords(request, memberSession.getMemberId()));
     }
+
 }

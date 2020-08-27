@@ -24,6 +24,14 @@ class RecordRetrieveService(private val recordRepository: RecordRepository) {
     }
 
     @Transactional(readOnly = true)
+    fun retrieveMonthDetailRecords(request: MonthRecordsRequest, memberId: Long?): List<RecordResponse> {
+        val records = recordRepository.findRecordBetween(memberId, request.convertFirstDayOfTheMonth(), request.convertEndDayOfTheMonth())
+        return records.stream()
+            .map { record: Record? -> RecordResponse.of(record) }
+            .collect(Collectors.toList())
+    }
+
+    @Transactional(readOnly = true)
     fun retrieveDayRecords(request: DayRecordsRequest, memberId: Long): List<RecordResponse> {
         val records = recordRepository.findRecordBetween(
             memberId,
@@ -38,4 +46,5 @@ class RecordRetrieveService(private val recordRepository: RecordRepository) {
             }
             .collect(Collectors.toList())
     }
+
 }
