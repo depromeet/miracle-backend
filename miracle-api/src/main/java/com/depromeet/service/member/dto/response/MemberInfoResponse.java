@@ -4,11 +4,11 @@ import com.depromeet.domain.common.Category;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberGoal;
 import com.depromeet.domain.member.ProfileIcon;
+import com.depromeet.utils.LocalDateTimeUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +24,13 @@ public class MemberInfoResponse {
 
     private final ProfileIcon profileIcon;
 
-    private final LocalTime wakeUpTime;
+    private final String wakeUpTime;
 
     private final List<Category> goals;
 
     public static MemberInfoResponse of(Member member) {
-        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(), member.getWakeUpTime(), convertMemberGoalsToCategories(member));
+        return new MemberInfoResponse(member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(),
+            LocalDateTimeUtils.convertNotIncludeSecondFormat(member.getWakeUpTime()), convertMemberGoalsToCategories(member));
     }
 
     private static List<Category> convertMemberGoalsToCategories(Member member) {
