@@ -2,6 +2,20 @@
 
 * 사용자들의 미라클 모닝 실천을 도와주는 시스템을 개발한다
 
+## 개발 스택
+* Web Application Server 
+    * JAVA 11 + Kotlin 1.3
+    * Spring Boot 2.2.8(Spring FrameWork, Spring Web MVC)
+    * ORM, Spring Data JPA + QueryDSL
+    * Unit Testing / Integration Testing + Junit 5
+* DataBase
+    * MariaDB (Production)
+    * H2 (Local)
+* Infra
+    * AWS EC2 + AWS RDS (MariaDB)
+    * CI: GitHub Action + AWS S3 + AWS CodeDeploy
+    * WebServer: Nginx (HTTPS, Reverse Proxy Configuration)
+
 ## 요구사항
 
 ### 스케쥴
