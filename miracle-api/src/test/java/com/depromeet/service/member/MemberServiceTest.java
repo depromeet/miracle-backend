@@ -307,6 +307,33 @@ class MemberServiceTest {
         }).isInstanceOf(NotFoundException.class);
     }
 
+    @Test
+    void 회원정보를_삭제한다() {
+        // given
+        memberRepository.save(member);
+
+        // when
+        memberService.deleteMemberInfo(member.getId());
+
+        // then
+        List<Member> members = memberRepository.findAll();
+        assertThat(members).isEmpty();
+    }
+
+    @Test
+    void 회원정보를_삭제시_회원의_목표도_삭제된다() {
+        // given
+        member.addMemberGoals(Collections.singletonList(MemberGoalCreator.create(Category.EXERCISE)));
+        memberRepository.save(member);
+
+        // when
+        memberService.deleteMemberInfo(member.getId());
+
+        // then
+        List<MemberGoal> memberGoals = memberGoalRepository.findAll();
+        assertThat(memberGoals).isEmpty();
+    }
+
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {
         assertAll(
             () -> assertThat(response.getEmail()).isEqualTo(email),
