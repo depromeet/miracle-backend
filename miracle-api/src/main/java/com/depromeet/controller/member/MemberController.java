@@ -10,6 +10,7 @@ import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,6 +59,15 @@ public class MemberController {
     @GetMapping("/api/v1/member")
     public ApiResponse<MemberInfoResponse> getMemberInfo(@LoginMember MemberSession memberSession) {
         return ApiResponse.of(memberService.getMemberInfo(memberSession.getMemberId()));
+    }
+
+    /**
+     * 회원정보를 삭제하는 API (테스트용도)
+     */
+    @DeleteMapping("/api/v1/member")
+    public ApiResponse<String> deleteMemberInfo(@LoginMember MemberSession memberSession) {
+        memberService.deleteMemberInfo(memberSession.getMemberId());
+        return ApiResponse.SUCCESS;
     }
 
 }

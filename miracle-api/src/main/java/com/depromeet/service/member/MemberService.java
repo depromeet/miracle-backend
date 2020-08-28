@@ -49,4 +49,10 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
+    @Transactional
+    public void deleteMemberInfo(Long memberId) {
+        Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
+        memberRepository.delete(member);
+    }
+
 }
