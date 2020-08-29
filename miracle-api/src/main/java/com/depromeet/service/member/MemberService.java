@@ -2,6 +2,8 @@ package com.depromeet.service.member;
 
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberRepository;
+import com.depromeet.domain.member.deleted.DeletedMember;
+import com.depromeet.domain.member.deleted.DeletedMemberRepository;
 import com.depromeet.event.alarm.NewMemberRegisteredEvent;
 import com.depromeet.event.alarm.WakeUpTimeUpdatedEvent;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
@@ -19,6 +21,7 @@ public class MemberService {
 
     private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
+    private final DeletedMemberRepository deletedMemberRepository;
 
     @Transactional
     public Long signUpMember(SignUpMemberRequest request) {
@@ -53,6 +56,7 @@ public class MemberService {
     public void deleteMemberInfo(Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
         memberRepository.delete(member);
+        deletedMemberRepository.save(DeletedMember.of(member));
     }
 
 }

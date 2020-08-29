@@ -45,4 +45,9 @@ Content-Type: application/json
     ]
 }
 
+### 회원 탈퇴 API
+DELETE {{host}}/api/v1/member
+Authorization: Bearer {{AUTHORIZATION}}
+
 ###
+

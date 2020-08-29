@@ -62,7 +62,7 @@ public class MemberController {
     }
 
     /**
-     * 회원정보를 삭제하는 API (테스트용도)
+     * 회원 탈퇴 API
      */
     @DeleteMapping("/api/v1/member")
     public ApiResponse<String> deleteMemberInfo(@LoginMember MemberSession memberSession) {

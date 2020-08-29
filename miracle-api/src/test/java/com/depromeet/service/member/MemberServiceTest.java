@@ -9,13 +9,19 @@ import com.depromeet.domain.alarm.AlarmScheduleRepository;
 import com.depromeet.domain.alarm.AlarmType;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
+import com.depromeet.domain.member.AuthProvider;
 import com.depromeet.domain.member.Member;
 import com.depromeet.domain.member.MemberCreator;
 import com.depromeet.domain.member.MemberGoal;
 import com.depromeet.domain.member.MemberGoalCreator;
 import com.depromeet.domain.member.MemberGoalRepository;
 import com.depromeet.domain.member.MemberRepository;
+import com.depromeet.domain.member.MemberType;
 import com.depromeet.domain.member.ProfileIcon;
+import com.depromeet.domain.member.deleted.DeletedMember;
+import com.depromeet.domain.member.deleted.DeletedMemberGoal;
+import com.depromeet.domain.member.deleted.DeletedMemberGoalRepository;
+import com.depromeet.domain.member.deleted.DeletedMemberRepository;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -53,6 +59,12 @@ class MemberServiceTest {
     private AlarmScheduleRepository alarmScheduleRepository;
 
     @Autowired
+    private DeletedMemberRepository deletedMemberRepository;
+
+    @Autowired
+    private DeletedMemberGoalRepository deletedMemberGoalRepository;
+
+    @Autowired
     private AlarmRepository alarmRepository;
 
     private Member member;
@@ -62,13 +74,13 @@ class MemberServiceTest {
         memberRepository.deleteAll();
         alarmRepository.deleteAllInBatch();
         alarmScheduleRepository.deleteAllInBatch();
+        deletedMemberGoalRepository.deleteAllInBatch();
+        deletedMemberRepository.deleteAllInBatch();
     }
 
     @BeforeEach
     void setUpMemberSample() {
         member = MemberCreator.create("will.seungho@gmail.com", "강승호", ProfileIcon.RED);
-        MemberGoal memberGoal = MemberGoalCreator.create(Category.READING);
-        member.addMemberGoals(Collections.singletonList(memberGoal));
     }
 
     @Test
@@ -308,7 +320,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원정보를_삭제한다() {
+    void 회원탈퇴시_회원정보를_삭제한다() {
         // given
         memberRepository.save(member);
 
@@ -321,9 +333,9 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원정보를_삭제시_회원의_목표도_삭제된다() {
+    void 회원탈퇴시_회원의_목표도_삭제된다() {
         // given
-        member.addMemberGoals(Collections.singletonList(MemberGoalCreator.create(Category.EXERCISE)));
+        member.addMemberGoals(Collections.singletonList(MemberGoalCreator.create(Category.READING)));
         memberRepository.save(member);
 
         // when
@@ -332,6 +344,36 @@ class MemberServiceTest {
         // then
         List<MemberGoal> memberGoals = memberGoalRepository.findAll();
         assertThat(memberGoals).isEmpty();
+    }
+
+    @Test
+    void 회원탈퇴시_DeletedMember_에_보관된다() {
+        // given
+        memberRepository.save(member);
+
+        // when
+        memberService.deleteMemberInfo(member.getId());
+
+        // then
+        List<DeletedMember> deletedMembers = deletedMemberRepository.findAll();
+        assertThat(deletedMembers).hasSize(1);
+        assertDeletedMemberInfo(deletedMembers.get(0), member.getId(), member.getEmail(), member.getName(), member.getProfileIcon(), member.getProvider(), member.getType());
+    }
+
+    @Test
+    void 회원탈퇴시_회원의_목표도_백업된다() {
+        // given
+        MemberGoal memberGoal = MemberGoalCreator.create(Category.READING);
+        member.addMemberGoals(Collections.singletonList(memberGoal));
+        memberRepository.save(member);
+
+        // when
+        memberService.deleteMemberInfo(member.getId());
+
+        // then
+        List<DeletedMemberGoal> deletedMemberGoals = deletedMemberGoalRepository.findAll();
+        assertThat(deletedMemberGoals).hasSize(1);
+        assertThat(deletedMemberGoals.get(0).getCategory()).isEqualTo(memberGoal.getCategory());
     }
 
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {
@@ -348,6 +390,17 @@ class MemberServiceTest {
             () -> assertThat(member.getName()).isEqualTo(name),
             () -> assertThat(member.getProfileIcon()).isEqualTo(profileIcon),
             () -> assertThat(member.getWakeUpTime()).isEqualTo(wakeUpTime)
+        );
+    }
+
+    private void assertDeletedMemberInfo(DeletedMember deletedMember, Long memberId, String email, String name, ProfileIcon profileIcon, AuthProvider provider, MemberType type) {
+        assertAll(
+            () -> assertThat(deletedMember.getBackupId()).isEqualTo(memberId),
+            () -> assertThat(deletedMember.getEmail()).isEqualTo(email),
+            () -> assertThat(deletedMember.getName()).isEqualTo(name),
+            () -> assertThat(deletedMember.getProfileIcon()).isEqualTo(profileIcon),
+            () -> assertThat(deletedMember.getProvider()).isEqualTo(provider),
+            () -> assertThat(deletedMember.getType()).isEqualTo(type)
         );
     }
 
