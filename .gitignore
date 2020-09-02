@@ -43,3 +43,7 @@ application-prod-db.yml
 ## Logging File ###
 *.log
 *.gz
+
+secret.tfvars
+terraform/prod/.terraform
+*.tfstate
