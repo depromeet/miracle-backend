@@ -4,9 +4,12 @@ import com.depromeet.domain.BaseTimeEntity;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.deprommet.exception.IllegalAccessException;
+import com.deprommet.exception.ValidationException;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Schedule extends BaseTimeEntity {
@@ -50,11 +53,18 @@ public class Schedule extends BaseTimeEntity {
         if (this.memberId != memberId) {
             throw new IllegalAccessException(String.format("타인의 스케쥴 (%d)은 수정할 수 없습니다", this.id), "타인의 스케쥴은 수정할 수 없습니다");
         }
+        validateTime(startTime, endTime);
         this.category = category;
         this.description = description;
         this.dayOfTheWeek = dayOfTheWeek;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    private void validateTime(LocalTime startTime, LocalTime endTime) {
+        if (startTime.isAfter(endTime)) {
+            throw new ValidationException("시작 시간은 종료 시간보다 반드시 먼저여야 합니다.", "시작 시간은 종료 시간보다 반드시 먼저여야 합니다.");
+        }
     }
 
     public Long getId() {
