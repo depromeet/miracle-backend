@@ -5,9 +5,7 @@ import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.service.schedule.ScheduleService;
-import com.depromeet.service.schedule.dto.*;
 import com.depromeet.util.JsonUtils;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -27,8 +25,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;

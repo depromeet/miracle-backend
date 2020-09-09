@@ -1,10 +1,10 @@
 package com.depromeet.service.schedule;
 
+import com.depromeet.controller.schedule.GetScheduleResponse;
+import com.depromeet.controller.schedule.UpdateScheduleRequest;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.ScheduleRepository;
-import com.depromeet.service.schedule.dto.GetScheduleResponse;
-import com.depromeet.service.schedule.dto.UpdateScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

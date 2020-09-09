@@ -1,10 +1,9 @@
 package com.depromeet.service.schedule;
 
-import com.depromeet.controller.schedule.CreateScheduleRequest;
+import com.depromeet.controller.schedule.*;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
-import com.depromeet.service.schedule.dto.*;
 import com.deprommet.exception.IllegalAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

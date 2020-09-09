@@ -4,13 +4,10 @@ import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
 import com.depromeet.domain.common.DayOfTheWeek;
-import com.depromeet.service.schedule.dto.GetCategoryComment;
 import com.depromeet.service.schedule.ScheduleService;
-import com.depromeet.service.schedule.dto.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -48,9 +45,9 @@ public class ScheduleController {
     /**
      * 스케쥴을 수정한다.
      *
-     * @param session 가입 멤버 정보
+     * @param session    가입 멤버 정보
      * @param scheduleId 수정하고자 하는 스케쥴 ID
-     * @param request 수정하고자 하는 스케쥴 정보
+     * @param request    수정하고자 하는 스케쥴 정보
      * @return 스케쥴 ID
      */
     @PutMapping(value = "/api/v1/schedule/{scheduleId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,8 +58,8 @@ public class ScheduleController {
     /**
      * 스케쥴을 삭제한다.
      *
-     * @param session 가입 멤버 정보
-     * @param scheduleId  삭제하고자 하는 스케쥴 ID
+     * @param session    가입 멤버 정보
+     * @param scheduleId 삭제하고자 하는 스케쥴 ID
      * @return
      */
     @DeleteMapping(value = "/api/v1/schedule/{scheduleId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
