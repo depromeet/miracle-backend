@@ -46,6 +46,7 @@ public class Schedule extends BaseTimeEntity {
     }
 
     public static Schedule of(long memberId, Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
+        validateTime(startTime, endTime);
         return new Schedule(memberId, category, description, dayOfTheWeek, startTime, endTime);
     }
 
@@ -61,7 +62,7 @@ public class Schedule extends BaseTimeEntity {
         this.endTime = endTime;
     }
 
-    private void validateTime(LocalTime startTime, LocalTime endTime) {
+    private static void validateTime(LocalTime startTime, LocalTime endTime) {
         if (startTime.isAfter(endTime)) {
             throw new ValidationException("시작 시간은 종료 시간보다 반드시 먼저여야 합니다.", "시작 시간은 종료 시간보다 반드시 먼저여야 합니다.");
         }

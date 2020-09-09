@@ -1,5 +1,6 @@
 package com.depromeet.service.schedule;
 
+import com.depromeet.controller.schedule.CreateScheduleRequest;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;

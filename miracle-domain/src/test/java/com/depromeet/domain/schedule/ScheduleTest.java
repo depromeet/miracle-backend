@@ -53,7 +53,7 @@ class ScheduleTest {
     static Stream<Arguments> source_startTimeAfterEndTime_ShouldFail() {
         return Stream.of(
             Arguments.of(1L, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(9, 0), LocalTime.of(8, 30)),
-            Arguments.of(2L, Category.EXERCISE, "스트레칭", DayOfTheWeek.THU, LocalTime.of(10, 0), LocalTime.of(10, 0)),
+            Arguments.of(2L, Category.EXERCISE, "스트레칭", DayOfTheWeek.THU, LocalTime.of(12, 0), LocalTime.of(10, 0)),
             Arguments.of(3L, Category.DIARY, "취침시간", DayOfTheWeek.WED, LocalTime.of(23, 0), LocalTime.of(22, 30))
         );
     }

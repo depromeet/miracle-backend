@@ -65,7 +65,7 @@ configure(javaProjects) {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-        // 자바 + 코틀린 사용시, lombok, querydsl 이슈 확인 필요.
+        implementation("com.google.code.gson:gson:2.8.5")
     }
 
     test {

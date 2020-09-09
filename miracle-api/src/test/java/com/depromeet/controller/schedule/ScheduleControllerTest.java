@@ -7,6 +7,11 @@ import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.service.schedule.ScheduleService;
 import com.depromeet.service.schedule.dto.*;
 import com.depromeet.util.JsonUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +25,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -46,6 +53,18 @@ class ScheduleControllerTest {
 
     @InjectMocks
     private ScheduleController controller;
+
+    private static final class LocalTimeAdapter extends TypeAdapter<LocalTime> {
+        @Override
+        public void write(JsonWriter out, LocalTime value) throws IOException {
+            out.value(value.toString());
+        }
+
+        @Override
+        public LocalTime read(JsonReader in) throws IOException {
+            return LocalTime.parse(in.nextString());
+        }
+    }
 
     @BeforeEach
     void setUp() {
@@ -73,15 +92,15 @@ class ScheduleControllerTest {
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/v1/schedule")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtils.toJson(request))
+            .content(new GsonBuilder().registerTypeAdapter(LocalTime.class, new LocalTimeAdapter().nullSafe()).create().toJson(request))
         );
 
         // then
         resultActions.andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.data.scheduleId").isNumber())
-            .andExpect(jsonPath("$.data.scheduleId").value(1L));
+            .andExpect(jsonPath("$.data.scheduleIds[0]").isNumber())
+            .andExpect(jsonPath("$.data.scheduleIds[0]").value(1L));
     }
 
     @DisplayName("스케쥴을 조회할 수 있다")
@@ -101,10 +120,10 @@ class ScheduleControllerTest {
         resultActions.andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.data.[0].id").value(1L))
+            .andExpect(jsonPath("$.data.[0].scheduleId").value(1L))
             .andExpect(jsonPath("$.data.[0].category").value(Category.EXERCISE.name()))
             .andExpect(jsonPath("$.data.[0].description").value("description"))
-            .andExpect(jsonPath("$.data.[0].dayOfWeek").value("MON"))
+            .andExpect(jsonPath("$.data.[0].dayOfTheWeek").value("MON"))
             .andExpect(jsonPath("$.data.[0].startTime").exists())
             .andExpect(jsonPath("$.data.[0].endTime").exists());
     }
