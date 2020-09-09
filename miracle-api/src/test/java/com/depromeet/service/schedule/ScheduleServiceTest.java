@@ -56,7 +56,7 @@ class ScheduleServiceTest {
     @DisplayName("존재하지 않는 스케쥴 수정 시에 예외 발생")
     @Test
     void updateNotExistSchedule_ShouldFail() {
-        UpdateScheduleRequest request = new UpdateScheduleRequest(1L, Category.EXERCISE, "desciption", DayOfTheWeek.MON, LocalTime.now(), LocalTime.now());
+        UpdateScheduleRequest request = new UpdateScheduleRequest(Category.EXERCISE, "desciption", DayOfTheWeek.MON, LocalTime.now(), LocalTime.now());
         assertThatThrownBy(() -> {
             service.updateSchedule(InMemoryScheduleRepository.MEMBER_1, 0L, request);
         }).isInstanceOf(NoSuchElementException.class);

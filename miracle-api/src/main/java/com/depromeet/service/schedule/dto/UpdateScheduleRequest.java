@@ -12,9 +12,6 @@ import java.time.LocalTime;
 
 public class UpdateScheduleRequest {
 
-    @NotNull(message = "수정하려는 스케쥴 id를 입력해주세요.")
-    private Long scheduleId;
-
     @NotBlank(message = "카테고리를 선택해주세요")
     private Category category;
 
@@ -36,8 +33,7 @@ public class UpdateScheduleRequest {
         // needed by jackson
     }
 
-    public UpdateScheduleRequest(Long scheduleId, Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
-        this.scheduleId = scheduleId;
+    public UpdateScheduleRequest(Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
         this.category = category;
         this.description = description;
         this.dayOfTheWeek = dayOfTheWeek;
@@ -49,9 +45,6 @@ public class UpdateScheduleRequest {
         return Schedule.of(memberId, category, description, dayOfTheWeek, startTime, endTime);
     }
 
-    public Long getScheduleId() {
-        return scheduleId;
-    }
 
     public Category getCategory() {
         return category;
@@ -80,7 +73,6 @@ public class UpdateScheduleRequest {
 
         UpdateScheduleRequest that = (UpdateScheduleRequest) o;
 
-        if (scheduleId != null ? !scheduleId.equals(that.scheduleId) : that.scheduleId != null) return false;
         if (category != that.category) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (dayOfTheWeek != that.dayOfTheWeek) return false;
@@ -90,8 +82,7 @@ public class UpdateScheduleRequest {
 
     @Override
     public int hashCode() {
-        int result = scheduleId != null ? scheduleId.hashCode() : 0;
-        result = 31 * result + (category != null ? category.hashCode() : 0);
+        int result = category != null ? category.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (dayOfTheWeek != null ? dayOfTheWeek.hashCode() : 0);
         result = 31 * result + (startTime != null ? startTime.hashCode() : 0);

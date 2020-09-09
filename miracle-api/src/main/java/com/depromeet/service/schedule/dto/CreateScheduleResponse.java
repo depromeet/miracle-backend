@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CreateScheduleResponse {
-    private List<Long> schedulesId;
+    private List<Long> scheduleIds;
 
     public CreateScheduleResponse(List<Long> schedulesId) {
-        this.schedulesId = schedulesId;
+        this.scheduleIds = schedulesId;
     }
 
     public static CreateScheduleResponse of(List<Schedule> schedules) {
@@ -18,7 +18,7 @@ public class CreateScheduleResponse {
             .collect(Collectors.toList()));
     }
 
-    public List<Long> getSchedulesId() {
-        return schedulesId;
+    public List<Long> getScheduleIds() {
+        return scheduleIds;
     }
 }

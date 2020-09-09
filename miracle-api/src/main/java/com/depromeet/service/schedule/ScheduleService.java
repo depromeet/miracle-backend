@@ -35,11 +35,11 @@ public class ScheduleService {
     }
 
     /**
-     * 특정 날짜의 전체 스케쥴을 조회한다.
+     * 특정 요일의 전체 스케쥴을 조회한다.
      *
-     * @param memberId 가입 멤버 ID
-     * @param date     조회 날짜
-     * @return 해당 날짜에 등록된 전체 스케쥴 정보
+     * @param memberId     가입 멤버 ID
+     * @param dayOfTheWeek 조회 요일
+     * @return 해당 요일에 등록된 전체 스케쥴 정보
      */
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> retrieveDailySchedule(long memberId, DayOfTheWeek dayOfTheWeek) {
