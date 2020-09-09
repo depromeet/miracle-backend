@@ -1,26 +1,19 @@
 package com.depromeet.service.schedule.dto;
 
 import com.depromeet.domain.common.Category;
-import com.depromeet.domain.schedule.LoopType;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.time.LocalTime;
 
 public class UpdateScheduleRequest {
 
-    @NotNull(message = "시작시간을 선택해주세요")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime startTime;
-
-    @NotNull(message = "종료시간을 선택해주세요")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime endTime;
+    @NotNull(message = "수정하려는 스케쥴 id를 입력해주세요.")
+    private Long scheduleId;
 
     @NotBlank(message = "카테고리를 선택해주세요")
     private Category category;
@@ -30,31 +23,34 @@ public class UpdateScheduleRequest {
     private String description;
 
     @ApiModelProperty
-    @NotNull(message = "반복설정을 선택해주세요")
-    private LoopType loopType;
+    @NotNull(message = "요일을 선택해주세요")
+    private DayOfTheWeek dayOfTheWeek;
+
+    @NotNull(message = "시작시간을 선택해주세요")
+    private LocalTime startTime;
+
+    @NotNull(message = "종료시간을 선택해주세요")
+    private LocalTime endTime;
 
     public UpdateScheduleRequest() {
         // needed by jackson
     }
 
-    public UpdateScheduleRequest(LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public UpdateScheduleRequest(Long scheduleId, Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
+        this.scheduleId = scheduleId;
         this.category = category;
         this.description = description;
-        this.loopType = loopType;
+        this.dayOfTheWeek = dayOfTheWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Schedule toEntity(long memberId) {
-        return Schedule.of(memberId, startTime, endTime, category, description, loopType);
+        return Schedule.of(memberId, category, description, dayOfTheWeek, startTime, endTime);
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
     public Category getCategory() {
@@ -65,24 +61,41 @@ public class UpdateScheduleRequest {
         return description;
     }
 
-    public LoopType getLoopType() {
-        return loopType;
+    public DayOfTheWeek getDayOfTheWeek() {
+        return dayOfTheWeek;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UpdateScheduleRequest request = (UpdateScheduleRequest) o;
-        return Objects.equals(startTime, request.startTime) &&
-            Objects.equals(endTime, request.endTime) &&
-            Objects.equals(category, request.category) &&
-            Objects.equals(description, request.description) &&
-            Objects.equals(loopType, request.loopType);
+
+        UpdateScheduleRequest that = (UpdateScheduleRequest) o;
+
+        if (scheduleId != null ? !scheduleId.equals(that.scheduleId) : that.scheduleId != null) return false;
+        if (category != that.category) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (dayOfTheWeek != that.dayOfTheWeek) return false;
+        if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
+        return endTime != null ? endTime.equals(that.endTime) : that.endTime == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startTime, endTime, category, description, loopType);
+        int result = scheduleId != null ? scheduleId.hashCode() : 0;
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (dayOfTheWeek != null ? dayOfTheWeek.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+        return result;
     }
 }

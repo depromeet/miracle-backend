@@ -64,8 +64,9 @@ public class ScheduleService {
      */
     @Transactional
     public UpdateScheduleResponse updateSchedule(long memberId, long scheduleId, UpdateScheduleRequest request) {
+        //TODO 기존 스케쥴과 시간이 겹치지 않는지 확인
         Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
-        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), request.getLoopType());
+        schedule.update(memberId, request.getCategory(), request.getDescription(), request.getDayOfTheWeek(), request.getStartTime(), request.getEndTime());
         return UpdateScheduleResponse.of(schedule);
     }
 

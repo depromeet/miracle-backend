@@ -124,7 +124,7 @@ class ScheduleControllerTest {
     @DisplayName("스케쥴을 수정할 수 있다")
     @Test
     void updateSchedule_ShouldSuccess() throws Exception {
-        UpdateScheduleRequest request = new UpdateScheduleRequest(startDateTime, endDateTime, Category.EXERCISE, "description", LoopType.NONE);
+        UpdateScheduleRequest request = new UpdateScheduleRequest(1L, Category.EXERCISE, "description", DayOfTheWeek.MON, startTime, endTime);
         Schedule schedule = request.toEntity(memberId);
 
         Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
