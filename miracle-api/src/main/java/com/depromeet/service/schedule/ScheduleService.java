@@ -5,9 +5,11 @@ import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
 import com.deprommet.exception.IllegalAccessException;
+import com.deprommet.exception.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -29,9 +31,11 @@ public class ScheduleService {
      */
     @Transactional
     public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
-        //TODO 기존 스케쥴과 시간이 겹치지 않는지 확인
-        List<Schedule> schedules = repository.saveAll(request.toEntity(memberId));
-        return CreateScheduleResponse.of(schedules);
+        List<Schedule> schedules = repository.findSchedulesByMemberIdAndDayOfTheWeeks(memberId, request.getDayOfTheWeeks());
+        checkDuplicateTime(request.getStartTime(), request.getEndTime(), schedules);
+
+        List<Schedule> newSchedules = repository.saveAll(request.toEntity(memberId));
+        return CreateScheduleResponse.of(newSchedules);
     }
 
     /**
@@ -60,7 +64,9 @@ public class ScheduleService {
      */
     @Transactional
     public UpdateScheduleResponse updateSchedule(long memberId, long scheduleId, UpdateScheduleRequest request) {
-        //TODO 기존 스케쥴과 시간이 겹치지 않는지 확인
+        List<Schedule> schedules = repository.findSchedulesByMemberIdAndDayOfTheWeek(memberId, request.getDayOfTheWeek());
+        checkDuplicateTime(request.getStartTime(), request.getEndTime(), schedules);
+
         Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
         schedule.update(memberId, request.getCategory(), request.getDescription(), request.getDayOfTheWeek(), request.getStartTime(), request.getEndTime());
         return UpdateScheduleResponse.of(schedule);
@@ -99,5 +105,16 @@ public class ScheduleService {
         }
 
         return new GetCategoryComment(schedule.getCategory().retrieveRecordComment());
+    }
+
+    private void checkDuplicateTime(LocalTime startTime, LocalTime endTime, List<Schedule> schedules) {
+        for (Schedule schedule : schedules) {
+            if (schedule.getStartTime().isAfter(startTime) && schedule.getStartTime().isBefore(endTime)) {
+                throw new ValidationException("다른 스케쥴과 시간이 겹칠 수 없습니다.", "다른 스케쥴과 시간이 겹칠 수 없습니다.");
+            }
+            if (schedule.getEndTime().isAfter(startTime) && schedule.getStartTime().isBefore(endTime)) {
+                throw new ValidationException("다른 스케쥴과 시간이 겹칠 수 없습니다.", "다른 스케쥴과 시간이 겹칠 수 없습니다.");
+            }
+        }
     }
 }

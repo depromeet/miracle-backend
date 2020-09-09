@@ -2,7 +2,6 @@ package com.depromeet.service.schedule;
 
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
-import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
 import org.springframework.data.domain.Example;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.Field;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +21,19 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     public static final long MEMBER_1 = 1L;
     public static final long MEMBER_2 = 2L;
     private List<Schedule> schedules = new ArrayList<>();
-    private long currentId = 1L;
+    private static long currentId = 1L;
 
     public InMemoryScheduleRepository() {
         schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
-        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
-        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
-        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
-        schedules.add(generateSchedule(MEMBER_1, Category.READING, "책읽기", DayOfTheWeek.SUN, LocalTime.of(6, 0), LocalTime.of( 6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.TUE, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.WED, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.THU, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.READING, "책읽기", DayOfTheWeek.FRI, LocalTime.of(6, 0), LocalTime.of(6, 30)));
         schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
-        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
-        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of (21, 0)));
-        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
-        schedules.add(generateSchedule(MEMBER_2, Category.EXERCISE, "운동하기", DayOfTheWeek.SUN, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.TUE, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.WED, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.THU, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.EXERCISE, "운동하기", DayOfTheWeek.FRI, LocalTime.of(20, 0), LocalTime.of(21, 0)));
     }
 
     private Schedule generateSchedule(long memberId, Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
@@ -63,6 +60,15 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     }
 
     @Override
+    public List<Schedule> findSchedulesByMemberIdAndDayOfTheWeeks(long memberId, List<DayOfTheWeek> dayOfTheWeeks) {
+        return schedules
+            .stream()
+            .filter(s -> s.getMemberId() == memberId)
+            .filter(s -> dayOfTheWeeks.contains(s.getDayOfTheWeek()))
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Schedule> findAll() {
         return schedules;
     }
@@ -79,7 +85,20 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
 
     @Override
     public <S extends Schedule> List<S> saveAll(Iterable<S> entities) {
-        return null;
+        List<S> result = (List<S>)entities;
+        for (Schedule schedule : result) {
+            try {
+                Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
+                Field field = clazz.getDeclaredField("id");
+                field.setAccessible(true);
+                field.set(schedule, currentId++);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        schedules.addAll(result);
+        return result;
     }
 
     @Override

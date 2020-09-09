@@ -1,10 +1,12 @@
 package com.depromeet.service.schedule;
 
+import com.depromeet.controller.schedule.CreateScheduleRequest;
 import com.depromeet.controller.schedule.GetScheduleResponse;
 import com.depromeet.controller.schedule.UpdateScheduleRequest;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.ScheduleRepository;
+import com.deprommet.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,8 +50,29 @@ class ScheduleServiceTest {
 
     static Stream<Arguments> source_retrieveDailySchedule_ShouldSuccess() {
         return Stream.of(
-            Arguments.of(InMemoryScheduleRepository.MEMBER_1, DayOfTheWeek.MON, Arrays.asList(1L, 2L, 3L, 4L)),
-            Arguments.of(InMemoryScheduleRepository.MEMBER_2, DayOfTheWeek.MON, Arrays.asList(6L, 7L, 8L, 9L))
+            Arguments.of(InMemoryScheduleRepository.MEMBER_1, DayOfTheWeek.MON, Arrays.asList(1L)),
+            Arguments.of(InMemoryScheduleRepository.MEMBER_2, DayOfTheWeek.MON, Arrays.asList(6L))
+        );
+    }
+
+    @DisplayName("겹치는 요일, 시간으로 스케쥴 등록 시에 예외 발생")
+    @ParameterizedTest
+    @MethodSource("source_createDuplicateSchedule_ShouldFail")
+    void createDuplicateSchedule_ShouldFail(LocalTime startTime, LocalTime endTime) {
+        CreateScheduleRequest request = new CreateScheduleRequest(Category.EXERCISE, "desciption", Arrays.asList(DayOfTheWeek.MON), startTime, endTime);
+        assertThatThrownBy(() -> {
+            service.createSchedule(InMemoryScheduleRepository.MEMBER_1, request);
+        }).isInstanceOf(ValidationException.class);
+    }
+
+    static Stream<Arguments> source_createDuplicateSchedule_ShouldFail() {
+        return Stream.of(
+            Arguments.of(LocalTime.of(5, 30), LocalTime.of(6, 10)),
+            Arguments.of(LocalTime.of(5, 30), LocalTime.of(6, 30)),
+            Arguments.of(LocalTime.of(5, 30), LocalTime.of(6, 40)),
+            Arguments.of(LocalTime.of(6, 0), LocalTime.of(6, 40)),
+            Arguments.of(LocalTime.of(6, 10), LocalTime.of(6, 40)),
+            Arguments.of(LocalTime.of(6, 20), LocalTime.of(7, 0))
         );
     }
 

@@ -26,4 +26,13 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
                 schedule.dayOfTheWeek.eq(dayOfTheWeek)
             ).fetch();
     }
+
+    @Override
+    public List<Schedule> findSchedulesByMemberIdAndDayOfTheWeeks(long memberId, List<DayOfTheWeek> dayOfTheWeeks) {
+        return queryFactory.selectFrom(schedule)
+            .where(
+                schedule.memberId.eq(memberId),
+                schedule.dayOfTheWeek.in(dayOfTheWeeks)
+            ).fetch();
+    }
 }

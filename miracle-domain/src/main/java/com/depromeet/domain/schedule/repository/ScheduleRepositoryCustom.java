@@ -8,4 +8,5 @@ import java.util.List;
 public interface ScheduleRepositoryCustom {
 
     List<Schedule> findSchedulesByMemberIdAndDayOfTheWeek(long memberId, DayOfTheWeek dayOfTheWeek);
+    List<Schedule> findSchedulesByMemberIdAndDayOfTheWeeks(long memberId, List<DayOfTheWeek> dayOfTheWeeks);
 }
