@@ -1,6 +1,7 @@
 package com.depromeet.service.schedule;
 
 import com.depromeet.domain.common.Category;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.domain.schedule.ScheduleRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import java.lang.reflect.Field;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,25 +27,25 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     private long currentId = 1L;
 
     public InMemoryScheduleRepository() {
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), Category.EXERCISE, "운동하기", LoopType.NONE));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 8, 6, 0), LocalDateTime.of(2020, 8, 8, 6, 30), Category.EXERCISE, "운동하기", LoopType.DAY));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 8, 1, 6, 0), LocalDateTime.of(2020, 8, 1, 6, 30), Category.EXERCISE, "운동하기", LoopType.WEEK));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 8, 6, 0), LocalDateTime.of(2020, 9, 8, 6, 30), Category.EXERCISE, "운동하기", LoopType.MONTH));
-        schedules.add(generateSchedule(MEMBER_1, LocalDateTime.of(2020, 9, 9, 6, 0), LocalDateTime.of(2020, 9, 9, 6, 30), Category.READING, "책읽기", LoopType.NONE));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), Category.READING, "책읽기", LoopType.NONE));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 10, 20, 0), LocalDateTime.of(2020, 7, 10, 21, 0), Category.READING, "책읽기", LoopType.DAY));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 7, 17, 20, 0), LocalDateTime.of(2020, 7, 17, 21, 0), Category.READING, "책읽기", LoopType.WEEK));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 6, 10, 20, 0), LocalDateTime.of(2020, 6, 10, 21, 0), Category.READING, "책읽기", LoopType.MONTH));
-        schedules.add(generateSchedule(MEMBER_2, LocalDateTime.of(2020, 9, 10, 20, 0), LocalDateTime.of(2020, 9, 10, 21, 0), Category.EXERCISE, "운동하기", LoopType.WEEK));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
+        schedules.add(generateSchedule(MEMBER_1, Category.READING, "책읽기", DayOfTheWeek.SUN, LocalTime.of(6, 0), LocalTime.of( 6, 30)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of (21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.READING, "책읽기", DayOfTheWeek.MON, LocalTime.of(20, 0), LocalTime.of(21, 0)));
+        schedules.add(generateSchedule(MEMBER_2, Category.EXERCISE, "운동하기", DayOfTheWeek.SUN, LocalTime.of(20, 0), LocalTime.of(21, 0)));
     }
 
-    private Schedule generateSchedule(long memberId, LocalDateTime startTime, LocalDateTime endTime, Category category, String description, LoopType loopType) {
-        Schedule schedule = Schedule.of(memberId, startTime, endTime, category, description, loopType);
+    private Schedule generateSchedule(long memberId, Category category, String description, DayOfTheWeek dayOfTheWeek, LocalTime startTime, LocalTime endTime) {
+        Schedule schedule = Schedule.of(memberId, category, description, dayOfTheWeek, startTime, endTime);
         try {
-        Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
-        Field field = clazz.getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(schedule, currentId++);
+            Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
+            Field field = clazz.getDeclaredField("id");
+            field.setAccessible(true);
+            field.set(schedule, currentId++);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return null;
@@ -52,43 +54,11 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(long memberId, LoopType loopType, int year, int month, int day) {
+    public List<Schedule> findSchedulesByMemberIdAndDayOfTheWeek(long memberId, DayOfTheWeek dayOfTheWeek) {
         return schedules
             .stream()
             .filter(s -> s.getMemberId() == memberId)
-            .filter(s -> s.getLoopType().equals(loopType))
-            .filter(s -> s.getYear() == year)
-            .filter(s -> s.getMonth() == month)
-            .filter(s -> s.getDay() == day)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Schedule> findSchedulesByMemberIdAndLoopType(long memberId, LoopType loopType) {
-        return schedules
-            .stream()
-            .filter(s -> s.getMemberId() == memberId)
-            .filter(s -> s.getLoopType().equals(loopType))
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(long memberId, LoopType loopType, DayOfWeek dayOfWeek) {
-        return schedules
-            .stream()
-            .filter(s -> s.getMemberId() == memberId)
-            .filter(s -> s.getLoopType().equals(loopType))
-            .filter(s -> s.getDayOfWeek().equals(dayOfWeek))
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Schedule> findSchedulesByMemberIdAndLoopTypeAndDay(long memberId, LoopType loopType, int day) {
-        return schedules
-            .stream()
-            .filter(s -> s.getMemberId() == memberId)
-            .filter(s -> s.getLoopType().equals(loopType))
-            .filter(s -> s.getDay() == day)
+            .filter(s -> s.getDayOfTheWeek().equals(dayOfTheWeek))
             .collect(Collectors.toList());
     }
 

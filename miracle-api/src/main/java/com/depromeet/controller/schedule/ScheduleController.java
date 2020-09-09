@@ -3,6 +3,7 @@ package com.depromeet.controller.schedule;
 import com.depromeet.ApiResponse;
 import com.depromeet.config.resolver.LoginMember;
 import com.depromeet.config.session.MemberSession;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.service.schedule.dto.GetCategoryComment;
 import com.depromeet.service.schedule.ScheduleService;
 import com.depromeet.service.schedule.dto.*;
@@ -33,17 +34,15 @@ public class ScheduleController {
     }
 
     /**
-     * 특정 날짜의 전체 스케쥴을 조회한다.
+     * 특정 요일의 전체 스케쥴을 조회한다.
      *
-     * @param session 가입 멤버 정보
-     * @param year    조회 년도
-     * @param month   조회 월
-     * @param day     조회 날짜
-     * @return 해당 날짜에 등록된 전체 스케쥴 정보
+     * @param session      가입 멤버 정보
+     * @param dayOfTheWeek 조회 요일
+     * @return 해당 요일에 등록된 전체 스케쥴 정보
      */
     @GetMapping(value = "/api/v1/schedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<List<GetScheduleResponse>> retrieveSchedule(@LoginMember MemberSession session, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
-        return ApiResponse.of(scheduleService.retrieveDailySchedule(session.getMemberId(), LocalDate.of(year, month, day)));
+    public ApiResponse<List<GetScheduleResponse>> retrieveSchedule(@LoginMember MemberSession session, @RequestParam DayOfTheWeek dayOfTheWeek) {
+        return ApiResponse.of(scheduleService.retrieveDailySchedule(session.getMemberId(), dayOfTheWeek));
     }
 
     /**
