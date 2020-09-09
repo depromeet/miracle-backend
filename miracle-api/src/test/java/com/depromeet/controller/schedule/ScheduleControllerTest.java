@@ -2,6 +2,7 @@ package com.depromeet.controller.schedule;
 
 import com.depromeet.controller.InMemoryLoginMemberArgumentResolver;
 import com.depromeet.domain.common.Category;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.LoopType;
 import com.depromeet.domain.schedule.Schedule;
 import com.depromeet.service.schedule.ScheduleService;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,16 +65,16 @@ class ScheduleControllerTest {
     @DisplayName("스케쥴을 등록할 수 있다")
     @Test
     void createSchedule_ShouldSuccess() throws Exception {
-        CreateScheduleRequest request = new CreateScheduleRequest(startDateTime, endDateTime, Category.EXERCISE, "description", LoopType.NONE);
-        Schedule schedule = request.toEntity(memberId);
+        CreateScheduleRequest request = new CreateScheduleRequest(Category.EXERCISE, "description", Arrays.asList(DayOfTheWeek.MON), startTime, endTime);
+        List<Schedule> schedules = request.toEntity(memberId);
 
         Class clazz = Class.forName("com.depromeet.domain.schedule.Schedule");
         Field field = clazz.getDeclaredField("id");
         field.setAccessible(true);
-        field.set(schedule, memberId);
+        field.set(schedules.get(0), memberId);
 
         // given
-        given(service.createSchedule(memberId, request)).willReturn(CreateScheduleResponse.of(schedule));
+        given(service.createSchedule(memberId, request)).willReturn(CreateScheduleResponse.of(schedules));
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/v1/schedule")

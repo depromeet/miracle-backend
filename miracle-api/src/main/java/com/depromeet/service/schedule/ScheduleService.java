@@ -30,8 +30,9 @@ public class ScheduleService {
      */
     @Transactional
     public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
-        Schedule schedule = repository.save(request.toEntity(memberId));
-        return CreateScheduleResponse.of(schedule);
+        //TODO 기존 스케쥴과 시간이 겹치지 않는지 확인
+        List<Schedule> schedules = repository.saveAll(request.toEntity(memberId));
+        return CreateScheduleResponse.of(schedules);
     }
 
     /**

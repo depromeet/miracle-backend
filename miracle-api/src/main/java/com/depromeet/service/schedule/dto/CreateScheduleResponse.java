@@ -2,18 +2,23 @@ package com.depromeet.service.schedule.dto;
 
 import com.depromeet.domain.schedule.Schedule;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CreateScheduleResponse {
-    private long scheduleId;
+    private List<Long> schedulesId;
 
-    private CreateScheduleResponse(long scheduleId) {
-        this.scheduleId = scheduleId;
+    public CreateScheduleResponse(List<Long> schedulesId) {
+        this.schedulesId = schedulesId;
     }
 
-    public static CreateScheduleResponse of(Schedule schedule) {
-        return new CreateScheduleResponse(schedule.getId());
+    public static CreateScheduleResponse of(List<Schedule> schedules) {
+        return new CreateScheduleResponse(schedules.stream()
+            .map(Schedule::getId)
+            .collect(Collectors.toList()));
     }
 
-    public long getScheduleId() {
-        return scheduleId;
+    public List<Long> getSchedulesId() {
+        return schedulesId;
     }
 }
