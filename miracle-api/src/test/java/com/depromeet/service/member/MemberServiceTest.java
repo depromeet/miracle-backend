@@ -11,6 +11,7 @@ import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.member.*;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
+import com.depromeet.service.member.dto.request.UpdateAlarmModeRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
@@ -328,6 +329,23 @@ class MemberServiceTest {
         // then
         List<MemberGoal> memberGoals = memberGoalRepository.findAll();
         assertThat(memberGoals).isEmpty();
+    }
+
+    @Test
+    void 멤버의_알림모드를_변경한다() {
+        // given
+        memberRepository.save(member);
+        AlarmMode alarmMode = AlarmMode.RELAX;
+
+        UpdateAlarmModeRequest request = UpdateAlarmModeRequest.testInstance(alarmMode);
+
+        // when
+        memberService.updateMemberAlarmMode(request, member.getId());
+
+        // then
+        List<Member> members = memberRepository.findAll();
+        assertThat(members).hasSize(1);
+        assertThat(members.get(0).getAlarmMode()).isEqualTo(alarmMode);
     }
 
     private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon, AlarmMode alarmMode) {

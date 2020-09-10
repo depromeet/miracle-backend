@@ -101,6 +101,10 @@ public class Member extends BaseTimeEntity {
         addMemberGoals(memberGoals);
     }
 
+    public void updateAlarmMode(AlarmMode alarmMode) {
+        this.alarmMode = alarmMode;
+    }
+
     private boolean hasSameMemberGoals(List<MemberGoal> others) {
         if (this.memberGoals.size() != others.size()) {
             return false;
