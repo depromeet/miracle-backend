@@ -11,6 +11,7 @@ public class MemberCreator {
             .email(email)
             .name("이름")
             .profileIcon(ProfileIcon.BLUE)
+            .alarmMode(AlarmMode.BASIC)
             .build();
     }
 
@@ -19,6 +20,7 @@ public class MemberCreator {
             .email(email)
             .name(name)
             .profileIcon(profileIcon)
+            .alarmMode(AlarmMode.BASIC)
             .build();
     }
 

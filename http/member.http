@@ -31,7 +31,8 @@ Content-Type: application/json
 {
     "name": "호승강",
     "profileIcon": "BLUE",
-    "wakeUpTime": "11:00"
+    "wakeUpTime": "11:00",
+    "alarmMode": "RELAX"
 }
 
 ### 회원의 목표 변경 API

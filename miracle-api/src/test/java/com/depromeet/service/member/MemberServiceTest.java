@@ -9,13 +9,7 @@ import com.depromeet.domain.alarm.AlarmScheduleRepository;
 import com.depromeet.domain.alarm.AlarmType;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
-import com.depromeet.domain.member.Member;
-import com.depromeet.domain.member.MemberCreator;
-import com.depromeet.domain.member.MemberGoal;
-import com.depromeet.domain.member.MemberGoalCreator;
-import com.depromeet.domain.member.MemberGoalRepository;
-import com.depromeet.domain.member.MemberRepository;
-import com.depromeet.domain.member.ProfileIcon;
+import com.depromeet.domain.member.*;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -93,7 +87,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), email, name, profileIcon, wakeUpTime);
+        assertMemberInfo(members.get(0), email, name, profileIcon, wakeUpTime, AlarmMode.BASIC);
     }
 
     @Test
@@ -190,6 +184,7 @@ class MemberServiceTest {
         String name = "kangseungho";
         ProfileIcon profileIcon = ProfileIcon.BLUE;
         LocalTime wakeUpTime = LocalTime.of(12, 0);
+        AlarmMode alarmMode = AlarmMode.BASIC;
 
         memberRepository.save(member);
 
@@ -197,6 +192,7 @@ class MemberServiceTest {
             .name(name)
             .profileIcon(profileIcon)
             .wakeUpTime(wakeUpTime)
+            .alarmMode(alarmMode)
             .build();
 
         // when
@@ -205,7 +201,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), member.getEmail(), name, profileIcon, wakeUpTime);
+        assertMemberInfo(members.get(0), member.getEmail(), name, profileIcon, wakeUpTime, alarmMode);
     }
 
     @Test
@@ -296,7 +292,7 @@ class MemberServiceTest {
         MemberInfoResponse response = memberService.getMemberInfo(member.getId());
 
         // then
-        assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileIcon());
+        assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileIcon(), member.getAlarmMode());
     }
 
     @Test
@@ -334,20 +330,22 @@ class MemberServiceTest {
         assertThat(memberGoals).isEmpty();
     }
 
-    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon) {
+    private void assertMemberInfoResponse(MemberInfoResponse response, String email, String name, ProfileIcon profileIcon, AlarmMode alarmMode) {
         assertAll(
             () -> assertThat(response.getEmail()).isEqualTo(email),
             () -> assertThat(response.getName()).isEqualTo(name),
-            () -> assertThat(response.getProfileIcon()).isEqualTo(profileIcon)
+            () -> assertThat(response.getProfileIcon()).isEqualTo(profileIcon),
+            () -> assertThat(response.getAlarmMode()).isEqualTo(alarmMode)
         );
     }
 
-    private void assertMemberInfo(Member member, String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
+    private void assertMemberInfo(Member member, String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime, AlarmMode alarmMode) {
         assertAll(
             () -> assertThat(member.getEmail()).isEqualTo(email),
             () -> assertThat(member.getName()).isEqualTo(name),
             () -> assertThat(member.getProfileIcon()).isEqualTo(profileIcon),
-            () -> assertThat(member.getWakeUpTime()).isEqualTo(wakeUpTime)
+            () -> assertThat(member.getWakeUpTime()).isEqualTo(wakeUpTime),
+            () -> assertThat(member.getAlarmMode()).isEqualByComparingTo(alarmMode)
         );
     }
 
