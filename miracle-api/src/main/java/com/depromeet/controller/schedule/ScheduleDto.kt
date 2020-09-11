@@ -3,6 +3,7 @@ package com.depromeet.controller.schedule
 import com.depromeet.domain.common.Category
 import com.depromeet.domain.common.DayOfTheWeek
 import com.depromeet.domain.schedule.Schedule
+import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import org.hibernate.validator.constraints.Length
@@ -23,9 +24,11 @@ data class CreateScheduleRequest(
     var dayOfTheWeeks: List<DayOfTheWeek>? = null,
 
     @NotNull(message = "시작시간을 선택해주세요")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     var startTime: LocalTime? = null,
 
     @NotNull(message = "종료시간을 선택해주세요")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     var endTime: LocalTime? = null
 ) {
     fun toEntity(memberId: Long): List<Schedule>? {
@@ -58,7 +61,9 @@ data class GetScheduleResponse(
     val category: Category,
     val description: String,
     val dayOfTheWeek: DayOfTheWeek,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     val startTime: LocalTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     val endTime: LocalTime
 ) {
     companion object {
@@ -77,14 +82,16 @@ data class UpdateScheduleRequest(
     @Length(max = 11, message = "11자 이하로 입력해주세요")
     var description: String? = null,
 
-    @NotNull(message = "요일을 선택해주세요")
     @ApiModelProperty
+    @NotNull(message = "요일을 선택해주세요")
     var dayOfTheWeek: DayOfTheWeek? = null,
 
     @NotNull(message = "시작시간을 선택해주세요")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     var startTime: LocalTime? = null,
 
     @NotNull(message = "종료시간을 선택해주세요")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     var endTime: LocalTime? = null
 ) {
     fun toEntity(memberId: Long): Schedule {
