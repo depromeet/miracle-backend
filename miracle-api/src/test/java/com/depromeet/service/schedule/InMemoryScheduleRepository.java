@@ -21,7 +21,7 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
     public static final long MEMBER_1 = 1L;
     public static final long MEMBER_2 = 2L;
     private List<Schedule> schedules = new ArrayList<>();
-    private static long currentId = 1L;
+    private long currentId = 1L;
 
     public InMemoryScheduleRepository() {
         schedules.add(generateSchedule(MEMBER_1, Category.EXERCISE, "운동하기", DayOfTheWeek.MON, LocalTime.of(6, 0), LocalTime.of(6, 30)));
