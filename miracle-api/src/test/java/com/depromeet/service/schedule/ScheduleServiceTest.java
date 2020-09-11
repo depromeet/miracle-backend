@@ -5,6 +5,7 @@ import com.depromeet.controller.schedule.GetScheduleResponse;
 import com.depromeet.controller.schedule.UpdateScheduleRequest;
 import com.depromeet.domain.common.Category;
 import com.depromeet.domain.common.DayOfTheWeek;
+import com.depromeet.domain.schedule.ScheduleDomainService;
 import com.depromeet.domain.schedule.ScheduleRepository;
 import com.deprommet.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
@@ -28,9 +29,10 @@ class ScheduleServiceTest {
 
     private ScheduleService service;
     private ScheduleRepository repository = new InMemoryScheduleRepository();
+    private ScheduleDomainService scheduleDomainService = new ScheduleDomainService(repository);
 
     public ScheduleServiceTest() {
-        this.service = new ScheduleService(repository);
+        this.service = new ScheduleService(scheduleDomainService, repository);
     }
 
     @DisplayName("하루 동안의 스케쥴을 조회 할 수 있다")

@@ -3,22 +3,23 @@ package com.depromeet.service.schedule;
 import com.depromeet.controller.schedule.*;
 import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
+import com.depromeet.domain.schedule.ScheduleDomainService;
 import com.depromeet.domain.schedule.ScheduleRepository;
 import com.deprommet.exception.IllegalAccessException;
-import com.deprommet.exception.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
+    private final ScheduleDomainService scheduleDomainService;
     private final ScheduleRepository repository;
 
-    public ScheduleService(ScheduleRepository repository) {
+    public ScheduleService(ScheduleDomainService scheduleDomainService, ScheduleRepository repository) {
+        this.scheduleDomainService = scheduleDomainService;
         this.repository = repository;
     }
 
@@ -31,11 +32,7 @@ public class ScheduleService {
      */
     @Transactional
     public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
-        List<Schedule> schedules = repository.findSchedulesByMemberIdAndDayOfTheWeeks(memberId, request.getDayOfTheWeeks());
-        checkDuplicateTime(request.getStartTime(), request.getEndTime(), schedules);
-
-        List<Schedule> newSchedules = repository.saveAll(request.toEntity(memberId));
-        return CreateScheduleResponse.of(newSchedules);
+        return CreateScheduleResponse.of(scheduleDomainService.createSchedules(memberId, request.getCategory(), request.getDescription(), request.getDayOfTheWeeks(), request.getStartTime(), request.getEndTime()));
     }
 
     /**
@@ -64,12 +61,7 @@ public class ScheduleService {
      */
     @Transactional
     public UpdateScheduleResponse updateSchedule(long memberId, long scheduleId, UpdateScheduleRequest request) {
-        List<Schedule> schedules = repository.findSchedulesByMemberIdAndDayOfTheWeek(memberId, request.getDayOfTheWeek());
-        checkDuplicateTime(request.getStartTime(), request.getEndTime(), schedules);
-
-        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
-        schedule.update(memberId, request.getCategory(), request.getDescription(), request.getDayOfTheWeek(), request.getStartTime(), request.getEndTime());
-        return UpdateScheduleResponse.of(schedule);
+        return UpdateScheduleResponse.of(scheduleDomainService.updateSchedule(scheduleId, request.toEntity(memberId)));
     }
 
     /**
@@ -105,16 +97,5 @@ public class ScheduleService {
         }
 
         return new GetCategoryComment(schedule.getCategory().retrieveRecordComment());
-    }
-
-    private void checkDuplicateTime(LocalTime startTime, LocalTime endTime, List<Schedule> schedules) {
-        for (Schedule schedule : schedules) {
-            if (schedule.getStartTime().isAfter(startTime) && schedule.getStartTime().isBefore(endTime)) {
-                throw new ValidationException("다른 스케쥴과 시간이 겹칠 수 없습니다.", "다른 스케쥴과 시간이 겹칠 수 없습니다.");
-            }
-            if (schedule.getEndTime().isAfter(startTime) && schedule.getStartTime().isBefore(endTime)) {
-                throw new ValidationException("다른 스케쥴과 시간이 겹칠 수 없습니다.", "다른 스케쥴과 시간이 겹칠 수 없습니다.");
-            }
-        }
     }
 }
