@@ -31,7 +31,17 @@ Content-Type: application/json
 {
     "name": "호승강",
     "profileIcon": "BLUE",
-    "wakeUpTime": "11:00"
+    "wakeUpTime": "11:00",
+    "alarmMode": "RELAX"
+}
+
+### 회원의 알림모드를 변경하는 API
+PUT {{host}}/api/v1/member/mode
+Authorization: Bearer {{AUTHORIZATION}}
+Content-Type: application/json
+
+{
+    "alarmMode": "RELAX"
 }
 
 ### 회원의 목표 변경 API

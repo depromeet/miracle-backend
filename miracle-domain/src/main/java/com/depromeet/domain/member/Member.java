@@ -58,12 +58,16 @@ public class Member extends BaseTimeEntity {
 
     private LocalTime wakeUpTime;
 
+    @Enumerated(EnumType.STRING)
+    private AlarmMode alarmMode;
+
     @Builder
-    public Member(String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
+    public Member(String email, String name, ProfileIcon profileIcon, LocalTime wakeUpTime, AlarmMode alarmMode) {
         this.email = Email.of(email);
         this.name = name;
         this.profileIcon = profileIcon;
         this.wakeUpTime = wakeUpTime;
+        this.alarmMode = alarmMode;
         this.provider = AuthProvider.GOOGLE;
         this.type = MemberType.FREE;
     }
@@ -74,6 +78,7 @@ public class Member extends BaseTimeEntity {
             .name(name)
             .profileIcon(profileIcon)
             .wakeUpTime(wakeUpTime)
+            .alarmMode(AlarmMode.BASIC)
             .build();
     }
 
@@ -81,10 +86,11 @@ public class Member extends BaseTimeEntity {
         return email.getEmail();
     }
 
-    public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
+    public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime, AlarmMode alarmMode) {
         this.name = name;
         this.profileIcon = profileIcon;
         this.wakeUpTime = wakeUpTime;
+        this.alarmMode = alarmMode;
     }
 
     public void updateMemberGoals(List<MemberGoal> memberGoals) {
@@ -93,6 +99,10 @@ public class Member extends BaseTimeEntity {
         }
         removeAllMemberGoals();
         addMemberGoals(memberGoals);
+    }
+
+    public void updateAlarmMode(AlarmMode alarmMode) {
+        this.alarmMode = alarmMode;
     }
 
     private boolean hasSameMemberGoals(List<MemberGoal> others) {

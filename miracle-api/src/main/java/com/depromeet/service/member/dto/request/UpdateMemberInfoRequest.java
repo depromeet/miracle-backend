@@ -1,5 +1,6 @@
 package com.depromeet.service.member.dto.request;
 
+import com.depromeet.domain.member.AlarmMode;
 import com.depromeet.domain.member.ProfileIcon;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +20,18 @@ public class UpdateMemberInfoRequest {
     @NotNull(message = "프로필 아이콘을 선택해주세요.")
     private ProfileIcon profileIcon;
 
+    @NotNull(message = "기상시간을 입력해주세요.")
     private LocalTime wakeUpTime;
 
+    @NotNull(message = "알람 모드를 선택해주세요.")
+    private AlarmMode alarmMode;
+
     @Builder(builderClassName = "TestBuilder", builderMethodName = "testBuilder")
-    public UpdateMemberInfoRequest(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
+    public UpdateMemberInfoRequest(String name, ProfileIcon profileIcon, LocalTime wakeUpTime, AlarmMode alarmMode) {
         this.name = name;
         this.profileIcon = profileIcon;
         this.wakeUpTime = wakeUpTime;
+        this.alarmMode = alarmMode;
     }
 
 }

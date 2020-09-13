@@ -6,6 +6,7 @@ import com.depromeet.config.session.MemberSession;
 import com.depromeet.constants.SessionConstants;
 import com.depromeet.service.member.MemberService;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
+import com.depromeet.service.member.dto.request.UpdateAlarmModeRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
@@ -51,6 +52,14 @@ public class MemberController {
     @PutMapping("/api/v1/member/goal")
     public ApiResponse<MemberInfoResponse> updateMemberGoals(@Valid @RequestBody UpdateMemberGoalsRequest request, @LoginMember MemberSession memberSession) {
         return ApiResponse.of(memberService.updateMemberGoals(request, memberSession.getMemberId()));
+    }
+
+    /**
+     * 회원의 알람모드를 변경하는 API
+     */
+    @PutMapping("/api/v1/member/mode")
+    public ApiResponse<MemberInfoResponse> updateMemberAlarmMode(@Valid @RequestBody UpdateAlarmModeRequest request, @LoginMember MemberSession memberSession) {
+        return ApiResponse.of(memberService.updateMemberAlarmMode(request, memberSession.getMemberId()));
     }
 
     /**

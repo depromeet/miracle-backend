@@ -5,6 +5,7 @@ import com.depromeet.domain.member.MemberRepository;
 import com.depromeet.event.alarm.NewMemberRegisteredEvent;
 import com.depromeet.event.alarm.WakeUpTimeUpdatedEvent;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
+import com.depromeet.service.member.dto.request.UpdateAlarmModeRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
 import com.depromeet.service.member.dto.response.MemberInfoResponse;
@@ -31,7 +32,7 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
-        member.updateInfo(request.getName(), request.getProfileIcon(), request.getWakeUpTime());
+        member.updateInfo(request.getName(), request.getProfileIcon(), request.getWakeUpTime(), request.getAlarmMode());
         eventPublisher.publishEvent(WakeUpTimeUpdatedEvent.of(member.getId(), request.getWakeUpTime()));
         return MemberInfoResponse.of(member);
     }
@@ -40,6 +41,13 @@ public class MemberService {
     public MemberInfoResponse updateMemberGoals(UpdateMemberGoalsRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
         member.updateMemberGoals(request.toMemberGoals());
+        return MemberInfoResponse.of(member);
+    }
+
+    @Transactional
+    public MemberInfoResponse updateMemberAlarmMode(UpdateAlarmModeRequest request, Long memberId) {
+        Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
+        member.updateAlarmMode(request.getAlarmMode());
         return MemberInfoResponse.of(member);
     }
 
