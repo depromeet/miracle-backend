@@ -31,6 +31,9 @@ import com.deprommet.exception.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -38,6 +41,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -299,8 +303,9 @@ class MemberServiceTest {
         assertThat(memberGoals).isEmpty();
     }
 
-    @Test
-    void 내정보를_불러온다() {
+    @ParameterizedTest
+    @MethodSource(value = "source_load_my_info_ShouldSuccess")
+    void 내정보를_불러온다(Member member) {
         // given
         memberRepository.save(member);
 
@@ -309,6 +314,13 @@ class MemberServiceTest {
 
         // then
         assertMemberInfoResponse(response, member.getEmail(), member.getName(), member.getProfileIcon());
+    }
+
+    static Stream<Arguments> source_load_my_info_ShouldSuccess() {
+        return Stream.of(
+            Arguments.of(MemberCreator.create("will.seungho@gmail.com", "강승호", ProfileIcon.BLUE)),
+            Arguments.of(MemberCreator.create("ksh980212@gmail.com", "호승강", ProfileIcon.RED))
+        );
     }
 
     @Test

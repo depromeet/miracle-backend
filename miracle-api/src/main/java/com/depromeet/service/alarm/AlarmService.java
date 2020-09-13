@@ -69,4 +69,10 @@ public class AlarmService {
         alarmScheduleRepository.delete(alarmSchedule);
     }
 
+    @Transactional
+    public void deleteAlarmScheduleByMemberId(Long memberId) {
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAlarmSchedulesByMemberId(memberId);
+        alarmScheduleRepository.deleteAll(alarmSchedules);
+    }
+
 }

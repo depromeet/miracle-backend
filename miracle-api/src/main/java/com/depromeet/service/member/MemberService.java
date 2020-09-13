@@ -6,6 +6,7 @@ import com.depromeet.domain.member.deleted.DeletedMember;
 import com.depromeet.domain.member.deleted.DeletedMemberRepository;
 import com.depromeet.event.alarm.NewMemberRegisteredEvent;
 import com.depromeet.event.alarm.WakeUpTimeUpdatedEvent;
+import com.depromeet.event.memer.MemberDeletedEvent;
 import com.depromeet.service.member.dto.request.SignUpMemberRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberGoalsRequest;
 import com.depromeet.service.member.dto.request.UpdateMemberInfoRequest;
@@ -57,6 +58,7 @@ public class MemberService {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
         memberRepository.delete(member);
         deletedMemberRepository.save(DeletedMember.of(member));
+        eventPublisher.publishEvent(MemberDeletedEvent.of(member.getId()));
     }
 
 }

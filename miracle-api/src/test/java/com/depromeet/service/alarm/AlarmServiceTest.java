@@ -249,6 +249,43 @@ class AlarmServiceTest extends MemberSetup {
         assertThat(alarms).isEmpty();
     }
 
+    @Test
+    void 특정멤버의_알람_스케쥴을_모두_삭제한다() {
+        // given
+        AlarmSchedule alarmSchedule = AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "description");
+        alarmSchedule.addAlarms(Collections.singletonList(
+            AlarmCreator.createAlarm(DayOfTheWeek.MON, LocalTime.of(8, 0))
+        ));
+        alarmScheduleRepository.save(alarmSchedule);
+
+        // when
+        alarmService.deleteAlarmScheduleByMemberId(memberId);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
+        assertThat(alarmSchedules).isEmpty();
+
+        List<Alarm> alarms = alarmRepository.findAll();
+        assertThat(alarms).isEmpty();
+    }
+
+    @Test
+    void 특정멤버의_알람_스케쥴의_알람_리스트도_모두_삭제한다() {
+        // given
+        alarmScheduleRepository.saveAll(Arrays.asList(
+            AlarmScheduleCreator.createAlarmSchedule(999L, AlarmType.WAKE_UP, "다른 멤버의 알림스케쥴"),
+            AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "첫 번째 알림스케쥴"),
+            AlarmScheduleCreator.createAlarmSchedule(memberId, AlarmType.WAKE_UP, "두 번째 알림스케쥴")));
+
+        // when
+        alarmService.deleteAlarmScheduleByMemberId(memberId);
+
+        // then
+        List<AlarmSchedule> alarmSchedules = alarmScheduleRepository.findAll();
+        assertThat(alarmSchedules).hasSize(1);
+        assertThat(alarmSchedules.get(0).getMemberId()).isEqualTo(999L);
+    }
+
     private void assertAlarmSchedule(AlarmSchedule alarmSchedule, String description, AlarmType type) {
         assertAll(
             () -> assertThat(alarmSchedule.getDescription()).isEqualTo(description),
