@@ -9,12 +9,16 @@ import com.depromeet.service.record.dto.response.RecordResponse;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,12 +37,10 @@ class RecordRetrieveServiceTest extends MemberSetup {
         recordRepository.deleteAll();
     }
 
-    @Description("7월 31일 23:50 ~ 8월 1일 00:10의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되어야 한다.")
-    @Test
-    void 달의_레코드_조회_테스트_레코드가_앞쪽_경계에_걸쳐있는경우_포함되서_조회된다() {
+    @ParameterizedTest
+    @MethodSource("records_included_at_the_start_of_the_query")
+    void 특정_달의_레코드_조회를_조회할때_레코드가_조회범위에_포함되면_조회된다(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         // given
-        LocalDateTime startDateTime = LocalDateTime.of(2020, 7, 31, 23, 50);
-        LocalDateTime endDateTime = LocalDateTime.of(2020, 8, 1, 0, 10);
         recordRepository.save(RecordCreator.create(memberId, startDateTime, endDateTime));
 
         MonthRecordsRequest request = MonthRecordsRequest.testBuilder()
@@ -54,12 +56,23 @@ class RecordRetrieveServiceTest extends MemberSetup {
         assertRecordResponse(responses.get(0), startDateTime, endDateTime);
     }
 
-    @Description("7월 31일 23:50 ~ 8월 1일 00:00 의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되지 않아야 한다.")
-    @Test
-    void 달의_레코드_조회_테스트_레코드가_앞쪽_경계에_겹치지_않는경우_포함되지_않는다() {
+    private static Stream<Arguments> records_included_at_the_start_of_the_query() {
+        return Stream.of(
+            Arguments.of(
+                LocalDateTime.of(2020, 7, 31, 23, 50),
+                LocalDateTime.of(2020, 8, 1, 0, 10)
+            ),
+            Arguments.of(
+                LocalDateTime.of(2020, 7, 31, 23, 40),
+                LocalDateTime.of(2020, 8, 1, 0, 20)
+            )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("records_not_included_at_the_start_of_the_query")
+    void 특정_달의_레코드_조회를_조회할때_레코드가_조회범위에_포함되지_않으면_조회되지_않는다(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         // given
-        LocalDateTime startDateTime = LocalDateTime.of(2020, 7, 31, 23, 50);
-        LocalDateTime endDateTime = LocalDateTime.of(2020, 8, 1, 0, 0);
         recordRepository.save(RecordCreator.create(memberId, startDateTime, endDateTime));
 
         MonthRecordsRequest request = MonthRecordsRequest.testBuilder()
@@ -72,6 +85,19 @@ class RecordRetrieveServiceTest extends MemberSetup {
 
         //then
         assertThat(response).isEmpty();
+    }
+
+    private static Stream<Arguments> records_not_included_at_the_start_of_the_query() {
+        return Stream.of(
+            Arguments.of(
+                LocalDateTime.of(2020, 7, 31, 23, 50),
+                LocalDateTime.of(2020, 8, 1, 0, 0)
+            ),
+            Arguments.of(
+                LocalDateTime.of(2020, 7, 31, 23, 40),
+                LocalDateTime.of(2020, 7, 31, 23, 50)
+            )
+        );
     }
 
     @Description("8월 31일 23:50 ~ 9월 1일 00:10 의 레코드 기록이 있을때, 8월의 레코드 정보를 불러오면 포함되어야 한다.")
