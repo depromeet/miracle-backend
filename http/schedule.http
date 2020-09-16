@@ -4,19 +4,19 @@ Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
 {
-    "startTime": "2020-08-06T16:30:00",
-    "endTime": "2020-08-06T17:00:00",
     "category": "EXERCISE",
     "description": "운동하기",
-    "loopType": "NONE"
+    "dayOfTheWeeks": ["MON", "WED"],
+    "startTime": "16:30",
+    "endTime": "17:00"
 }
 > {%
-client.global.set("SCHEDULE_ID", response.body["data"]["scheduleId"]);
+client.global.set("SCHEDULE_ID", response.body["data"]["scheduleIds"][0]);
  %}
 
 ###
 
-GET {{host}}/api/v1/schedule?year=2020&month=8&day=6
+GET {{host}}/api/v1/schedule?dayOfTheWeek=MON
 Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
@@ -27,11 +27,11 @@ Authorization: Bearer {{AUTHORIZATION}}
 Content-Type: application/json
 
 {
-  "startTime": "2020-08-09T16:30:00",
-  "endTime": "2020-08-09T17:00:00",
-  "category": "MEDITATION",
-  "description": "명상하기",
-  "loopType": "DAY"
+    "category": "READING",
+    "description": "책읽기",
+    "dayOfTheWeek": "MON",
+    "startTime": "08:30",
+    "endTime": "10:00"
 }
 > {%
 client.global.set("SCHEDULE_ID", response.body["data"]["scheduleId"]);

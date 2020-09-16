@@ -1,23 +1,25 @@
 package com.depromeet.service.schedule;
 
-import com.depromeet.domain.schedule.LoopType;
+import com.depromeet.controller.schedule.*;
+import com.depromeet.domain.common.DayOfTheWeek;
 import com.depromeet.domain.schedule.Schedule;
+import com.depromeet.domain.schedule.ScheduleDomainService;
 import com.depromeet.domain.schedule.ScheduleRepository;
-import com.depromeet.service.schedule.dto.*;
 import com.deprommet.exception.IllegalAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
+    private final ScheduleDomainService scheduleDomainService;
     private final ScheduleRepository repository;
 
-    public ScheduleService(ScheduleRepository repository) {
+    public ScheduleService(ScheduleDomainService scheduleDomainService, ScheduleRepository repository) {
+        this.scheduleDomainService = scheduleDomainService;
         this.repository = repository;
     }
 
@@ -30,23 +32,19 @@ public class ScheduleService {
      */
     @Transactional
     public CreateScheduleResponse createSchedule(long memberId, CreateScheduleRequest request) {
-        Schedule schedule = repository.save(request.toEntity(memberId));
-        return CreateScheduleResponse.of(schedule);
+        return CreateScheduleResponse.of(scheduleDomainService.createSchedules(memberId, request.getCategory(), request.getDescription(), request.getDayOfTheWeeks(), request.getStartTime(), request.getEndTime()));
     }
 
     /**
-     * 특정 날짜의 전체 스케쥴을 조회한다.
+     * 특정 요일의 전체 스케쥴을 조회한다.
      *
-     * @param memberId 가입 멤버 ID
-     * @param date     조회 날짜
-     * @return 해당 날짜에 등록된 전체 스케쥴 정보
+     * @param memberId     가입 멤버 ID
+     * @param dayOfTheWeek 조회 요일
+     * @return 해당 요일에 등록된 전체 스케쥴 정보
      */
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> retrieveDailySchedule(long memberId, LocalDate date) {
-        List<Schedule> schedules = repository.findSchedulesByMemberIdAndLoopTypeAndYearAndMonthAndDay(memberId, LoopType.NONE, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        schedules.addAll(repository.findSchedulesByMemberIdAndLoopType(memberId, LoopType.DAY));
-        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDayOfWeek(memberId, LoopType.WEEK, date.getDayOfWeek()));
-        schedules.addAll(repository.findSchedulesByMemberIdAndLoopTypeAndDay(memberId, LoopType.MONTH, date.getDayOfMonth()));
+    public List<GetScheduleResponse> retrieveDailySchedule(long memberId, DayOfTheWeek dayOfTheWeek) {
+        List<Schedule> schedules = repository.findSchedulesByMemberIdAndDayOfTheWeek(memberId, dayOfTheWeek);
         return schedules
             .stream()
             .map(GetScheduleResponse::of)
@@ -63,9 +61,7 @@ public class ScheduleService {
      */
     @Transactional
     public UpdateScheduleResponse updateSchedule(long memberId, long scheduleId, UpdateScheduleRequest request) {
-        Schedule schedule = repository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException(String.format("스케쥴 (%d)은 존재하지 않습니다", scheduleId)));
-        schedule.update(memberId, request.getStartTime(), request.getEndTime(), request.getCategory(), request.getDescription(), request.getLoopType());
-        return UpdateScheduleResponse.of(schedule);
+        return UpdateScheduleResponse.of(scheduleDomainService.updateSchedule(scheduleId, request.toEntity(memberId)));
     }
 
     /**
