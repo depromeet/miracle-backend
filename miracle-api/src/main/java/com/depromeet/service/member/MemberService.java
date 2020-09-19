@@ -32,7 +32,7 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
         Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
-        member.updateInfo(request.getName(), request.getProfileIcon(), request.getWakeUpTime(), request.getAlarmMode());
+        member.updateInfo(request.getName(), request.getProfileIcon(), request.getWakeUpTime());
         eventPublisher.publishEvent(WakeUpTimeUpdatedEvent.of(member.getId(), request.getWakeUpTime()));
         return MemberInfoResponse.of(member);
     }

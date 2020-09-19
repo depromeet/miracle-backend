@@ -86,11 +86,10 @@ public class Member extends BaseTimeEntity {
         return email.getEmail();
     }
 
-    public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime, AlarmMode alarmMode) {
+    public void updateInfo(String name, ProfileIcon profileIcon, LocalTime wakeUpTime) {
         this.name = name;
         this.profileIcon = profileIcon;
         this.wakeUpTime = wakeUpTime;
-        this.alarmMode = alarmMode;
     }
 
     public void updateMemberGoals(List<MemberGoal> memberGoals) {
