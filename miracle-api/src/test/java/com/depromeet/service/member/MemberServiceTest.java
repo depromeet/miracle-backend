@@ -185,7 +185,6 @@ class MemberServiceTest {
         String name = "kangseungho";
         ProfileIcon profileIcon = ProfileIcon.BLUE;
         LocalTime wakeUpTime = LocalTime.of(12, 0);
-        AlarmMode alarmMode = AlarmMode.BASIC;
 
         memberRepository.save(member);
 
@@ -193,7 +192,6 @@ class MemberServiceTest {
             .name(name)
             .profileIcon(profileIcon)
             .wakeUpTime(wakeUpTime)
-            .alarmMode(alarmMode)
             .build();
 
         // when
@@ -202,7 +200,7 @@ class MemberServiceTest {
         // then
         List<Member> members = memberRepository.findAll();
         assertThat(members).hasSize(1);
-        assertMemberInfo(members.get(0), member.getEmail(), name, profileIcon, wakeUpTime, alarmMode);
+        assertMemberInfo(members.get(0), member.getEmail(), name, profileIcon, wakeUpTime, member.getAlarmMode());
     }
 
     @Test
